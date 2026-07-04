@@ -3,15 +3,467 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Inicio | Gavy Montez</title>
+  <title>Inicio | GavyMontez Creaciones</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="frontend/css/styles.css">
   
+  <style>
+    .hero-carousel {
+      position: relative;
+      height: 85vh;
+      min-height: 500px;
+      max-height: 700px;
+      overflow: hidden;
+    }
+    .carousel-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: 1;
+    }
+    .carousel-slide.active { opacity: 1; z-index: 2; }
+    .carousel-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    @media (max-width: 768px) {
+      .carousel-bg { background-size: contain; background-color: var(--hero-bg); }
+      .hero-carousel { height: 60vh; min-height: 400px; }
+    }
+    .carousel-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.7) 100%);
+      z-index: 3;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 4;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .hero-text { color: white; text-shadow: 0 2px 15px rgba(0,0,0,0.5); }
+    .hero-text h1 { font-size: 3.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1rem; }
+    .hero-text h1 span { color: var(--accent); }
+    .hero-text p { font-size: 1.1rem; opacity: 0.95; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary-hero {
+      background: var(--accent);
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary-hero:hover { background: var(--art-hover); transform: translateY(-2px); }
+    .btn-outline-hero {
+      background: transparent;
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 2px solid white;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    .btn-outline-hero:hover { background: white; color: var(--accent); transform: translateY(-2px); }
+    .carousel-controls {
+      position: absolute;
+      bottom: 2rem;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      padding: 0;
+    }
+    .carousel-dot.active { background: var(--accent); width: 30px; border-radius: 12px; }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      font-size: 1.2rem;
+    }
+    .carousel-arrow:hover { background: rgba(0,0,0,0.8); transform: translateY(-50%) scale(1.05); }
+    .carousel-arrow.prev { left: 2rem; }
+    .carousel-arrow.next { right: 2rem; }
+    @media (max-width: 768px) {
+      .hero-text h1 { font-size: 2rem; }
+      .hero-text p { font-size: 0.9rem; }
+      .hero-buttons { gap: 0.8rem; }
+      .btn-primary-hero, .btn-outline-hero { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
+      .carousel-arrow { width: 35px; height: 35px; font-size: 0.9rem; }
+      .carousel-arrow.prev { left: 0.5rem; }
+      .carousel-arrow.next { right: 0.5rem; }
+      .hero-carousel { height: 55vh; min-height: 350px; }
+    }
+
+    .search-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 4rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .search-overlay.active { opacity: 1; visibility: visible; }
+    .search-container { max-width: 600px; width: 90%; position: relative; }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border-radius: 30px;
+      padding: 0.6rem 1rem;
+      border: 2px solid var(--border);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      transition: border-color 0.3s ease;
+    }
+    .search-bar:focus-within { border-color: var(--accent); }
+    .search-bar .search-icon { color: var(--text-primary); opacity: 0.5; font-size: 1.1rem; }
+    .search-bar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 1rem;
+      padding: 0.4rem 0;
+      min-width: 60px;
+    }
+    .search-bar input::placeholder { color: var(--text-primary); opacity: 0.5; }
+    .search-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .search-btn:hover { background: var(--art-hover); transform: scale(1.05); }
+    .search-close {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 0.2rem;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+      flex-shrink: 0;
+    }
+    .search-close:hover { opacity: 1; }
+    .search-results {
+      background: var(--card-bg);
+      border-radius: 16px;
+      margin-top: 0.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+      display: none;
+    }
+    .search-results.active { display: block; }
+    .search-results::-webkit-scrollbar { width: 4px; }
+    .search-results::-webkit-scrollbar-track { background: transparent; }
+    .search-results::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border-bottom: 1px solid var(--border);
+    }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: var(--bg-primary); }
+    .search-result-item img {
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--hero-bg);
+    }
+    .search-result-info { flex: 1; min-width: 0; }
+    .search-result-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .search-result-meta { display: flex; gap: 0.8rem; margin-top: 0.1rem; flex-wrap: wrap; }
+    .search-result-categoria {
+      font-size: 0.7rem;
+      color: var(--accent);
+      font-weight: 500;
+      background: var(--bg-primary);
+      padding: 0.05rem 0.6rem;
+      border-radius: 20px;
+    }
+    .search-result-precio { font-size: 0.7rem; color: var(--text-primary); opacity: 0.7; font-weight: 600; }
+    .search-result-empty {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--text-primary);
+      opacity: 0.6;
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .search-result-empty i { font-size: 1.5rem; opacity: 0.4; }
+
+    .cart-icon-wrapper { position: relative; cursor: pointer; }
+    .cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #e74c3c;
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .cart-badge.hidden { transform: scale(0); }
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      background: var(--card-bg);
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      box-shadow: -4px 0 30px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .cart-overlay.open { transform: translateX(0); }
+    .cart-overlay-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .cart-overlay-backdrop.open { opacity: 1; visibility: visible; }
+    .cart-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .cart-header h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--text-primary); }
+    .cart-close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); padding: 0.3rem; }
+    .cart-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+    .cart-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      color: var(--text-primary);
+      opacity: 0.6;
+    }
+    .cart-empty i { font-size: 3rem; margin-bottom: 1rem; color: var(--accent); opacity: 0.4; }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-size: 0.85rem; font-weight: 500; color: var(--text-primary); }
+    .cart-item-meta { font-size: 0.75rem; color: var(--text-primary); opacity: 0.6; }
+    .cart-item-actions { display: flex; align-items: center; gap: 0.5rem; }
+    .cart-item-actions button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .cart-item-actions button:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .cart-item-qty { font-weight: 600; min-width: 24px; text-align: center; color: var(--text-primary); }
+    .cart-item-price { font-weight: 600; color: var(--accent); font-size: 0.85rem; min-width: 50px; text-align: right; }
+    .cart-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .cart-totals { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
+    .cart-total-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-primary); }
+    .cart-total-row.total { font-weight: 700; font-size: 1.1rem; border-top: 1px solid var(--border); padding-top: 0.5rem; margin-top: 0.3rem; }
+    .cart-total-row.total .price { color: var(--accent); }
+    .cart-checkout-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .cart-checkout-btn:hover { background: #1da851; transform: scale(1.02); }
+    .cart-go-to-btn {
+      width: 100%;
+      padding: 0.7rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .cart-go-to-btn:hover { background: var(--art-hover); }
+
+    .service-card {
+      padding: 1.5rem;
+      border-radius: 1rem;
+      text-align: center;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      transition: all 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    .service-card .icon {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .service-card h3 { font-weight: 700; font-size: 1rem; color: var(--text-primary); }
+    .service-card p { font-size: 0.85rem; color: var(--text-primary); opacity: 0.7; }
+
+    .logo-option { display: none; }
+    .logo-option.active { display: flex; }
+    .gavy-logo-link {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+  </style>
+
   <script>
     tailwind.config = {
       theme: {
@@ -28,113 +480,211 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
+  <div id="toast">
+    <span class="toast-icon success"><i class="fa-solid fa-circle-check"></i></span>
+    <span class="toast-message"></span>
+    <button class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
   <header class="sticky top-0 z-40 backdrop-blur-md border-b shadow-sm" style="background-color: var(--surface); border-color: var(--border);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="h-20 flex items-center justify-between">
         
-        <!-- Botón menú hamburguesa (izquierda en móvil) -->
         <div class="md:hidden flex items-center">
           <button onclick="toggleMobileMenu()" class="focus:outline-none p-2" style="color: var(--text-primary);">
             <i class="fa-solid fa-bars text-2xl"></i>
           </button>
         </div>
 
-        <!-- Logo -->
-        <a href="index.html" class="flex items-center gap-2 group flex-shrink-0 md:ml-0 ml-2">
-          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-xl font-serif" style="background-color: var(--accent);">GM</div>
-          <span class="text-xl md:text-2xl font-serif font-bold tracking-wide" style="color: var(--text-primary);">Gavy Montez</span>
+        <a href="index.html" class="flex flex-col items-start group flex-shrink-0 md:ml-0 ml-2" style="text-decoration: none;">
+          <span class="font-serif text-xl md:text-2xl font-bold tracking-wide leading-tight" style="color: var(--text-primary);">GavyMontez</span>
+          <span class="text-[10px] font-light tracking-[0.2em] uppercase" style="color: var(--accent); opacity: 0.7;">Creaciones</span>
         </a>
 
-        <!-- NAV CENTRADO (escritorio) -->
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
           <a href="index.html" class="nav-link active font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
           <a href="novedades.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-star"></i> Novedades</a>
           <a href="catalogo.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
-          <a href="contacto.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-address-card"></i> Contacto</a>
         </nav>
 
-        <!-- Botón tema oscuro (derecha) -->
         <div class="flex items-center gap-3 flex-shrink-0">
+          <button id="searchTrigger" class="w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center" style="background-color: var(--surface); color: var(--text-primary); border: 1px solid var(--border);">
+            <i class="fa-solid fa-search text-xl"></i>
+          </button>
           <button id="theme-toggle" class="w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center" style="background-color: var(--surface); color: var(--accent); border: 1px solid var(--border);">
             <i id="theme-icon" class="fa-regular fa-moon text-xl"></i>
           </button>
+          <div class="cart-icon-wrapper" id="cartIconWrapper">
+            <button id="cartToggle" class="w-10 h-10 rounded-full transition-all duration-300 flex items-center justify-center" style="background-color: var(--surface); color: var(--text-primary); border: 1px solid var(--border);">
+              <i class="fa-solid fa-cart-shopping text-xl"></i>
+            </button>
+            <span id="cartBadge" class="cart-badge hidden">0</span>
+          </div>
         </div>
       </div>
 
-      <!-- Mobile menu (sin botón "Ver Novedades") -->
       <div id="mobile-menu" class="hidden md:hidden py-4 px-6 space-y-4 shadow-inner" style="background-color: var(--surface); border-color: var(--border);">
         <a href="index.html" class="flex items-center gap-2 w-full text-left font-serif text-lg py-2 border-b" style="color: var(--text-primary); border-color: var(--border);"><i class="fa-solid fa-house"></i> Inicio</a>
         <a href="novedades.html" class="flex items-center gap-2 w-full text-left font-serif text-lg py-2 border-b" style="color: var(--text-primary); border-color: var(--border);"><i class="fa-regular fa-star"></i> Novedades</a>
         <a href="catalogo.html" class="flex items-center gap-2 w-full text-left font-serif text-lg py-2 border-b" style="color: var(--text-primary); border-color: var(--border);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
-        <a href="contacto.html" class="flex items-center gap-2 w-full text-left font-serif text-lg py-2" style="color: var(--text-primary);"><i class="fa-regular fa-address-card"></i> Contacto</a>
       </div>
     </div>
   </header>
 
-  <main class="flex-grow">
-    <div class="relative overflow-hidden py-16 md:py-24" style="background-color: var(--hero-bg);">
-      <div class="absolute -top-12 -left-12 w-48 h-48 rounded-full opacity-30 blur-xl" style="background-color: var(--border);"></div>
-      <div class="absolute bottom-0 right-10 w-72 h-72 rounded-full opacity-15 blur-2xl" style="background-color: var(--secondary);"></div>
-      
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight" style="color: var(--text-primary);">
-              <span class="italic underline" style="color: var(--accent);">Gavy Montez</span><br>Creaciones hechas a mano con Amor
-            </h1>
-            <p class="text-lg md:text-xl max-w-xl mx-auto lg:mx-0 font-light leading-relaxed" style="color: var(--text-primary); opacity: 0.8;">
-              Pulseras, atrapasueños, sombreros y esculturas pintadas. Cada pieza es única, tejida y moldeada con esencia caribeña desde La Habana.
-            </p>
-            
-            <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <a href="catalogo.html" class="text-white text-base font-semibold px-8 py-4 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2" style="background-color: var(--accent);">
-                Ver colección <i class="fa-solid fa-arrow-right"></i>
-              </a>
-              <button onclick="scrollToFeatured()" class="bg-transparent border-2 text-base font-medium px-6 py-4 rounded-full transition-all duration-300" style="border-color: var(--border); color: var(--text-primary);">
-                Conocer más
-              </button>
-            </div>
-          </div>
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-container">
+      <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Buscar artículos..." autocomplete="off">
+        <button class="search-btn" id="searchSubmitBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="search-close" id="searchClose"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="searchResults" class="search-results"></div>
+    </div>
+  </div>
 
-          <div class="lg:col-span-5 relative">
-            <div class="relative mx-auto max-w-[400px] lg:max-w-none">
-              <div class="absolute inset-0 rounded-3xl rotate-3 scale-102 opacity-10" style="background-color: var(--accent);"></div>
-              <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=800" alt="Artesana Gavy Montez tejiendo con amor" class="rounded-3xl shadow-xl border-4 border-white object-cover w-full h-[350px] md:h-[450px] relative z-10" />
-              <div class="absolute -bottom-6 -left-6 p-4 rounded-2xl shadow-lg max-w-[200px] z-20 hidden sm:block" style="background-color: var(--card-bg); border-color: var(--border);">
-                <div class="flex items-center gap-3">
-                  <span class="text-3xl" style="color: var(--accent);"><i class="fa-solid fa-heart"></i></span>
-                  <div>
-                    <p class="text-xs font-bold uppercase" style="color: var(--accent);">Esencia única</p>
-                    <p class="text-[10px]" style="color: var(--text-primary); opacity: 0.7;">Hecho con amor en cada puntada.</p>
-                  </div>
-                </div>
-              </div>
+  <div class="cart-overlay-backdrop" id="cartBackdrop"></div>
+  <div class="cart-overlay" id="cartOverlay">
+    <div class="cart-header">
+      <h2><i class="fa-solid fa-cart-shopping" style="color: var(--accent);"></i> Tu carrito</h2>
+      <button class="cart-close-btn" id="cartClose"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <div class="cart-empty">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <p>Tu carrito está vacío</p>
+        <p style="font-size: 0.85rem; margin-top: 0.3rem;">Explora nuestro catálogo y añade tus piezas favoritas</p>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display: none;">
+      <button class="cart-go-to-btn" id="cartGoToBtn"><i class="fa-solid fa-arrow-right"></i> Ir al carrito</button>
+      <div class="cart-totals">
+        <div class="cart-total-row"><span>Subtotal</span><span class="price" id="cartSubtotal">$0</span></div>
+        <div class="cart-total-row"><span>Comisión (10%)</span><span class="price" id="cartCommission">$0</span></div>
+        <div class="cart-total-row total"><span>Total</span><span class="price" id="cartTotal">$0</span></div>
+      </div>
+      <button class="cart-checkout-btn" id="cartCheckoutBtn"><i class="fa-brands fa-whatsapp"></i> Comprar por WhatsApp</button>
+    </div>
+  </div>
+
+  <main class="flex-grow">
+    <div class="hero-carousel" id="heroCarousel">
+      <div class="carousel-slide active" data-slide="0">
+        <div class="carousel-bg" style="background-image: url('resources/carrucel/slide1.jpg');"></div>
+        <div class="carousel-overlay"></div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1>Arte <span>hecho a mano</span></h1>
+            <p>Descubre nuestras creaciones únicas, tejidas y moldeadas con esencia caribeña desde La Habana.</p>
+            <div class="hero-buttons">
+              <a href="catalogo.html" class="btn-primary-hero"><i class="fa-regular fa-rectangle-list"></i> Ver catálogo</a>
+              <button class="btn-outline-hero" onclick="scrollToSection('sobre-nosotros')">Sobre nosotros</button>
             </div>
           </div>
         </div>
       </div>
+      <div class="carousel-slide" data-slide="1">
+        <div class="carousel-bg" style="background-image: url('resources/carrucel/slide2.jpg');"></div>
+        <div class="carousel-overlay"></div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1>Pulseras <span>únicas</span></h1>
+            <p>Hilos de algodón, mostacillas y semillas que cuentan historias.</p>
+            <div class="hero-buttons">
+              <a href="catalogo.html?cat=pulseras" class="btn-primary-hero"><i class="fa-regular fa-rectangle-list"></i> Ver pulseras</a>
+              <button class="btn-outline-hero" onclick="scrollToSection('sobre-nosotros')">Sobre nosotros</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-slide" data-slide="2">
+        <div class="carousel-bg" style="background-image: url('resources/carrucel/slide3.jpg');"></div>
+        <div class="carousel-overlay"></div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1>Atrapasueños <span>mágicos</span></h1>
+            <p>Armoniza tus espacios con nuestros atrapasueños tejidos a mano.</p>
+            <div class="hero-buttons">
+              <a href="catalogo.html?cat=atrapasuenos" class="btn-primary-hero"><i class="fa-regular fa-rectangle-list"></i> Ver atrapasueños</a>
+              <button class="btn-outline-hero" onclick="scrollToSection('sobre-nosotros')">Sobre nosotros</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-slide" data-slide="3">
+        <div class="carousel-bg" style="background-image: url('resources/carrucel/slide4.jpg');"></div>
+        <div class="carousel-overlay"></div>
+        <div class="hero-content">
+          <div class="hero-text">
+            <h1>Figuras <span>de fornai</span></h1>
+            <p>Esculturas pintadas a mano que capturan la esencia de Cuba.</p>
+            <div class="hero-buttons">
+              <a href="catalogo.html?cat=esculturas" class="btn-primary-hero"><i class="fa-regular fa-rectangle-list"></i> Ver figuras</a>
+              <button class="btn-outline-hero" onclick="scrollToSection('sobre-nosotros')">Sobre nosotros</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-controls" id="carouselControls"></div>
+      <div class="carousel-arrow prev" id="carouselPrev"><i class="fa-solid fa-chevron-left"></i></div>
+      <div class="carousel-arrow next" id="carouselNext"><i class="fa-solid fa-chevron-right"></i></div>
     </div>
 
-    <section class="py-16 border-y" style="background-color: var(--card-bg); border-color: var(--border);">
+    <section id="sobre-nosotros" class="py-16 border-y" style="background-color: var(--card-bg); border-color: var(--border);">
       <div class="max-w-5xl mx-auto px-4 text-center space-y-6">
         <h2 class="text-3xl md:text-4xl font-serif font-bold" style="color: var(--text-primary);">El valor de lo hecho a mano con amor</h2>
         <div class="w-24 h-1 mx-auto rounded-full" style="background-color: var(--accent);"></div>
         <p class="text-lg max-w-3xl mx-auto leading-relaxed" style="color: var(--text-primary); opacity: 0.8;">
-          En el taller de Gavy Montez, seleccionamos hilos de algodón, maderas nobles y pigmentos naturales. Cada creación es un reflejo de nuestra pasión por la artesanía cubana, con esmero y cariño. No hay dos iguales.
+          En el taller de GavyMontez Creaciones, seleccionamos hilos de algodón, maderas nobles y pigmentos naturales. Cada creación es un reflejo de nuestra pasión por la artesanía cubana, con esmero y cariño. No hay dos iguales.
         </p>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8">
-          <div class="p-4 rounded-2xl border" style="background-color: var(--bg-primary); border-color: var(--border);"><span class="block text-2xl mb-1" style="color: var(--accent);"><i class="fa-solid fa-leaf"></i></span><h3 class="font-bold text-sm" style="color: var(--text-primary);">Materiales Eco</h3></div>
-          <div class="p-4 rounded-2xl border" style="background-color: var(--bg-primary); border-color: var(--border);"><span class="block text-2xl mb-1" style="color: var(--accent);"><i class="fa-solid fa-truck-fast"></i></span><h3 class="font-bold text-sm" style="color: var(--text-primary);">Envíos Seguros</h3></div>
-          <div class="p-4 rounded-2xl border" style="background-color: var(--bg-primary); border-color: var(--border);"><span class="block text-2xl mb-1" style="color: var(--accent);"><i class="fa-solid fa-wand-magic-sparkles"></i></span><h3 class="font-bold text-sm" style="color: var(--text-primary);">Diseños Únicos</h3></div>
-          <div class="p-4 rounded-2xl border" style="background-color: var(--bg-primary); border-color: var(--border);"><span class="block text-2xl mb-1" style="color: var(--accent);"><i class="fa-brands fa-whatsapp"></i></span><h3 class="font-bold text-sm" style="color: var(--text-primary);">Trato Directo</h3></div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 pt-8">
+          <div class="service-card">
+            <span class="icon"><i class="fa-solid fa-feather-pointed"></i></span>
+            <h3>Atrapasueños</h3>
+            <p>Tejidos a mano con esencia cubana</p>
+          </div>
+          <div class="service-card">
+            <span class="icon"><i class="fa-solid fa-hand-sparkles"></i></span>
+            <h3>Pulseras</h3>
+            <p>Hilos y semillas con historia</p>
+          </div>
+          <div class="service-card">
+            <span class="icon"><i class="fa-solid fa-palette"></i></span>
+            <h3>Figuras de fornai</h3>
+            <p>Esculturas pintadas a mano</p>
+          </div>
+          <div class="service-card">
+            <span class="icon"><i class="fa-solid fa-handshake"></i></span>
+            <h3>Trato directo</h3>
+            <p>Atención personalizada</p>
+          </div>
+          <div class="service-card">
+            <span class="icon"><i class="fa-solid fa-truck"></i></span>
+            <h3>Envíos seguros</h3>
+            <p>Entregas en toda Cuba</p>
+          </div>
         </div>
       </div>
     </section>
 
+    <section id="combos-section" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="display: none;">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+        <div>
+          <span class="uppercase tracking-widest text-xs font-bold" style="color: var(--accent);">Ofertas especiales</span>
+          <h2 class="text-3xl md:text-4xl font-serif font-bold mt-1" style="color: var(--text-primary);">Combos exclusivos</h2>
+        </div>
+        <a href="catalogo.html?cat=combos" class="font-semibold flex items-center gap-2 group transition-all duration-300" style="color: var(--accent);">Ver combos <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i></a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="combos-grid"></div>
+    </section>
+
     <section id="featured-products" class="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-        <div><span class="uppercase tracking-widest text-xs font-bold" style="color: var(--accent);">Favoritos del taller</span><h2 class="text-3xl md:text-4xl font-serif font-bold mt-1" style="color: var(--text-primary);">Creaciones destacadas</h2></div>
+        <div>
+          <span class="uppercase tracking-widest text-xs font-bold" style="color: var(--accent);">Favoritos del taller</span>
+          <h2 class="text-3xl md:text-4xl font-serif font-bold mt-1" style="color: var(--text-primary);">Creaciones destacadas</h2>
+        </div>
         <a href="catalogo.html" class="font-semibold flex items-center gap-2 group transition-all duration-300" style="color: var(--accent);">Ver todo el catálogo <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i></a>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="featured-grid"></div>
@@ -144,45 +694,54 @@
     </section>
   </main>
 
-  <!-- FOOTER centrado en móvil -->
-  <footer class="py-12 border-t" style="background-color: var(--footer-bg); border-color: var(--border);">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b text-center md:text-left" style="border-color: rgba(255,255,255,0.1);">
-        <div class="space-y-4 flex flex-col items-center md:items-start">
-          <div class="flex items-center gap-2 justify-center md:justify-start"><div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-base font-serif" style="background-color: var(--accent);">GM</div><span class="text-lg font-serif font-bold tracking-wide text-white">Gavy Montez</span></div>
-          <p class="text-sm text-white/70 max-w-sm text-center md:text-left">Creaciones hechas a mano con Amor. Cada puntada, cada pincelada, lleva esencia cubana.</p>
-        </div>
-        <div class="space-y-4 flex flex-col items-center md:items-start">
-          <h4 class="text-sm font-semibold uppercase tracking-wider text-center md:text-left" style="color: var(--footer-text-primary);">Navegación</h4>
-          <ul class="space-y-2 text-sm text-center md:text-left">
-            <li><a href="index.html" class="footer-link transition-all duration-300" style="color: var(--footer-text-secondary);">Inicio</a></li>
-            <li><a href="novedades.html" class="footer-link transition-all duration-300" style="color: var(--footer-text-secondary);">Novedades</a></li>
-            <li><a href="catalogo.html" class="footer-link transition-all duration-300" style="color: var(--footer-text-secondary);">Catálogo Completo</a></li>
-            <li><a href="contacto.html" class="footer-link transition-all duration-300" style="color: var(--footer-text-secondary);">Ubicación y Contacto</a></li>
+  <footer class="footer-gavy">
+    <div class="footer-container">
+      <div class="footer-columns">
+        <!-- Columna 1: Navegación (izquierda en escritorio, segundo en móvil) -->
+        <div class="footer-col-1">
+          <h3>Navegación</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="novedades.html">Novedades</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
           </ul>
         </div>
-        <div class="space-y-4 flex flex-col items-center md:items-start">
-          <h4 class="text-sm font-semibold uppercase tracking-wider text-center md:text-left" style="color: var(--footer-text-primary);">Canales</h4>
-          <ul class="space-y-2 text-sm text-center md:text-left">
-            <li><a href="https://wa.me/5358481876" target="_blank" class="footer-contact transition-all duration-300 flex items-center gap-2 justify-center md:justify-start" style="color: var(--footer-text-secondary);"><i class="fa-brands fa-whatsapp" style="color: var(--accent);"></i> +53 58481876</a></li>
-            <li><a href="https://instagram.com/gavymontez_creaciones" target="_blank" class="footer-contact transition-all duration-300 flex items-center gap-2 justify-center md:justify-start" style="color: var(--footer-text-secondary);"><i class="fa-brands fa-instagram" style="color: var(--accent);"></i> @gavymontez_creaciones</a></li>
-            <li class="flex items-center gap-2 justify-center md:justify-start" style="color: var(--footer-text-secondary);"><i class="fa-solid fa-location-dot" style="color: var(--accent);"></i> La Lisa, La Habana, Cuba</li>
+        
+        <!-- Columna 2: Logo, descripción y redes sociales (centro en escritorio, primero en móvil) -->
+        <div class="footer-col-2">
+          <div class="footer-logo">
+            <div class="logo-icon">GM</div>
+            <span class="logo-text">GavyMontez</span>
+            <span class="logo-sub">Creaciones</span>
+          </div>
+          <p class="footer-description">Creaciones hechas a mano con Amor. Cada puntada, cada pincelada, lleva esencia cubana.</p>
+          <div class="footer-social">
+            <a href="https://instagram.com/gavymontez_creaciones" target="_blank" class="social-icon-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://wa.me/5358481876" target="_blank" class="social-icon-link" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="mailto:gavymontez@creaciones.com" target="_blank" class="social-icon-link" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
+          </div>
+        </div>
+        
+        <!-- Columna 3: Información (derecha en escritorio, tercero en móvil) -->
+        <div class="footer-col-3">
+          <h3>Información</h3>
+          <ul class="footer-links">
+            <li><a href="terminos.html">Términos y Condiciones</a></li>
+            <li><a href="politicaEnvios.html">Política de Envíos</a></li>
+            <li><a href="preguntasFrecuentes.html">Preguntas Frecuentes</a></li>
           </ul>
         </div>
       </div>
-      <div class="pt-8 flex flex-col md:flex-row justify-between items-center text-xs gap-4 text-center" style="color: var(--footer-text-secondary); opacity: 0.7;">
-        <p>© 2025 Gavy Montez · Creaciones hechas a mano con Amor.</p>
-        <p class="flex items-center gap-4 justify-center"><span>Prototipo interactivo</span><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span><span>WhatsApp Activo</span></p>
+      <hr class="footer-divider">
+      <div class="footer-bottom">
+        <p class="footer-copyright">© 2026 GavyMontez Creaciones · Arte con intención y alma.</p>
       </div>
     </div>
   </footer>
 
-  <a href="https://wa.me/5358481876?text=Hola%20Gavy%20Montez!%20Vengo%20desde%20su%20web%20cat%C3%A1logo%20y%20me%20encant%C3%B3%20una%20de%20sus%20creaciones" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-xl hover:bg-[#20ba5a] hover:scale-110 transition-all group"><i class="fa-brands fa-whatsapp"></i><span class="absolute right-16 px-3 py-1.5 rounded-lg shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" style="background-color: var(--text-primary); color: var(--bg-primary);">¿Dudas? Chatea con Gavy</span></a>
+  <a href="https://wa.me/5358481876" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-xl hover:bg-[#20ba5a] hover:scale-110 transition-all group"><i class="fa-brands fa-whatsapp"></i></a>
 
-  <div id="prototipo-info-modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/60 flex items-center justify-center p-4">
-    <div class="rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl relative" style="background-color: var(--card-bg); border-color: var(--border);"><button onclick="document.getElementById('prototipo-info-modal').classList.add('hidden')" class="absolute top-4 right-4 text-xl" style="color: var(--text-primary);"><i class="fa-solid fa-xmark"></i></button><div class="space-y-6"><div class="flex items-center gap-3"><span class="text-3xl" style="color: var(--accent);"><i class="fa-solid fa-circle-question"></i></span><h2 class="text-2xl font-serif font-bold" style="color: var(--text-primary);">Guía Gavy Montez</h2></div><div class="space-y-4 text-sm" style="color: var(--text-primary); opacity: 0.8;"><p>Catálogo artesanal interactivo. Filtros funcionales, WhatsApp real (+53 58481876), Instagram @gavymontez_creaciones.</p><div class="border-l-4 pl-4 space-y-2" style="border-color: var(--accent);"><p>📌 <strong>Responsive:</strong> Prueba en móvil o escritorio.</p><p>📌 <strong>Filtros por categorías</strong> en Catálogo.</p><p>📌 <strong>WhatsApp integrado:</strong> mensaje automático.</p></div></div><button onclick="document.getElementById('prototipo-info-modal').classList.add('hidden')" class="w-full text-white py-3 rounded-xl font-bold" style="background-color: var(--accent);">Entendido</button></div></div>
-  </div>
-
+  <script src="backend/data.js"></script>
   <script>
     function initTheme() {
       const savedTheme = localStorage.getItem('theme');
@@ -195,17 +754,12 @@
       }
     }
     function updateThemeIcons(theme) {
-      const icons = document.querySelectorAll('#theme-icon, #theme-icon-mobile');
-      icons.forEach(icon => {
-        if (theme === 'dark') {
-          icon.className = 'fa-regular fa-sun text-xl';
-        } else {
-          icon.className = 'fa-regular fa-moon text-xl';
-        }
-      });
+      const icon = document.getElementById('theme-icon');
+      if (icon) { icon.className = theme === 'dark' ? 'fa-regular fa-sun text-xl' : 'fa-regular fa-moon text-xl'; }
     }
     function toggleTheme() {
-      if (document.body.classList.contains('dark-mode')) {
+      const isDark = document.body.classList.contains('dark-mode');
+      if (isDark) {
         document.body.classList.remove('dark-mode');
         localStorage.setItem('theme', 'light');
         updateThemeIcons('light');
@@ -215,18 +769,298 @@
         updateThemeIcons('dark');
       }
     }
+
+    let currentSlide = 0;
+    let totalSlides = 4;
+    let carouselInterval;
+
+    function initCarousel() {
+      totalSlides = document.querySelectorAll('.carousel-slide').length;
+      createDots();
+      startAutoSlide();
+      setupCarouselEvents();
+    }
+    function createDots() {
+      const controls = document.getElementById('carouselControls');
+      controls.innerHTML = '';
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('button');
+        dot.className = `carousel-dot ${i === currentSlide ? 'active' : ''}`;
+        dot.setAttribute('data-slide', i);
+        dot.addEventListener('click', () => goToSlide(i));
+        controls.appendChild(dot);
+      }
+    }
+    function updateDots() {
+      document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+    function goToSlide(index) {
+      document.querySelectorAll('.carousel-slide')[currentSlide].classList.remove('active');
+      currentSlide = index;
+      document.querySelectorAll('.carousel-slide')[currentSlide].classList.add('active');
+      updateDots();
+      resetAutoSlide();
+    }
+    function nextSlide() { goToSlide((currentSlide + 1) % totalSlides); }
+    function prevSlide() { goToSlide((currentSlide - 1 + totalSlides) % totalSlides); }
+    function startAutoSlide() {
+      if (carouselInterval) clearInterval(carouselInterval);
+      carouselInterval = setInterval(nextSlide, 8000);
+    }
+    function resetAutoSlide() {
+      if (carouselInterval) {
+        clearInterval(carouselInterval);
+        carouselInterval = setInterval(nextSlide, 8000);
+      }
+    }
+    function setupCarouselEvents() {
+      document.getElementById('carouselPrev').addEventListener('click', () => { prevSlide(); resetAutoSlide(); });
+      document.getElementById('carouselNext').addEventListener('click', () => { nextSlide(); resetAutoSlide(); });
+    }
+    function scrollToSection(id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function initSearch() {
+      const trigger = document.getElementById('searchTrigger');
+      const overlay = document.getElementById('searchOverlay');
+      const close = document.getElementById('searchClose');
+      const submitBtn = document.getElementById('searchSubmitBtn');
+      const input = document.getElementById('searchInput');
+      const results = document.getElementById('searchResults');
+
+      function openSearch() { overlay.classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(() => input.focus(), 150); }
+      function closeSearch() { overlay.classList.remove('active'); document.body.style.overflow = ''; input.value = ''; results.classList.remove('active'); }
+      function ejecutarBusqueda() { const termino = input.value.trim(); if (termino) { closeSearch(); window.location.href = `busqueda.html?q=${encodeURIComponent(termino)}`; } }
+      trigger.addEventListener('click', openSearch);
+      close.addEventListener('click', closeSearch);
+      submitBtn.addEventListener('click', ejecutarBusqueda);
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
+
+      let timeoutId = null;
+      input.addEventListener('input', () => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          const termino = input.value.trim();
+          if (termino.length < 2) { results.classList.remove('active'); return; }
+          const resultados = buscarProductos(termino);
+          renderSearchResults(resultados, results);
+          results.classList.add('active');
+        }, 200);
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); ejecutarBusqueda(); }
+        if (e.key === 'Escape') closeSearch();
+      });
+    }
+
+    function buscarProductos(termino) {
+      if (typeof productos === 'undefined') return [];
+      const terminoLower = termino.toLowerCase().trim();
+      return productos.filter(p =>
+        p.nombre.toLowerCase().includes(terminoLower) ||
+        p.categoria.toLowerCase().includes(terminoLower) ||
+        (p.descripcion && p.descripcion.toLowerCase().includes(terminoLower))
+      ).slice(0, 8);
+    }
+
+    function renderSearchResults(resultados, container) {
+      if (resultados.length === 0) {
+        container.innerHTML = `<div class="search-result-empty"><i class="fa-regular fa-face-frown"></i><span>No se encontraron artículos</span></div>`;
+        return;
+      }
+      container.innerHTML = resultados.map(p => `
+        <div class="search-result-item" onclick="window.location.href='detalles.html?id=${p.id}'">
+          <img src="${p.img}" onerror="this.src='https://picsum.photos/seed/${p.id}/50/50'" alt="${p.nombre}" loading="lazy">
+          <div class="search-result-info">
+            <div class="search-result-name">${p.nombre}</div>
+            <div class="search-result-meta">
+              <span class="search-result-categoria">${p.categoria}</span>
+              <span class="search-result-precio">${p.precio}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    let carrito = [];
+    function loadCart() {
+      const saved = localStorage.getItem('gavy_cart');
+      if (saved) { try { carrito = JSON.parse(saved); } catch(e) { carrito = []; } }
+      updateCartUI();
+    }
+    function saveCart() { localStorage.setItem('gavy_cart', JSON.stringify(carrito)); updateCartUI(); }
+    function addToCart(productoId, cantidad = 1) {
+      const producto = productos.find(p => p.id === productoId);
+      if (!producto) return;
+      const existing = carrito.find(item => item.id === productoId);
+      if (existing) { existing.cantidad += cantidad; } else { carrito.push({ ...producto, cantidad }); }
+      saveCart();
+      showToast(`¡${producto.nombre} añadido al carrito!`, 'success');
+    }
+    function updateQuantity(productoId, delta) {
+      const item = carrito.find(i => i.id === productoId);
+      if (!item) return;
+      const nueva = item.cantidad + delta;
+      if (nueva <= 0) { carrito = carrito.filter(i => i.id !== productoId); saveCart(); return; }
+      item.cantidad = nueva; saveCart();
+    }
+    function getCartTotal() { return carrito.reduce((sum, item) => sum + parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad, 0); }
+    function getCartProductCount() { return carrito.length; }
+    function updateCartUI() {
+      const badge = document.getElementById('cartBadge');
+      const count = getCartProductCount();
+      if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
+      renderCartItems();
+    }
+    function renderCartItems() {
+      const body = document.getElementById('cartBody');
+      const footer = document.getElementById('cartFooter');
+      if (carrito.length === 0) {
+        body.innerHTML = `<div class="cart-empty"><i class="fa-solid fa-basket-shopping"></i><p>Tu carrito está vacío</p><p style="font-size: 0.85rem; margin-top: 0.3rem;">Explora nuestro catálogo y añade tus piezas favoritas</p></div>`;
+        footer.style.display = 'none'; return;
+      }
+      body.innerHTML = carrito.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-info"><div class="cart-item-name">${item.nombre}</div><div class="cart-item-meta">${item.precio} c/u</div></div>
+          <div class="cart-item-actions">
+            <button onclick="updateQuantity(${item.id}, -1)"><i class="fa-solid fa-minus"></i></button>
+            <span class="cart-item-qty">${item.cantidad}</span>
+            <button onclick="updateQuantity(${item.id}, 1)"><i class="fa-solid fa-plus"></i></button>
+            <span class="cart-item-price">$${(parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad).toFixed(0)}</span>
+          </div>
+        </div>
+      `).join('');
+      const subtotal = getCartTotal();
+      const comision = subtotal * 0.1;
+      const total = subtotal + comision;
+      document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(0)}`;
+      document.getElementById('cartCommission').textContent = `$${comision.toFixed(0)}`;
+      document.getElementById('cartTotal').textContent = `$${total.toFixed(0)}`;
+      footer.style.display = 'block';
+    }
+    function toggleCart() {
+      const overlay = document.getElementById('cartOverlay');
+      const backdrop = document.getElementById('cartBackdrop');
+      overlay.classList.toggle('open');
+      backdrop.classList.toggle('open');
+      document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
+    }
+    function initCartUI() {
+      const toggle = document.getElementById('cartToggle');
+      const close = document.getElementById('cartClose');
+      const backdrop = document.getElementById('cartBackdrop');
+      toggle.addEventListener('click', toggleCart);
+      close.addEventListener('click', toggleCart);
+      backdrop.addEventListener('click', toggleCart);
+      document.getElementById('cartGoToBtn').addEventListener('click', () => { toggleCart(); window.location.href = 'carrito.html'; });
+      document.getElementById('cartCheckoutBtn').addEventListener('click', () => {
+        if (carrito.length === 0) return;
+        let mensaje = 'Hola, vengo de la página web gavymontez-creaciones y estoy interesado en comprar estos artículos:\n\n';
+        carrito.forEach(item => { mensaje += `·${item.nombre} x ${item.cantidad}\n`; });
+        const total = getCartTotal() + (getCartTotal() * 0.1);
+        mensaje += `\nEl precio total sería $${total.toFixed(0)}.`;
+        window.open(`https://wa.me/5358481876?text=${encodeURIComponent(mensaje)}`, '_blank');
+      });
+    }
+
+    function createProductCard(p) {
+      const div = document.createElement('div');
+      div.className = "rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl group cursor-pointer flex flex-col justify-between product-card";
+      div.style.backgroundColor = "var(--card-bg)";
+      div.style.borderColor = "var(--border)";
+      div.setAttribute('onclick', `window.location.href='detalles.html?id=${p.id}'`);
+
+      const categoryIcons = {
+        pulseras: 'fa-solid fa-hand-sparkles',
+        atrapasuenos: 'fa-solid fa-feather-pointed',
+        esculturas: 'fa-solid fa-palette',
+        sombreros: 'fa-solid fa-hat-cowboy',
+        combos: 'fa-solid fa-gift'
+      };
+      const categoryLabels = {
+        pulseras: 'Pulseras',
+        atrapasuenos: 'Atrapasueños',
+        esculturas: 'Esculturas',
+        sombreros: 'Sombreros',
+        combos: 'Combos'
+      };
+
+      let tipoBadge = '';
+      if (p.tipo === 'espiritual') {
+        tipoBadge = `<span class="absolute top-3 right-3 text-[9px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: #AD610E; color: white; border: 1px solid #756205;">
+          <i class="fa-solid fa-star" style="font-size: 8px;"></i> Especial
+        </span>`;
+      } else {
+        tipoBadge = `<span class="absolute top-3 right-3 text-[9px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: #756205; color: white; border: 1px solid #AD610E;">
+          <i class="fa-regular fa-circle" style="font-size: 6px;"></i> Clásico
+        </span>`;
+      }
+
+      div.innerHTML = `
+        <div>
+          <div class="relative h-64 overflow-hidden" style="background-color: var(--hero-bg);">
+            <img src="${p.img}" alt="${p.nombre}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+            <span class="absolute top-3 left-3 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: var(--card-bg); color: var(--accent);">
+              <i class="${categoryIcons[p.categoria] || 'fa-solid fa-tag'}" style="font-size: 10px;"></i> ${categoryLabels[p.categoria] || p.categoria}
+            </span>
+            ${tipoBadge}
+          </div>
+          <div class="p-5 space-y-1">
+            <h3 class="font-serif font-bold text-lg transition-colors" style="color: var(--card-text-primary);">${p.nombre}</h3>
+            <p class="text-xs line-clamp-2 mt-1" style="color: var(--card-text-secondary);">${p.descripcion?.slice(0, 70) || ''}...</p>
+          </div>
+        </div>
+        <div class="px-5 pb-5 pt-2 flex items-center justify-between border-t" style="border-color: var(--border);">
+          <span class="text-xl font-bold" style="color: var(--accent);">${p.precio}</span>
+          <span class="btn-ver-detalles">
+            Ver detalles <i class="fa-solid fa-chevron-right"></i>
+          </span>
+        </div>
+      `;
+      return div;
+    }
+
+    function renderFeatured() {
+      const grid = document.getElementById('featured-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const destacados = productos.filter(p => p.destacado && p.categoria !== 'combos');
+      destacados.forEach(p => grid.appendChild(createProductCard(p)));
+    }
+
+    function renderCombos() {
+      const section = document.getElementById('combos-section');
+      const grid = document.getElementById('combos-grid');
+      const combos = productos.filter(p => p.categoria === 'combos');
+      if (combos.length === 0) { section.style.display = 'none'; return; }
+      section.style.display = 'block';
+      grid.innerHTML = '';
+      combos.forEach(p => grid.appendChild(createProductCard(p)));
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+      if (typeof productos === 'undefined') { console.warn('La variable productos no está definida.'); }
       initTheme();
-      const themeToggle = document.getElementById('theme-toggle');
-      const themeToggleMobile = document.getElementById('theme-toggle-mobile');
-      if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-      if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+      document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+      initCarousel();
+      initSearch();
+      loadCart();
+      initCartUI();
+      renderFeatured();
+      renderCombos();
+      
+      window.addToCart = addToCart;
+      window.updateQuantity = updateQuantity;
+      window.toggleCart = toggleCart;
+      window.scrollToSection = scrollToSection;
     });
-    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
-    function scrollToFeatured() { document.getElementById('featured-products').scrollIntoView({ behavior: 'smooth' }); }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
   </script>
-  <script src="js/data.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/main.js"></script>
 </body>
 </html>

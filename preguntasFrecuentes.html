@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Catálogo | GavyMontez Creaciones</title>
+  <title>Preguntas Frecuentes | GavyMontez Creaciones</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,73 +13,325 @@
   <link rel="stylesheet" href="frontend/css/styles.css">
   
   <style>
-    .search-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: flex-start; justify-content: center; padding-top: 4rem; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    .search-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 4rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
     .search-overlay.active { opacity: 1; visibility: visible; }
     .search-container { max-width: 600px; width: 90%; position: relative; }
-    .search-bar { display: flex; align-items: center; gap: 0.5rem; background: var(--card-bg); border-radius: 30px; padding: 0.6rem 1rem; border: 2px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.2); transition: border-color 0.3s ease; }
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border-radius: 30px;
+      padding: 0.6rem 1rem;
+      border: 2px solid var(--border);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      transition: border-color 0.3s ease;
+    }
     .search-bar:focus-within { border-color: var(--accent); }
     .search-bar .search-icon { color: var(--text-primary); opacity: 0.5; font-size: 1.1rem; }
-    .search-bar input { flex: 1; background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 1rem; padding: 0.4rem 0; min-width: 60px; }
+    .search-bar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 1rem;
+      padding: 0.4rem 0;
+      min-width: 60px;
+    }
     .search-bar input::placeholder { color: var(--text-primary); opacity: 0.5; }
-    .search-btn { background: var(--accent); border: none; border-radius: 50%; width: 38px; height: 38px; color: white; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .search-btn {
+      background: var(--accent);
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
     .search-btn:hover { background: var(--art-hover); transform: scale(1.05); }
-    .search-close { background: none; border: none; color: var(--text-primary); font-size: 1.3rem; cursor: pointer; padding: 0.2rem; opacity: 0.6; transition: opacity 0.2s ease; flex-shrink: 0; }
+    .search-close {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 0.2rem;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+      flex-shrink: 0;
+    }
     .search-close:hover { opacity: 1; }
-    .search-results { background: var(--card-bg); border-radius: 16px; margin-top: 0.5rem; max-height: 400px; overflow-y: auto; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid var(--border); display: none; }
+    .search-results {
+      background: var(--card-bg);
+      border-radius: 16px;
+      margin-top: 0.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      border: 1px solid var(--border);
+      display: none;
+    }
     .search-results.active { display: block; }
     .search-results::-webkit-scrollbar { width: 4px; }
     .search-results::-webkit-scrollbar-track { background: transparent; }
     .search-results::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-    .search-result-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem 1rem; cursor: pointer; transition: background 0.2s ease; border-bottom: 1px solid var(--border); }
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border-bottom: 1px solid var(--border);
+    }
     .search-result-item:last-child { border-bottom: none; }
     .search-result-item:hover { background: var(--bg-primary); }
-    .search-result-item img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--hero-bg); }
+    .search-result-item img {
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--hero-bg);
+    }
     .search-result-info { flex: 1; min-width: 0; }
-    .search-result-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .search-result-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .search-result-meta { display: flex; gap: 0.8rem; margin-top: 0.1rem; flex-wrap: wrap; }
-    .search-result-categoria { font-size: 0.7rem; color: var(--accent); font-weight: 500; background: var(--bg-primary); padding: 0.05rem 0.6rem; border-radius: 20px; }
+    .search-result-categoria {
+      font-size: 0.7rem;
+      color: var(--accent);
+      font-weight: 500;
+      background: var(--bg-primary);
+      padding: 0.05rem 0.6rem;
+      border-radius: 20px;
+    }
     .search-result-precio { font-size: 0.7rem; color: var(--text-primary); opacity: 0.7; font-weight: 600; }
-    .search-result-empty { padding: 2rem 1rem; text-align: center; color: var(--text-primary); opacity: 0.6; font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+    .search-result-empty {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--text-primary);
+      opacity: 0.6;
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
     .search-result-empty i { font-size: 1.5rem; opacity: 0.4; }
 
     .cart-icon-wrapper { position: relative; cursor: pointer; }
-    .cart-badge { position: absolute; top: -6px; right: -6px; background: #e74c3c; color: white; font-size: 0.6rem; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+    .cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #e74c3c;
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
     .cart-badge.hidden { transform: scale(0); }
-    .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 420px; height: 100vh; background: var(--card-bg); z-index: 1000; transform: translateX(100%); transition: transform 0.3s ease; box-shadow: -4px 0 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; }
+    .cart-overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      background: var(--card-bg);
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      box-shadow: -4px 0 30px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
     .cart-overlay.open { transform: translateX(0); }
-    .cart-overlay-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    .cart-overlay-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
     .cart-overlay-backdrop.open { opacity: 1; visibility: visible; }
-    .cart-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+    .cart-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
     .cart-header h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--text-primary); }
     .cart-close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); padding: 0.3rem; }
     .cart-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
-    .cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; color: var(--text-primary); opacity: 0.6; }
+    .cart-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      color: var(--text-primary);
+      opacity: 0.6;
+    }
     .cart-empty i { font-size: 3rem; margin-bottom: 1rem; color: var(--accent); opacity: 0.4; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
     .cart-item-info { flex: 1; }
     .cart-item-name { font-size: 0.85rem; font-weight: 500; color: var(--text-primary); }
     .cart-item-meta { font-size: 0.75rem; color: var(--text-primary); opacity: 0.6; }
     .cart-item-actions { display: flex; align-items: center; gap: 0.5rem; }
-    .cart-item-actions button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-primary); color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.2s ease; }
+    .cart-item-actions button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
     .cart-item-actions button:hover { background: var(--accent); color: white; border-color: var(--accent); }
-    .cart-item-actions input { width: 35px; text-align: center; border: none; background: transparent; font-weight: 600; font-size: 0.9rem; color: var(--text-primary); outline: none; }
-    .cart-item-actions input::-webkit-outer-spin-button,
-    .cart-item-actions input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .cart-item-actions input[type=number] { -moz-appearance: textfield; }
+    .cart-item-qty { font-weight: 600; min-width: 24px; text-align: center; color: var(--text-primary); }
     .cart-item-price { font-weight: 600; color: var(--accent); font-size: 0.85rem; min-width: 50px; text-align: right; }
-    .cart-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .cart-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
     .cart-totals { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
     .cart-total-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-primary); }
     .cart-total-row.total { font-weight: 700; font-size: 1.1rem; border-top: 1px solid var(--border); padding-top: 0.5rem; margin-top: 0.3rem; }
     .cart-total-row.total .price { color: var(--accent); }
-    .cart-checkout-btn { width: 100%; padding: 0.8rem; background: #25D366; color: white; border: none; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .cart-checkout-btn {
+      width: 100%;
+      padding: 0.8rem;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
     .cart-checkout-btn:hover { background: #1da851; transform: scale(1.02); }
-    .cart-go-to-btn { width: 100%; padding: 0.7rem; background: var(--accent); color: white; border: none; border-radius: 30px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .cart-go-to-btn {
+      width: 100%;
+      padding: 0.7rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
     .cart-go-to-btn:hover { background: var(--art-hover); }
 
-    .page-input-no-buttons { width: 60px; text-align: center; padding: 0.3rem 0.5rem; border-radius: 8px; border: 1px solid var(--border); background-color: var(--card-bg); color: var(--text-primary); font-size: 0.95rem; outline: none; transition: border-color 0.3s ease; -moz-appearance: textfield; }
-    .page-input-no-buttons::-webkit-outer-spin-button, .page-input-no-buttons::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .page-input-no-buttons:focus { border-color: var(--accent); }
+    /* FAQ Acordeón */
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 0;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question {
+      width: 100%;
+      padding: 0.8rem 0;
+      background: none;
+      border: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+    .faq-question:hover { color: var(--accent); }
+    .faq-question i { transition: transform 0.3s ease; color: var(--accent); }
+    .faq-question.open i { transform: rotate(180deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+      padding: 0;
+      color: var(--text-primary);
+      opacity: 0.8;
+      line-height: 1.7;
+    }
+    .faq-answer.open {
+      max-height: 500px;
+      padding: 0.5rem 0 1rem;
+    }
+    .faq-answer a { color: var(--accent); text-decoration: none; }
+    .faq-answer a:hover { text-decoration: underline; }
   </style>
 
   <script>
@@ -121,7 +373,7 @@
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
           <a href="index.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
           <a href="novedades.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-star"></i> Novedades</a>
-          <a href="catalogo.html" class="nav-link active font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
+          <a href="catalogo.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
         </nav>
 
         <div class="flex items-center gap-3 flex-shrink-0">
@@ -184,75 +436,163 @@
     </div>
   </div>
 
-  <main class="flex-grow py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="uppercase tracking-widest text-xs font-bold flex items-center justify-center gap-2" style="color: var(--accent);">
-          <i class="fa-regular fa-rectangle-list"></i> Colección GavyMontez
-        </span>
-        <h1 class="text-4xl font-serif font-bold mt-1" style="color: var(--text-primary);">Piezas únicas, hechas con amor</h1>
-        <p class="mt-3" style="color: var(--text-primary); opacity: 0.7;">Filtra por categoría o tipo. Mostrando 12 productos por página.</p>
+  <main class="flex-grow py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <span class="uppercase tracking-widest text-xs font-bold" style="color: var(--accent);">Ayuda y soporte</span>
+        <h1 class="text-4xl font-serif font-bold mt-1" style="color: var(--text-primary);">Preguntas Frecuentes</h1>
+        <p class="mt-3" style="color: var(--text-primary); opacity: 0.7;">Encuentra respuestas a las dudas más comunes sobre nuestras creaciones.</p>
       </div>
 
-      <div class="flex flex-wrap justify-center gap-3 mb-6" id="category-filters">
-        <button onclick="filterCategory('todos')" data-cat="todos" class="category-btn active px-5 py-2.5 rounded-full text-sm transition-all border bg-art-accent text-white flex items-center gap-1.5">
-          <i class="fa-solid fa-grid-2"></i> Todos
-        </button>
-        <button onclick="filterCategory('pulseras')" data-cat="pulseras" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-hand-sparkles"></i> Pulseras
-        </button>
-        <button onclick="filterCategory('atrapasuenos')" data-cat="atrapasuenos" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-feather-pointed"></i> Atrapasueños
-        </button>
-        <button onclick="filterCategory('esculturas')" data-cat="esculturas" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-palette"></i> Esculturas
-        </button>
-        <button onclick="filterCategory('sombreros')" data-cat="sombreros" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-hat-cowboy"></i> Sombreros
-        </button>
-        <button onclick="filterCategory('combos')" data-cat="combos" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-gift"></i> Combos
-        </button>
-      </div>
-
-      <div class="flex flex-wrap justify-center gap-3 mb-10" id="tipo-filters">
-        <span class="text-sm font-medium self-center mr-2 flex items-center gap-1.5" style="color: var(--text-primary); opacity: 0.7;">
-          <i class="fa-solid fa-sliders"></i> Tipo:
-        </span>
-        <label class="flex items-center gap-1.5 text-sm px-4 py-2 rounded-full border cursor-pointer transition-all" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
-          <input type="radio" name="tipo-filtro" value="todos" checked onchange="filterByType(this.value)"> 
-          <i class="fa-regular fa-circle"></i> Todos
-        </label>
-        <label class="flex items-center gap-1.5 text-sm px-4 py-2 rounded-full border cursor-pointer transition-all" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
-          <input type="radio" name="tipo-filtro" value="clasico" onchange="filterByType(this.value)"> 
-          <i class="fa-regular fa-circle" style="color: #756205;"></i> Clásicos (CUP)
-        </label>
-        <label class="flex items-center gap-1.5 text-sm px-4 py-2 rounded-full border cursor-pointer transition-all" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
-          <input type="radio" name="tipo-filtro" value="espiritual" onchange="filterByType(this.value)"> 
-          <i class="fa-solid fa-star" style="color: #AD610E; font-size: 12px;"></i> Especiales (USD)
-        </label>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="catalogo-grid"></div>
-      
-      <div id="pagination-container" class="flex justify-center items-center gap-4 mt-12">
-        <button id="prev-page-btn" class="px-4 py-2 rounded-full border transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
-          <i class="fa-solid fa-chevron-left"></i> Anterior
-        </button>
-        <div class="flex items-center gap-2">
-          <span style="color: var(--text-primary); opacity: 0.7;">Página</span>
-          <input type="number" id="page-input" min="1" class="page-input-no-buttons">
-          <span style="color: var(--text-primary); opacity: 0.7;">de <span id="total-pages">1</span></span>
+      <div class="rounded-3xl p-6 md:p-8 border shadow-md" style="background-color: var(--card-bg); border-color: var(--border);">
+        
+        <!-- FAQ 1 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cómo puedo realizar un pedido?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Para realizar un pedido, simplemente navega por nuestro <a href="catalogo.html">catálogo</a>, selecciona las piezas que te gusten y añádelas al carrito. Luego, ve al carrito y haz clic en <strong>"Comprar por WhatsApp"</strong>. Esto abrirá un chat con nosotros donde confirmaremos tu pedido, te daremos el costo total con envío y acordaremos el método de pago y entrega.</p>
+          </div>
         </div>
-        <button id="next-page-btn" class="px-4 py-2 rounded-full border transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
-          Siguiente <i class="fa-solid fa-chevron-right"></i>
-        </button>
-      </div>
-      
-      <div id="empty-catalog-state" class="hidden text-center py-16">
-        <i class="fa-regular fa-face-frown text-5xl" style="color: var(--accent); opacity: 0.3;"></i>
-        <p class="text-lg mt-4" style="color: var(--text-primary); opacity: 0.7;">No hay productos en esta categoría.</p>
-        <button onclick="filterCategory('todos')" class="mt-4 text-white px-6 py-2 rounded-full" style="background-color: var(--accent);">Mostrar todos</button>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Qué métodos de pago aceptan?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Aceptamos los siguientes métodos de pago:</p>
+            <ul style="list-style: disc; padding-left: 1.5rem; margin-top: 0.3rem;">
+              <li>Transferencia bancaria (CUP y MLC)</li>
+              <li>Efectivo en punto de encuentro acordado (dentro de La Habana)</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Los detalles de pago se proporcionan al confirmar el pedido por WhatsApp.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cuánto cuesta el envío?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>El costo de envío depende de tu ubicación. Te informamos el costo exacto antes de confirmar la compra. Generalmente:</p>
+            <ul style="list-style: disc; padding-left: 1.5rem; margin-top: 0.3rem;">
+              <li><strong>La Habana:</strong> Costo reducido o entrega personalizada sin cargo</li>
+              <li><strong>Resto del país:</strong> Se calcula según el peso y la distancia</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Consulta nuestra <a href="politicaEnvios.html">Política de Envíos</a> para más detalles.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cuánto tiempo tarda en llegar mi pedido?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Los tiempos de entrega varían según la ubicación:</p>
+            <ul style="list-style: disc; padding-left: 1.5rem; margin-top: 0.3rem;">
+              <li><strong>La Habana:</strong> 1-3 días hábiles</li>
+              <li><strong>Resto del país:</strong> 3-7 días hábiles</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Te proporcionaremos un número de seguimiento para que puedas rastrear tu paquete.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Puedo devolver o cambiar un producto?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Dado que cada pieza es única y hecha a mano, no aceptamos devoluciones por cambio de opinión. Sin embargo, si tu producto llega dañado o con algún defecto, contáctanos dentro de las <strong>48 horas</strong> de recibido para evaluar una solución.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 6 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cómo sé si un producto es "Clásico" o "Edición Especial"?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>En la página de cada producto, encontrarás un badge (etiqueta) que indica el tipo:</p>
+            <ul style="list-style: none; padding-left: 0; margin-top: 0.3rem;">
+              <li><span class="tipo-badge clasico" style="display: inline-block; font-size: 0.6rem;"><i class="fa-regular fa-circle"></i> Clásico</span> — Precio en CUP, materiales tradicionales</li>
+              <li><span class="tipo-badge espiritual" style="display: inline-block; font-size: 0.6rem; margin-top: 0.3rem;"><i class="fa-solid fa-star"></i> Edición Especial</span> — Precio en USD, con significado espiritual</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- FAQ 7 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Qué es la "Edición Especial" o "Espiritual"?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Nuestra <strong>Edición Especial</strong> está diseñada para conectar con lo espiritual y lo energético. Cada pieza incluye materiales seleccionados por su significado (cristales, plumas éticas, maderas sagradas) y viene con una descripción detallada de su simbolismo. Estas piezas están pensadas para quienes buscan algo más que una joya o decoración: una conexión con lo sagrado.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 8 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Cómo puedo contactarlos?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Puedes contactarnos a través de:</p>
+            <ul style="list-style: none; padding-left: 0; margin-top: 0.3rem;">
+              <li><i class="fa-brands fa-whatsapp" style="color: #25D366;"></i> <a href="https://wa.me/5358481876" target="_blank">WhatsApp: +53 58481876</a></li>
+              <li><i class="fa-brands fa-instagram" style="color: #E1306C;"></i> <a href="https://instagram.com/gavymontez_creaciones" target="_blank">Instagram: @gavymontez_creaciones</a></li>
+              <li><i class="fa-regular fa-envelope"></i> <a href="mailto:gavymontez@creaciones.com">gavymontez@creaciones.com</a></li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Respondemos en menos de 24 horas.</p>
+          </div>
+        </div>
+
+        <!-- FAQ 9 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Hacen envíos internacionales?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Actualmente solo realizamos envíos dentro de Cuba. Estamos trabajando para ofrecer envíos internacionales en el futuro. ¡Mantente atento a nuestras novedades!</p>
+          </div>
+        </div>
+
+        <!-- FAQ 10 -->
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>¿Puedo encargar una pieza personalizada?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Sí, aceptamos pedidos personalizados. Contáctanos por WhatsApp con tu idea y trabajaremos juntos para crear una pieza única que refleje tu esencia. Los tiempos y precios se acuerdan según la complejidad del diseño.</p>
+          </div>
+        </div>
+
+        <div class="pt-6 border-t text-center" style="border-color: var(--border);">
+          <p style="color: var(--text-primary); opacity: 0.6; font-size: 0.9rem;">
+            <i class="fa-regular fa-message"></i> ¿No encontraste lo que buscabas? 
+            <a href="contacto.html" style="color: var(--accent); font-weight: 600;">Contáctanos directamente</a>
+          </p>
+        </div>
+
+        <div class="text-center pt-4">
+          <a href="catalogo.html" class="inline-block text-white px-6 py-3 rounded-full transition-all hover:scale-102" style="background-color: var(--accent);">
+            <i class="fa-solid fa-arrow-left"></i> Ver catálogo
+          </a>
+        </div>
       </div>
     </div>
   </main>
@@ -260,16 +600,17 @@
   <footer class="footer-gavy">
     <div class="footer-container">
       <div class="footer-columns">
+        <!-- Columna 1: Navegación (izquierda en escritorio, segundo en móvil) -->
         <div class="footer-col-1">
           <h3>Navegación</h3>
           <ul class="footer-links">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="novedades.html">Novedades</a></li>
             <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
           </ul>
         </div>
         
+        <!-- Columna 2: Logo, descripción y redes sociales (centro en escritorio, primero en móvil) -->
         <div class="footer-col-2">
           <div class="footer-logo">
             <div class="logo-icon">GM</div>
@@ -284,6 +625,7 @@
           </div>
         </div>
         
+        <!-- Columna 3: Información (derecha en escritorio, tercero en móvil) -->
         <div class="footer-col-3">
           <h3>Información</h3>
           <ul class="footer-links">
@@ -305,6 +647,13 @@
   <script src="backend/data.js"></script>
   <script src="frontend/scripts/ui.js"></script>
   <script>
+    function toggleFaq(button) {
+      const answer = button.nextElementSibling;
+      const icon = button.querySelector('i');
+      answer.classList.toggle('open');
+      icon.classList.toggle('rotated');
+    }
+
     function initTheme() {
       const savedTheme = localStorage.getItem('theme');
       if (savedTheme === 'dark') {
@@ -401,40 +750,12 @@
       updateCartUI();
     }
     function saveCart() { localStorage.setItem('gavy_cart', JSON.stringify(carrito)); updateCartUI(); }
-    function addToCart(productoId, cantidad = 1) {
-      const producto = productos.find(p => p.id === productoId);
-      if (!producto) return;
-      const existing = carrito.find(item => item.id === productoId);
-      if (existing) { existing.cantidad += cantidad; } else { carrito.push({ ...producto, cantidad }); }
-      saveCart();
-      showToast(`¡${producto.nombre} añadido al carrito!`, 'success');
-    }
     function updateQuantity(productoId, delta) {
       const item = carrito.find(i => i.id === productoId);
       if (!item) return;
       const nueva = item.cantidad + delta;
       if (nueva <= 0) { carrito = carrito.filter(i => i.id !== productoId); saveCart(); return; }
       item.cantidad = nueva; saveCart();
-    }
-    function updateQtyFromInput(id, value) {
-      const num = parseInt(value);
-      if (isNaN(num) || num < 1) {
-        const item = carrito.find(i => i.id === id);
-        const input = document.querySelector(`#cartBody input[onchange*="updateQtyFromInput(${id}"]`);
-        if (item && input) {
-          input.value = item.cantidad;
-        }
-        return;
-      }
-      const item = carrito.find(i => i.id === id);
-      if (!item) return;
-      if (num === 0) {
-        carrito = carrito.filter(i => i.id !== id);
-        saveCart();
-        return;
-      }
-      item.cantidad = num;
-      saveCart();
     }
     function getCartTotal() { return carrito.reduce((sum, item) => sum + parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad, 0); }
     function getCartProductCount() { return carrito.length; }
@@ -456,7 +777,7 @@
           <div class="cart-item-info"><div class="cart-item-name">${item.nombre}</div><div class="cart-item-meta">${item.precio} c/u</div></div>
           <div class="cart-item-actions">
             <button onclick="updateQuantity(${item.id}, -1)"><i class="fa-solid fa-minus"></i></button>
-            <input type="number" value="${item.cantidad}" min="1" onchange="updateQtyFromInput(${item.id}, this.value)">
+            <span class="cart-item-qty">${item.cantidad}</span>
             <button onclick="updateQuantity(${item.id}, 1)"><i class="fa-solid fa-plus"></i></button>
             <span class="cart-item-price">$${(parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad).toFixed(0)}</span>
           </div>
@@ -495,132 +816,6 @@
       });
     }
 
-    let currentPage = 1;
-    let itemsPerPage = 12;
-    let currentFilteredProducts = [...(typeof productos !== 'undefined' ? productos : [])];
-
-    function createProductCard(p) {
-      const div = document.createElement('div');
-      div.className = "rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl group cursor-pointer flex flex-col justify-between product-card";
-      div.style.backgroundColor = "var(--card-bg)";
-      div.style.borderColor = "var(--border)";
-      div.setAttribute('onclick', `window.location.href='detalles.html?id=${p.id}'`);
-
-      const categoryIcons = {
-        pulseras: 'fa-solid fa-hand-sparkles',
-        atrapasuenos: 'fa-solid fa-feather-pointed',
-        esculturas: 'fa-solid fa-palette',
-        sombreros: 'fa-solid fa-hat-cowboy',
-        combos: 'fa-solid fa-gift'
-      };
-      const categoryLabels = {
-        pulseras: 'Pulseras',
-        atrapasuenos: 'Atrapasueños',
-        esculturas: 'Esculturas',
-        sombreros: 'Sombreros',
-        combos: 'Combos'
-      };
-
-      let tipoBadge = '';
-      if (p.tipo === 'espiritual') {
-        tipoBadge = `<span class="absolute top-3 right-3 text-[9px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: #AD610E; color: white; border: 1px solid #756205;">
-          <i class="fa-solid fa-star" style="font-size: 8px;"></i> Especial
-        </span>`;
-      } else {
-        tipoBadge = `<span class="absolute top-3 right-3 text-[9px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: #756205; color: white; border: 1px solid #AD610E;">
-          <i class="fa-regular fa-circle" style="font-size: 6px;"></i> Clásico
-        </span>`;
-      }
-
-      div.innerHTML = `
-        <div>
-          <div class="relative h-64 overflow-hidden" style="background-color: var(--hero-bg);">
-            <img src="${p.img}" alt="${p.nombre}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            <span class="absolute top-3 left-3 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: var(--card-bg); color: var(--accent);">
-              <i class="${categoryIcons[p.categoria] || 'fa-solid fa-tag'}" style="font-size: 10px;"></i> ${categoryLabels[p.categoria] || p.categoria}
-            </span>
-            ${tipoBadge}
-          </div>
-          <div class="p-5 space-y-1">
-            <h3 class="font-serif font-bold text-lg transition-colors" style="color: var(--card-text-primary);">${p.nombre}</h3>
-            <p class="text-xs line-clamp-2 mt-1" style="color: var(--card-text-secondary);">${p.descripcion?.slice(0, 70) || ''}...</p>
-          </div>
-        </div>
-        <div class="px-5 pb-5 pt-2 flex items-center justify-between border-t" style="border-color: var(--border);">
-          <span class="text-xl font-bold" style="color: var(--accent);">${p.precio}</span>
-          <span class="btn-ver-detalles">
-            Ver detalles <i class="fa-solid fa-chevron-right"></i>
-          </span>
-        </div>
-      `;
-      return div;
-    }
-
-    function renderCatalogoConPaginado() {
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      const productosPagina = currentFilteredProducts.slice(startIndex, endIndex);
-      const totalPages = Math.ceil(currentFilteredProducts.length / itemsPerPage);
-      const grid = document.getElementById('catalogo-grid');
-      const emptyState = document.getElementById('empty-catalog-state');
-      const paginationContainer = document.getElementById('pagination-container');
-      
-      if (productosPagina.length === 0 && currentFilteredProducts.length === 0) {
-        grid.classList.add('hidden');
-        emptyState.classList.remove('hidden');
-        paginationContainer.classList.add('hidden');
-        return;
-      }
-      grid.classList.remove('hidden');
-      emptyState.classList.add('hidden');
-      paginationContainer.classList.remove('hidden');
-      grid.innerHTML = '';
-      productosPagina.forEach(p => grid.appendChild(createProductCard(p)));
-      
-      const prevBtn = document.getElementById('prev-page-btn');
-      const nextBtn = document.getElementById('next-page-btn');
-      const pageInput = document.getElementById('page-input');
-      const totalPagesSpan = document.getElementById('total-pages');
-      pageInput.value = currentPage;
-      totalPagesSpan.textContent = totalPages;
-      prevBtn.disabled = currentPage === 1;
-      nextBtn.disabled = currentPage === totalPages || totalPages === 0;
-      if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
-    }
-
-    function aplicarFiltros() {
-      const categoriaActiva = document.querySelector('.category-btn.active')?.dataset.cat || 'todos';
-      const tipoSeleccionado = document.querySelector('[name="tipo-filtro"]:checked')?.value || 'todos';
-      
-      let productosFiltrados = [...(typeof productos !== 'undefined' ? productos : [])];
-      if (categoriaActiva !== 'todos') {
-        productosFiltrados = productosFiltrados.filter(p => p.categoria === categoriaActiva);
-      }
-      if (tipoSeleccionado !== 'todos') {
-        productosFiltrados = productosFiltrados.filter(p => p.tipo === tipoSeleccionado);
-      }
-      currentFilteredProducts = productosFiltrados;
-      currentPage = 1;
-      renderCatalogoConPaginado();
-    }
-
-    window.filterCategory = function(catId) {
-      document.querySelectorAll('#category-filters .category-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-art-accent', 'text-white', 'border-art-accent');
-        btn.classList.add('bg-white', 'text-art-text', 'border-art-border');
-      });
-      const activeBtn = document.querySelector(`#category-filters [data-cat="${catId}"]`);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-white', 'text-art-text', 'border-art-border');
-        activeBtn.classList.add('active', 'bg-art-accent', 'text-white', 'border-art-accent');
-      }
-      aplicarFiltros();
-    };
-
-    window.filterByType = function(tipo) {
-      aplicarFiltros();
-    };
-
     document.addEventListener('DOMContentLoaded', function() {
       if (typeof productos === 'undefined') { console.warn('La variable productos no está definida.'); }
       initTheme();
@@ -628,30 +823,6 @@
       initSearch();
       loadCart();
       initCartUI();
-      
-      const urlParams = new URLSearchParams(window.location.search);
-      const searchQuery = urlParams.get('search');
-      if (searchQuery) {
-        const input = document.getElementById('searchInput');
-        if (input) {
-          input.value = searchQuery;
-          const resultados = buscarProductos(searchQuery);
-          if (resultados.length > 0) {
-            const ids = resultados.map(p => p.id);
-            currentFilteredProducts = (typeof productos !== 'undefined' ? productos : []).filter(p => ids.includes(p.id));
-          } else {
-            currentFilteredProducts = [];
-          }
-          currentPage = 1;
-        }
-      }
-      
-      currentFilteredProducts = [...(typeof productos !== 'undefined' ? productos : [])];
-      renderCatalogoConPaginado();
-      
-      document.getElementById('prev-page-btn')?.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderCatalogoConPaginado(); } });
-      document.getElementById('next-page-btn')?.addEventListener('click', () => { const total = Math.ceil(currentFilteredProducts.length / itemsPerPage); if (currentPage < total) { currentPage++; renderCatalogoConPaginado(); } });
-      document.getElementById('page-input')?.addEventListener('change', function() { let np = parseInt(this.value); const total = Math.ceil(currentFilteredProducts.length / itemsPerPage); if (isNaN(np)) np = 1; if (np < 1) np = 1; if (np > total && total > 0) np = total; currentPage = np; renderCatalogoConPaginado(); });
     });
 
     function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }

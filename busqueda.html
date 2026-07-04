@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Catálogo | GavyMontez Creaciones</title>
+  <title>Resultados de búsqueda | GavyMontez Creaciones</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,7 +121,7 @@
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
           <a href="index.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
           <a href="novedades.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-star"></i> Novedades</a>
-          <a href="catalogo.html" class="nav-link active font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
+          <a href="catalogo.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
         </nav>
 
         <div class="flex items-center gap-3 flex-shrink-0">
@@ -186,57 +186,17 @@
 
   <main class="flex-grow py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
       <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="uppercase tracking-widest text-xs font-bold flex items-center justify-center gap-2" style="color: var(--accent);">
-          <i class="fa-regular fa-rectangle-list"></i> Colección GavyMontez
-        </span>
-        <h1 class="text-4xl font-serif font-bold mt-1" style="color: var(--text-primary);">Piezas únicas, hechas con amor</h1>
-        <p class="mt-3" style="color: var(--text-primary); opacity: 0.7;">Filtra por categoría o tipo. Mostrando 12 productos por página.</p>
+        <span class="uppercase tracking-widest text-xs font-bold" style="color: var(--accent);">Resultados de búsqueda</span>
+        <h1 class="text-4xl font-serif font-bold mt-1" style="color: var(--text-primary);" id="searchTitle">Buscando...</h1>
+        <p class="mt-3" style="color: var(--text-primary); opacity: 0.7;" id="searchCount">0 productos encontrados</p>
       </div>
 
-      <div class="flex flex-wrap justify-center gap-3 mb-6" id="category-filters">
-        <button onclick="filterCategory('todos')" data-cat="todos" class="category-btn active px-5 py-2.5 rounded-full text-sm transition-all border bg-art-accent text-white flex items-center gap-1.5">
-          <i class="fa-solid fa-grid-2"></i> Todos
-        </button>
-        <button onclick="filterCategory('pulseras')" data-cat="pulseras" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-hand-sparkles"></i> Pulseras
-        </button>
-        <button onclick="filterCategory('atrapasuenos')" data-cat="atrapasuenos" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-feather-pointed"></i> Atrapasueños
-        </button>
-        <button onclick="filterCategory('esculturas')" data-cat="esculturas" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-palette"></i> Esculturas
-        </button>
-        <button onclick="filterCategory('sombreros')" data-cat="sombreros" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-hat-cowboy"></i> Sombreros
-        </button>
-        <button onclick="filterCategory('combos')" data-cat="combos" class="category-btn px-5 py-2.5 rounded-full text-sm border bg-white text-art-text flex items-center gap-1.5">
-          <i class="fa-solid fa-gift"></i> Combos
-        </button>
-      </div>
-
-      <div class="flex flex-wrap justify-center gap-3 mb-10" id="tipo-filters">
-        <span class="text-sm font-medium self-center mr-2 flex items-center gap-1.5" style="color: var(--text-primary); opacity: 0.7;">
-          <i class="fa-solid fa-sliders"></i> Tipo:
-        </span>
-        <label class="flex items-center gap-1.5 text-sm px-4 py-2 rounded-full border cursor-pointer transition-all" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
-          <input type="radio" name="tipo-filtro" value="todos" checked onchange="filterByType(this.value)"> 
-          <i class="fa-regular fa-circle"></i> Todos
-        </label>
-        <label class="flex items-center gap-1.5 text-sm px-4 py-2 rounded-full border cursor-pointer transition-all" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
-          <input type="radio" name="tipo-filtro" value="clasico" onchange="filterByType(this.value)"> 
-          <i class="fa-regular fa-circle" style="color: #756205;"></i> Clásicos (CUP)
-        </label>
-        <label class="flex items-center gap-1.5 text-sm px-4 py-2 rounded-full border cursor-pointer transition-all" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
-          <input type="radio" name="tipo-filtro" value="espiritual" onchange="filterByType(this.value)"> 
-          <i class="fa-solid fa-star" style="color: #AD610E; font-size: 12px;"></i> Especiales (USD)
-        </label>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="catalogo-grid"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="busqueda-grid"></div>
       
       <div id="pagination-container" class="flex justify-center items-center gap-4 mt-12">
-        <button id="prev-page-btn" class="px-4 py-2 rounded-full border transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
+        <button id="prev-page-btn" class="px-4 py-2 rounded-full border transition-all disabled:opacity-50 disabled:cursor-not-allowed" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
           <i class="fa-solid fa-chevron-left"></i> Anterior
         </button>
         <div class="flex items-center gap-2">
@@ -244,15 +204,16 @@
           <input type="number" id="page-input" min="1" class="page-input-no-buttons">
           <span style="color: var(--text-primary); opacity: 0.7;">de <span id="total-pages">1</span></span>
         </div>
-        <button id="next-page-btn" class="px-4 py-2 rounded-full border transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
+        <button id="next-page-btn" class="px-4 py-2 rounded-full border transition-all disabled:opacity-50 disabled:cursor-not-allowed" style="border-color: var(--border); background-color: var(--card-bg); color: var(--text-primary);">
           Siguiente <i class="fa-solid fa-chevron-right"></i>
         </button>
       </div>
       
-      <div id="empty-catalog-state" class="hidden text-center py-16">
+      <div id="empty-search-state" class="hidden text-center py-16">
         <i class="fa-regular fa-face-frown text-5xl" style="color: var(--accent); opacity: 0.3;"></i>
-        <p class="text-lg mt-4" style="color: var(--text-primary); opacity: 0.7;">No hay productos en esta categoría.</p>
-        <button onclick="filterCategory('todos')" class="mt-4 text-white px-6 py-2 rounded-full" style="background-color: var(--accent);">Mostrar todos</button>
+        <p class="text-lg mt-4" style="color: var(--text-primary); opacity: 0.7;">No se encontraron productos para tu búsqueda.</p>
+        <p class="text-sm mt-1" style="color: var(--text-primary); opacity: 0.5;">Prueba con otras palabras clave o revisa nuestro catálogo completo.</p>
+        <a href="catalogo.html" class="inline-block mt-6 text-white px-6 py-3 rounded-full" style="background-color: var(--accent);">Ver catálogo completo</a>
       </div>
     </div>
   </main>
@@ -266,7 +227,6 @@
             <li><a href="index.html">Inicio</a></li>
             <li><a href="novedades.html">Novedades</a></li>
             <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
           </ul>
         </div>
         
@@ -303,7 +263,6 @@
   <a href="https://wa.me/5358481876" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-xl hover:bg-[#20ba5a] hover:scale-110 transition-all group"><i class="fa-brands fa-whatsapp"></i></a>
 
   <script src="backend/data.js"></script>
-  <script src="frontend/scripts/ui.js"></script>
   <script>
     function initTheme() {
       const savedTheme = localStorage.getItem('theme');
@@ -401,14 +360,6 @@
       updateCartUI();
     }
     function saveCart() { localStorage.setItem('gavy_cart', JSON.stringify(carrito)); updateCartUI(); }
-    function addToCart(productoId, cantidad = 1) {
-      const producto = productos.find(p => p.id === productoId);
-      if (!producto) return;
-      const existing = carrito.find(item => item.id === productoId);
-      if (existing) { existing.cantidad += cantidad; } else { carrito.push({ ...producto, cantidad }); }
-      saveCart();
-      showToast(`¡${producto.nombre} añadido al carrito!`, 'success');
-    }
     function updateQuantity(productoId, delta) {
       const item = carrito.find(i => i.id === productoId);
       if (!item) return;
@@ -495,10 +446,6 @@
       });
     }
 
-    let currentPage = 1;
-    let itemsPerPage = 12;
-    let currentFilteredProducts = [...(typeof productos !== 'undefined' ? productos : [])];
-
     function createProductCard(p) {
       const div = document.createElement('div');
       div.className = "rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl group cursor-pointer flex flex-col justify-between product-card";
@@ -556,21 +503,53 @@
       return div;
     }
 
-    function renderCatalogoConPaginado() {
+    let currentPage = 1;
+    let itemsPerPage = 12;
+    let currentResults = [];
+    let searchTerm = '';
+
+    function getSearchTermFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('q') || '';
+    }
+
+    function performSearch(termino) {
+      if (typeof productos === 'undefined') { currentResults = []; return; }
+      searchTerm = termino;
+      const terminoLower = termino.toLowerCase().trim();
+      if (!terminoLower) { currentResults = []; return; }
+      currentResults = productos.filter(p =>
+        p.nombre.toLowerCase().includes(terminoLower) ||
+        p.categoria.toLowerCase().includes(terminoLower) ||
+        (p.descripcion && p.descripcion.toLowerCase().includes(terminoLower))
+      );
+    }
+
+    function renderResultadosConPaginado() {
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      const productosPagina = currentFilteredProducts.slice(startIndex, endIndex);
-      const totalPages = Math.ceil(currentFilteredProducts.length / itemsPerPage);
-      const grid = document.getElementById('catalogo-grid');
-      const emptyState = document.getElementById('empty-catalog-state');
+      const productosPagina = currentResults.slice(startIndex, endIndex);
+      const totalPages = Math.ceil(currentResults.length / itemsPerPage);
+      const grid = document.getElementById('busqueda-grid');
+      const emptyState = document.getElementById('empty-search-state');
       const paginationContainer = document.getElementById('pagination-container');
+      const searchTitle = document.getElementById('searchTitle');
+      const searchCount = document.getElementById('searchCount');
       
-      if (productosPagina.length === 0 && currentFilteredProducts.length === 0) {
+      if (searchTerm) {
+        searchTitle.textContent = `Resultados para "${searchTerm}"`;
+      } else {
+        searchTitle.textContent = 'Resultados de búsqueda';
+      }
+      searchCount.textContent = `${currentResults.length} producto${currentResults.length !== 1 ? 's' : ''} encontrado${currentResults.length !== 1 ? 's' : ''}`;
+      
+      if (currentResults.length === 0) {
         grid.classList.add('hidden');
         emptyState.classList.remove('hidden');
         paginationContainer.classList.add('hidden');
         return;
       }
+      
       grid.classList.remove('hidden');
       emptyState.classList.add('hidden');
       paginationContainer.classList.remove('hidden');
@@ -581,45 +560,14 @@
       const nextBtn = document.getElementById('next-page-btn');
       const pageInput = document.getElementById('page-input');
       const totalPagesSpan = document.getElementById('total-pages');
+      
       pageInput.value = currentPage;
       totalPagesSpan.textContent = totalPages;
       prevBtn.disabled = currentPage === 1;
       nextBtn.disabled = currentPage === totalPages || totalPages === 0;
-      if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
-    }
-
-    function aplicarFiltros() {
-      const categoriaActiva = document.querySelector('.category-btn.active')?.dataset.cat || 'todos';
-      const tipoSeleccionado = document.querySelector('[name="tipo-filtro"]:checked')?.value || 'todos';
       
-      let productosFiltrados = [...(typeof productos !== 'undefined' ? productos : [])];
-      if (categoriaActiva !== 'todos') {
-        productosFiltrados = productosFiltrados.filter(p => p.categoria === categoriaActiva);
-      }
-      if (tipoSeleccionado !== 'todos') {
-        productosFiltrados = productosFiltrados.filter(p => p.tipo === tipoSeleccionado);
-      }
-      currentFilteredProducts = productosFiltrados;
-      currentPage = 1;
-      renderCatalogoConPaginado();
+      if (currentPage > totalPages && totalPages > 0) { currentPage = totalPages; }
     }
-
-    window.filterCategory = function(catId) {
-      document.querySelectorAll('#category-filters .category-btn').forEach(btn => {
-        btn.classList.remove('active', 'bg-art-accent', 'text-white', 'border-art-accent');
-        btn.classList.add('bg-white', 'text-art-text', 'border-art-border');
-      });
-      const activeBtn = document.querySelector(`#category-filters [data-cat="${catId}"]`);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-white', 'text-art-text', 'border-art-border');
-        activeBtn.classList.add('active', 'bg-art-accent', 'text-white', 'border-art-accent');
-      }
-      aplicarFiltros();
-    };
-
-    window.filterByType = function(tipo) {
-      aplicarFiltros();
-    };
 
     document.addEventListener('DOMContentLoaded', function() {
       if (typeof productos === 'undefined') { console.warn('La variable productos no está definida.'); }
@@ -629,29 +577,41 @@
       loadCart();
       initCartUI();
       
-      const urlParams = new URLSearchParams(window.location.search);
-      const searchQuery = urlParams.get('search');
-      if (searchQuery) {
-        const input = document.getElementById('searchInput');
-        if (input) {
-          input.value = searchQuery;
-          const resultados = buscarProductos(searchQuery);
-          if (resultados.length > 0) {
-            const ids = resultados.map(p => p.id);
-            currentFilteredProducts = (typeof productos !== 'undefined' ? productos : []).filter(p => ids.includes(p.id));
-          } else {
-            currentFilteredProducts = [];
-          }
-          currentPage = 1;
-        }
+      const termino = getSearchTermFromURL();
+      if (termino) {
+        performSearch(termino);
+        currentPage = 1;
+        renderResultadosConPaginado();
+      } else {
+        document.getElementById('searchTitle').textContent = 'Búsqueda vacía';
+        document.getElementById('searchCount').textContent = '0 productos encontrados';
+        document.getElementById('busqueda-grid').classList.add('hidden');
+        document.getElementById('pagination-container').classList.add('hidden');
+        document.getElementById('empty-search-state').classList.remove('hidden');
+        document.getElementById('empty-search-state').innerHTML = `
+          <i class="fa-regular fa-search text-5xl" style="color: var(--accent); opacity: 0.3;"></i>
+          <p class="text-lg mt-4" style="color: var(--text-primary); opacity: 0.7;">No especificaste qué buscar.</p>
+          <p class="text-sm mt-1" style="color: var(--text-primary); opacity: 0.5;">Usa el buscador para encontrar tus artículos favoritos.</p>
+          <a href="catalogo.html" class="inline-block mt-6 text-white px-6 py-3 rounded-full" style="background-color: var(--accent);">Ver catálogo completo</a>
+        `;
       }
       
-      currentFilteredProducts = [...(typeof productos !== 'undefined' ? productos : [])];
-      renderCatalogoConPaginado();
-      
-      document.getElementById('prev-page-btn')?.addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderCatalogoConPaginado(); } });
-      document.getElementById('next-page-btn')?.addEventListener('click', () => { const total = Math.ceil(currentFilteredProducts.length / itemsPerPage); if (currentPage < total) { currentPage++; renderCatalogoConPaginado(); } });
-      document.getElementById('page-input')?.addEventListener('change', function() { let np = parseInt(this.value); const total = Math.ceil(currentFilteredProducts.length / itemsPerPage); if (isNaN(np)) np = 1; if (np < 1) np = 1; if (np > total && total > 0) np = total; currentPage = np; renderCatalogoConPaginado(); });
+      document.getElementById('prev-page-btn')?.addEventListener('click', () => {
+        if (currentPage > 1) { currentPage--; renderResultadosConPaginado(); }
+      });
+      document.getElementById('next-page-btn')?.addEventListener('click', () => {
+        const total = Math.ceil(currentResults.length / itemsPerPage);
+        if (currentPage < total) { currentPage++; renderResultadosConPaginado(); }
+      });
+      document.getElementById('page-input')?.addEventListener('change', function() {
+        let np = parseInt(this.value);
+        const total = Math.ceil(currentResults.length / itemsPerPage);
+        if (isNaN(np)) np = 1;
+        if (np < 1) np = 1;
+        if (np > total && total > 0) np = total;
+        currentPage = np;
+        renderResultadosConPaginado();
+      });
     });
 
     function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }

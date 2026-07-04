@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Detalles de producto | GavyMontez Creaciones</title>
+  <title>Mi Carrito | GavyMontez Creaciones</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -292,75 +292,35 @@
     }
     .cart-go-to-btn:hover { background: var(--art-hover); }
 
-    .add-to-cart-btn {
-      padding: 0.8rem 1.5rem;
-      border-radius: 30px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: none;
-      background: var(--accent);
-      color: white;
-      font-size: 1rem;
+    .cart-item-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-item-row img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: var(--hero-bg);
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-info h3 { font-family: 'Playfair Display', serif; font-weight: 600; color: var(--text-primary); }
+    .cart-item-info p { font-size: 0.85rem; color: var(--text-primary); opacity: 0.6; }
+    .qty-control {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 0.5rem;
-      flex: 0 0 auto;
-      min-width: 150px;
-    }
-    .add-to-cart-btn:hover {
-      background: var(--btn-hover-bg, #756205);
-      color: var(--btn-hover-text, white);
-      transform: scale(1.02);
-    }
-
-    .added-btn {
-      padding: 0.8rem 1.5rem;
-      border-radius: 30px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: none;
-      background: #2e7d32;
-      color: white;
-      font-size: 1rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      flex: 0 0 auto;
-      min-width: 130px;
-    }
-    .added-btn:hover {
-      background: #1b5e20;
-      transform: scale(1.02);
-    }
-    .added-btn i {
-      animation: checkPop 0.3s ease;
-    }
-    @keyframes checkPop {
-      0% { transform: scale(0); }
-      50% { transform: scale(1.3); }
-      100% { transform: scale(1); }
-    }
-
-    .cart-qty-elipse {
-      display: none;
-      align-items: center;
-      gap: 0.6rem;
       background: var(--bg-primary);
       border: 1px solid var(--border);
       border-radius: 30px;
-      padding: 0.15rem 0.3rem;
-      flex: 0 0 auto;
+      padding: 0.2rem 0.3rem;
     }
-    .cart-qty-elipse.visible {
-      display: flex;
-    }
-    .cart-qty-elipse .qty-btn {
-      width: 30px;
-      height: 30px;
+    .qty-control button {
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       border: 1px solid var(--border);
       background: var(--card-bg);
@@ -372,84 +332,192 @@
       align-items: center;
       justify-content: center;
     }
-    .cart-qty-elipse .qty-btn:hover {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-    .cart-qty-elipse .qty-input {
-      width: 36px;
+    .qty-control button:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .qty-control input {
+      width: 40px;
       text-align: center;
       border: none;
       background: transparent;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--text-primary);
       outline: none;
-      padding: 0;
     }
-    .cart-qty-elipse .qty-input::-webkit-outer-spin-button,
-    .cart-qty-elipse .qty-input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+    .qty-control input::-webkit-outer-spin-button,
+    .qty-control input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .qty-control input[type=number] { -moz-appearance: textfield; }
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #e74c3c;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      padding: 0.3rem 0.6rem;
+      border-radius: 8px;
     }
-    .cart-qty-elipse .qty-input[type=number] {
-      -moz-appearance: textfield;
-    }
-
-    .btn-compartir {
+    .remove-btn:hover { background: #fee2e2; }
+    .add-more-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.8rem 1.5rem;
+      padding: 0.7rem 1.5rem;
+      border-radius: 30px;
+      border: 2px dashed var(--border);
+      background: transparent;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    .add-more-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      padding: 1rem;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 24px;
+      max-width: 750px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-content::-webkit-scrollbar { width: 6px; }
+    .modal-content::-webkit-scrollbar-track { background: transparent; }
+    .modal-content::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+    .modal-close {
+      position: sticky;
+      top: 0;
+      float: right;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-primary);
+      z-index: 10;
+      transition: all 0.2s ease;
+    }
+    .modal-close:hover { background: var(--accent); color: white; }
+    .modal-product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .modal-product-card {
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0.75rem 0.5rem 0.5rem;
+      text-align: center;
+      background: var(--bg-primary);
+      position: relative;
+    }
+    .modal-product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
+    .modal-product-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent), 0 8px 25px rgba(193, 122, 77, 0.2);
+      background: var(--card-bg);
+    }
+    .modal-product-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: var(--hero-bg);
+    }
+    .modal-product-card h4 { font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; color: var(--text-primary); line-height: 1.2; }
+    .modal-product-card .price { font-size: 0.85rem; color: var(--accent); font-weight: 700; display: block; margin-top: 0.15rem; }
+    .modal-product-card .qty-control { margin-top: 0.4rem; padding: 0.15rem 0.25rem; justify-content: center; }
+    .modal-product-card .qty-control input { width: 28px; font-size: 0.8rem; }
+    .modal-product-card .qty-control button { width: 24px; height: 24px; font-size: 0.7rem; }
+    .modal-product-card .subtotal-preview { font-size: 0.7rem; color: var(--text-primary); opacity: 0.6; margin-top: 0.2rem; display: block; }
+    .modal-product-card .check-mark {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+    .modal-product-card.selected .check-mark { display: flex; }
+
+    .modal-selection-counter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .modal-selection-counter span { font-size: 0.85rem; color: var(--text-primary); opacity: 0.7; }
+    .modal-selection-counter .count { font-weight: 700; color: var(--accent); font-size: 1rem; }
+
+    .modal-add-btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--accent);
+      color: white;
+      border: none;
       border-radius: 30px;
       font-weight: 600;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-primary);
+      font-size: 0.95rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      flex: 0 0 auto;
+      margin-top: 1rem;
     }
-    .btn-compartir:hover {
-      background: var(--bg-primary);
-      transform: translateY(-1px);
-    }
+    .modal-add-btn:hover { background: var(--art-hover); transform: scale(1.02); }
+    .modal-add-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-    .detalle-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      padding-top: 1rem;
-      width: 100%;
-    }
-    .detalle-actions .action-row {
-      display: flex;
+    .selection-check {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: none;
       align-items: center;
-      gap: 0.8rem;
-      width: 100%;
-      flex-wrap: wrap;
+      justify-content: center;
+      font-size: 0.65rem;
+      box-shadow: 0 2px 8px rgba(193, 122, 77, 0.4);
     }
-
-    .btn-info {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-primary);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .btn-info:hover {
-      background: var(--bg-primary);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .modal-product-card.selected .selection-check { display: flex; }
   </style>
 
   <script>
@@ -489,7 +557,7 @@
         </a>
 
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
-          <a href="index.html" class="nav-link active font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
+          <a href="index.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
           <a href="novedades.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-star"></i> Novedades</a>
           <a href="catalogo.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
         </nav>
@@ -555,37 +623,51 @@
   </div>
 
   <main class="flex-grow py-12">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <a href="catalogo.html" class="inline-flex items-center gap-2 font-medium mb-4 transition-all duration-300 hover:gap-3" style="color: var(--text-primary);">
-        <i class="fa-solid fa-arrow-left"></i> Volver al catálogo
-      </a>
-
-      <div id="detalle-container" class="rounded-3xl p-6 md:p-10 border shadow-md" style="background-color: var(--card-bg); border-color: var(--border);">
-        <div class="text-center py-12">
-          <i class="fa-solid fa-spinner fa-spin text-3xl" style="color: var(--accent);"></i>
-          <p class="mt-3" style="color: var(--text-primary); opacity: 0.7;">Cargando información de la pieza...</p>
-        </div>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-serif font-bold" style="color: var(--text-primary);">
+          <i class="fa-solid fa-cart-shopping" style="color: var(--accent);"></i> Mi Carrito
+        </h1>
+        <a href="catalogo.html" class="text-sm font-medium flex items-center gap-2" style="color: var(--accent);">
+          <i class="fa-solid fa-arrow-left"></i> Seguir comprando
+        </a>
       </div>
 
-      <div class="mt-16" id="similares-section" style="display: none;">
-        <h2 class="text-2xl md:text-3xl font-serif font-bold mb-6" style="color: var(--text-primary);">También te puede gustar</h2>
-        <div id="similares-carousel" class="flex gap-6 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory"></div>
+      <div id="cart-container" class="rounded-3xl p-6 md:p-8 border shadow-md" style="background-color: var(--card-bg); border-color: var(--border);">
+        <div id="cart-content"></div>
       </div>
     </div>
   </main>
 
+  <div class="modal-overlay" id="addModal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-xl font-serif font-bold" style="color: var(--text-primary);">Selecciona artículos</h3>
+      <p class="text-sm" style="color: var(--text-primary); opacity: 0.6;">Haz clic en las tarjetas para seleccionar múltiples artículos. Ajusta la cantidad con los botones.</p>
+      <div class="modal-selection-counter">
+        <span>Artículos seleccionados:</span>
+        <span class="count" id="selectedCount">0</span>
+      </div>
+      <div class="modal-product-grid" id="modalProductGrid"></div>
+      <button class="modal-add-btn" id="modalAddBtn" disabled>Añadir seleccionados al carrito</button>
+    </div>
+  </div>
+
   <footer class="footer-gavy">
     <div class="footer-container">
       <div class="footer-columns">
+        <!-- Columna 1: Navegación (izquierda en escritorio, segundo en móvil) -->
         <div class="footer-col-1">
           <h3>Navegación</h3>
           <ul class="footer-links">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="novedades.html">Novedades</a></li>
             <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
           </ul>
         </div>
+        
+        <!-- Columna 2: Logo, descripción y redes sociales (centro en escritorio, primero en móvil) -->
         <div class="footer-col-2">
           <div class="footer-logo">
             <div class="logo-icon">GM</div>
@@ -599,6 +681,8 @@
             <a href="mailto:gavymontez@creaciones.com" target="_blank" class="social-icon-link" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
           </div>
         </div>
+        
+        <!-- Columna 3: Información (derecha en escritorio, tercero en móvil) -->
         <div class="footer-col-3">
           <h3>Información</h3>
           <ul class="footer-links">
@@ -730,73 +814,34 @@
 
     // ========== CARRITO ==========
     let carrito = [];
+    let selectedProducts = {};
+
     function loadCart() {
       const saved = localStorage.getItem('gavy_cart');
       if (saved) { try { carrito = JSON.parse(saved); } catch(e) { carrito = []; } }
       updateCartUI();
+      updateCartBadge();
     }
+
     function saveCart() {
       localStorage.setItem('gavy_cart', JSON.stringify(carrito));
       updateCartUI();
-      const currentProductId = window.currentProductId;
-      if (currentProductId) { updateDetailCartState(currentProductId); }
+      updateCartBadge();
     }
-    function addToCart(productoId, cantidad = 1) {
-      const producto = productos.find(p => p.id === productoId);
-      if (!producto) return;
-      const existing = carrito.find(item => item.id === productoId);
-      if (existing) { existing.cantidad += cantidad; } else { carrito.push({ ...producto, cantidad }); }
-      saveCart();
-      updateDetailCartState(productoId);
-      showToast(`¡${producto.nombre} añadido al carrito!`, 'success');
-    }
-    function removeFromCart(productoId) {
-      const producto = productos.find(p => p.id === productoId);
-      carrito = carrito.filter(i => i.id !== productoId);
-      saveCart();
-      updateDetailCartState(productoId);
-      if (producto) { showToast(`¡${producto.nombre} eliminado del carrito!`, 'info'); }
-    }
-    function updateQuantity(productoId, delta) {
-      const item = carrito.find(i => i.id === productoId);
-      if (!item) return;
-      const nueva = item.cantidad + delta;
-      if (nueva <= 0) { removeFromCart(productoId); return; }
-      item.cantidad = nueva;
-      saveCart();
-      updateDetailCartState(productoId);
-    }
-    function updateQtyFromInput(id, value) {
-      const num = parseInt(value);
-      if (isNaN(num) || num < 1) {
-        const item = carrito.find(i => i.id === id);
-        const input = document.getElementById('qtyInput');
-        if (item && input) {
-          input.value = item.cantidad;
-        }
-        return;
-      }
-      const item = carrito.find(i => i.id === id);
-      if (!item) return;
-      if (num === 0) {
-        removeFromCart(id);
-        return;
-      }
-      item.cantidad = num;
-      saveCart();
-      updateDetailCartState(id);
-    }
+
     function getCartTotal() {
       return carrito.reduce((sum, item) => sum + parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad, 0);
     }
+
     function getCartProductCount() { return carrito.length; }
-    function updateCartUI() {
+
+    function updateCartBadge() {
       const badge = document.getElementById('cartBadge');
       const count = getCartProductCount();
       if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
-      renderCartItems();
     }
-    function renderCartItems() {
+
+    function updateCartUI() {
       const body = document.getElementById('cartBody');
       const footer = document.getElementById('cartFooter');
       if (carrito.length === 0) {
@@ -822,6 +867,33 @@
       document.getElementById('cartTotal').textContent = `$${total.toFixed(0)}`;
       footer.style.display = 'block';
     }
+
+    function updateQuantity(id, delta) {
+      const item = carrito.find(i => i.id === id);
+      if (!item) return;
+      const nueva = item.cantidad + delta;
+      if (nueva <= 0) { carrito = carrito.filter(i => i.id !== id); saveCart(); renderCartPage(); return; }
+      item.cantidad = nueva;
+      saveCart();
+      renderCartPage();
+    }
+
+    function updateQtyFromInput(id, value) {
+      const num = parseInt(value);
+      if (isNaN(num) || num < 1) return;
+      const item = carrito.find(i => i.id === id);
+      if (!item) return;
+      item.cantidad = num;
+      saveCart();
+      renderCartPage();
+    }
+
+    function removeItem(id) {
+      carrito = carrito.filter(i => i.id !== id);
+      saveCart();
+      renderCartPage();
+    }
+
     function toggleCart() {
       const overlay = document.getElementById('cartOverlay');
       const backdrop = document.getElementById('cartBackdrop');
@@ -829,6 +901,7 @@
       backdrop.classList.toggle('open');
       document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
     }
+
     function initCartUI() {
       const toggle = document.getElementById('cartToggle');
       const close = document.getElementById('cartClose');
@@ -836,7 +909,7 @@
       toggle.addEventListener('click', toggleCart);
       close.addEventListener('click', toggleCart);
       backdrop.addEventListener('click', toggleCart);
-      document.getElementById('cartGoToBtn').addEventListener('click', () => { toggleCart(); window.location.href = 'carrito.html'; });
+      document.getElementById('cartGoToBtn').addEventListener('click', () => { toggleCart(); });
       document.getElementById('cartCheckoutBtn').addEventListener('click', () => {
         if (carrito.length === 0) return;
         let mensaje = 'Hola, vengo de la página web gavymontez-creaciones y estoy interesado en comprar estos artículos:\n\n';
@@ -847,244 +920,227 @@
       });
     }
 
-    // ========== ACTUALIZAR ESTADO EN DETALLES ==========
-    function updateDetailCartState(productId) {
-      const addBtn = document.getElementById('addToCartBtn');
-      const addedBtn = document.getElementById('addedBtn');
-      const qtyElipse = document.getElementById('cartQtyElipse');
-      const qtyInput = document.getElementById('qtyInput');
-      const existing = carrito.find(item => item.id === productId);
-      
-      if (existing) {
-        if (addBtn) addBtn.style.display = 'none';
-        if (addedBtn) {
-          addedBtn.style.display = 'inline-flex';
-          addedBtn.innerHTML = '<i class="fa-solid fa-check"></i> Añadido';
-          addedBtn.onclick = function() { removeFromCart(productId); };
-        }
-        if (qtyElipse) {
-          qtyElipse.classList.add('visible');
-          qtyElipse.style.display = 'flex';
-        }
-        if (qtyInput) qtyInput.value = existing.cantidad;
-        updateCartUI();
-      } else {
-        if (addBtn) {
-          addBtn.style.display = 'inline-flex';
-          addBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i> Añadir al carrito';
-        }
-        if (addedBtn) addedBtn.style.display = 'none';
-        if (qtyElipse) {
-          qtyElipse.classList.remove('visible');
-          qtyElipse.style.display = 'none';
-        }
-      }
-    }
-
-    // ========== DETALLE DE PRODUCTO ==========
-    let currentProducto = null;
-    window.currentProductId = null;
-
-    function cargarDetalleProducto(id) {
-      const producto = productos.find(p => p.id === id);
-      currentProducto = producto;
-      window.currentProductId = id;
-      
-      if (!producto) {
-        document.getElementById('detalle-container').innerHTML = `
+    function renderCartPage() {
+      const container = document.getElementById('cart-content');
+      if (carrito.length === 0) {
+        container.innerHTML = `
           <div class="text-center py-12">
-            <i class="fa-solid fa-triangle-exclamation text-5xl mb-4" style="color: var(--accent);"></i>
-            <h2 class="text-2xl font-serif font-bold" style="color: var(--text-primary);">Producto no encontrado</h2>
-            <p class="mt-2" style="color: var(--text-primary); opacity: 0.7;">La pieza que buscas no existe o fue removida.</p>
+            <i class="fa-solid fa-basket-shopping text-5xl" style="color: var(--accent); opacity: 0.3;"></i>
+            <h3 class="text-xl font-serif font-bold mt-4" style="color: var(--text-primary);">Tu carrito está vacío</h3>
+            <p class="mt-2" style="color: var(--text-primary); opacity: 0.6;">Explora nuestro catálogo y añade tus piezas favoritas</p>
             <a href="catalogo.html" class="inline-block mt-6 text-white px-6 py-3 rounded-full" style="background-color: var(--accent);">Ver catálogo</a>
           </div>
         `;
         return;
       }
-      
-      guardarVisto(id);
-      
-      const categoryIcons = {
-        pulseras: 'fa-solid fa-hand-sparkles',
-        atrapasuenos: 'fa-solid fa-feather-pointed',
-        esculturas: 'fa-solid fa-palette',
-        sombreros: 'fa-solid fa-hat-cowboy',
-        combos: 'fa-solid fa-gift'
-      };
-      
-      const categoryLabels = {
-        pulseras: 'Pulseras',
-        atrapasuenos: 'Atrapasueños',
-        esculturas: 'Esculturas',
-        sombreros: 'Sombreros',
-        combos: 'Combos'
-      };
-      
-      let tipoBadge = '';
-      if (producto.tipo === 'espiritual') {
-        tipoBadge = `<span class="tipo-badge espiritual"><i class="fa-solid fa-star"></i> Edición Especial</span>`;
-      } else {
-        tipoBadge = `<span class="tipo-badge clasico"><i class="fa-regular fa-circle"></i> Clásico</span>`;
-      }
-      
-      document.title = `${producto.nombre} - GavyMontez Creaciones`;
-      
-      const existing = carrito.find(item => item.id === producto.id);
-      const enCarrito = !!existing;
-      
-      const materiales = producto.materiales || 'No especificado';
-      const tamano = producto.tamano || 'No especificado';
-      const tieneSignificado = producto.significado && producto.significado.items && producto.significado.items.length > 0;
-      
-      const detalleHTML = `
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          <div class="lg:col-span-7">
-            <div class="rounded-2xl overflow-hidden border" style="background-color: var(--hero-bg); border-color: var(--border);">
-              <img id="detalle-img-principal" src="${producto.img}" alt="${producto.nombre}" class="w-full h-[350px] md:h-[450px] object-cover" loading="lazy">
-            </div>
-            <div class="flex gap-3 mt-4 overflow-x-auto pb-2" id="detalle-miniaturas">
-              ${producto.miniaturas ? producto.miniaturas.map(url => `
-                <img src="${url}" class="w-20 h-20 rounded-xl object-cover border-2 cursor-pointer transition-all miniatura-producto" style="border-color: var(--border);" onmouseenter="this.style.borderColor='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)'" onclick="document.getElementById('detalle-img-principal').src='${url}'" loading="lazy">
-              `).join('') : ''}
-            </div>
-          </div>
-          
-          <div class="lg:col-span-5 space-y-5">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="inline-flex items-center gap-1.5 text-white text-xs font-bold uppercase px-3 py-1.5 rounded-full" style="background-color: var(--secondary);">
-                <i class="${categoryIcons[producto.categoria] || 'fa-solid fa-tag'}" style="font-size: 10px;"></i> ${categoryLabels[producto.categoria] || producto.categoria}
-              </span>
-              ${tipoBadge}
-            </div>
-            <h1 class="text-3xl md:text-4xl font-serif font-bold" style="color: var(--detail-text-primary);">${producto.nombre}</h1>
-            <p class="text-3xl font-bold" style="color: var(--accent);">${producto.precio}</p>
-            
-            <div class="border-t border-b py-4" style="border-color: var(--border);">
-              <p class="text-sm font-bold uppercase tracking-wider mb-2" style="color: var(--detail-title-descrip);">Descripción de la artesana</p>
-              <p class="leading-relaxed" style="color: var(--detail-text-desc);">${producto.descripcion}</p>
-              
-              <div class="flex flex-wrap gap-2 mt-3">
-                <button class="btn-info" onclick="abrirInformacion('${materiales.replace(/'/g, "\\'")}', '${tamano.replace(/'/g, "\\'")}')">
-                  <i class="fa-solid fa-circle-info"></i> Materiales y medidas
-                </button>
-                ${tieneSignificado ? `
-                  <button class="btn-info" onclick="abrirSignificado('${producto.significado.titulo || 'Significado Espiritual'}', ${JSON.stringify(producto.significado.items).replace(/"/g, '&quot;')})">
-                    <i class="fa-solid fa-spa"></i> Ver significado
-                  </button>
-                ` : ''}
+      let html = `
+        <div class="space-y-2">
+          ${carrito.map(item => `
+            <div class="cart-item-row">
+              <img src="${item.img}" onerror="this.src='https://picsum.photos/seed/${item.id}/80/80'" alt="${item.nombre}">
+              <div class="cart-item-info">
+                <h3>${item.nombre}</h3>
+                <p>${item.precio} c/u</p>
               </div>
-            </div>
-            
-            <div class="detalle-actions">
-              <div class="action-row">
-                <button class="add-to-cart-btn" id="addToCartBtn" onclick="handleAddToCart()" style="${enCarrito ? 'display: none;' : ''}">
-                  <i class="fa-solid fa-cart-plus"></i> Añadir al carrito
-                </button>
-                
-                <button class="added-btn" id="addedBtn" onclick="${enCarrito ? `removeFromCart(${producto.id})` : ''}" style="${enCarrito ? '' : 'display: none;'}">
-                  <i class="fa-solid fa-check"></i> Añadido
-                </button>
-                
-                <div class="cart-qty-elipse ${enCarrito ? 'visible' : ''}" id="cartQtyElipse" style="${enCarrito ? 'display: flex;' : 'display: none;'}">
-                  <button class="qty-btn" onclick="updateQuantity(${producto.id}, -1)"><i class="fa-solid fa-minus"></i></button>
-                  <input type="number" class="qty-input" id="qtyInput" value="${enCarrito ? existing.cantidad : 1}" min="1" onchange="updateQtyFromInput(${producto.id}, this.value)" onkeydown="if(event.key==='Enter'){this.blur();}">
-                  <button class="qty-btn" onclick="updateQuantity(${producto.id}, 1)"><i class="fa-solid fa-plus"></i></button>
+              <div class="flex items-center gap-3">
+                <div class="qty-control">
+                  <button onclick="updateQty(${item.id}, -1)"><i class="fa-solid fa-minus"></i></button>
+                  <input type="number" value="${item.cantidad}" min="1" onchange="setQty(${item.id}, this.value)">
+                  <button onclick="updateQty(${item.id}, 1)"><i class="fa-solid fa-plus"></i></button>
                 </div>
-                
-                <button class="btn-compartir" onclick="abrirCompartir()">
-                  <i class="fa-regular fa-share-from-square"></i> Compartir
-                </button>
+                <span style="font-weight: 600; color: var(--accent); min-width: 50px; text-align: right;">
+                  $${(parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad).toFixed(0)}
+                </span>
+                <button class="remove-btn" onclick="removeItem(${item.id})"><i class="fa-solid fa-trash-can"></i></button>
               </div>
             </div>
+          `).join('')}
+        </div>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+          <button class="add-more-btn" onclick="openModal()"><i class="fa-solid fa-plus"></i> Añadir otro artículo</button>
+        </div>
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+          <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.95rem; color: var(--text-primary);">
+              <span>Subtotal</span>
+              <span id="subtotal">$${getCartTotal().toFixed(0)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-primary); opacity: 0.7;">
+              <span>Comisión (10%)</span>
+              <span id="commission">$${(getCartTotal() * 0.1).toFixed(0)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; color: var(--text-primary); border-top: 1px solid var(--border); padding-top: 0.5rem; margin-top: 0.3rem;">
+              <span>Total</span>
+              <span style="color: var(--accent);" id="total">$${(getCartTotal() * 1.1).toFixed(0)}</span>
+            </div>
           </div>
+          <button onclick="checkoutWhatsApp()" class="w-full mt-4 py-3 rounded-full font-bold flex items-center justify-center gap-2 transition-all hover:scale-102" style="background: #25D366; color: white;">
+            <i class="fa-brands fa-whatsapp text-xl"></i> Comprar por WhatsApp
+          </button>
         </div>
       `;
-      
-      document.getElementById('detalle-container').innerHTML = detalleHTML;
-      
-      window.addToCartBtn = document.getElementById('addToCartBtn');
-      window.addedBtn = document.getElementById('addedBtn');
-      window.qtyElipse = document.getElementById('cartQtyElipse');
-      window.qtyInput = document.getElementById('qtyInput');
-      
-      cargarSimilares(producto.categoria, producto.id);
+      container.innerHTML = html;
     }
 
-    function handleAddToCart() {
-      if (!currentProducto) return;
-      addToCart(currentProducto.id, 1);
+    function updateQty(id, delta) {
+      const item = carrito.find(i => i.id === id);
+      if (!item) return;
+      const nueva = item.cantidad + delta;
+      if (nueva <= 0) { removeItem(id); return; }
+      item.cantidad = nueva;
+      saveCart();
+      renderCartPage();
     }
 
-    function cargarSimilares(categoria, idActual) {
-      const carousel = document.getElementById('similares-carousel');
-      const section = document.getElementById('similares-section');
-      if (!carousel) return;
-      let similares = productos.filter(p => p.categoria === categoria && p.id !== idActual);
-      if (similares.length < 3) {
-        const extras = productos.filter(p => p.id !== idActual && !similares.includes(p));
-        similares = [...similares, ...extras].slice(0, 4);
-      }
-      if (similares.length === 0) { if (section) section.style.display = 'none'; return; }
-      if (section) section.style.display = 'block';
-      carousel.innerHTML = '';
-      similares.forEach(prod => {
-        const card = document.createElement('div');
-        card.className = "flex-shrink-0 w-64 snap-start rounded-2xl border overflow-hidden cursor-pointer transition-all hover:shadow-md group";
-        card.style.backgroundColor = "var(--card-bg)";
-        card.style.borderColor = "var(--border)";
-        card.setAttribute('onclick', `window.location.href='detalles.html?id=${prod.id}'`);
-        
-        const categoryIcons = {
-          pulseras: 'fa-solid fa-hand-sparkles',
-          atrapasuenos: 'fa-solid fa-feather-pointed',
-          esculturas: 'fa-solid fa-palette',
-          sombreros: 'fa-solid fa-hat-cowboy',
-          combos: 'fa-solid fa-gift'
-        };
-        const categoryLabels = {
-          pulseras: 'Pulseras',
-          atrapasuenos: 'Atrapasueños',
-          esculturas: 'Esculturas',
-          sombreros: 'Sombreros',
-          combos: 'Combos'
-        };
-        
-        // Badge de categoría (esquina superior izquierda)
-        let badgeHtml = `<span class="absolute top-3 left-3 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: var(--card-bg); color: var(--accent); z-index: 2;">
-          <i class="${categoryIcons[prod.categoria] || 'fa-solid fa-tag'}" style="font-size: 8px;"></i> ${categoryLabels[prod.categoria] || prod.categoria}
-        </span>`;
-        
-        // Badge de tipo (esquina superior derecha)
-        let tipoBadgeHtml = '';
-        if (prod.tipo === 'espiritual') {
-          tipoBadgeHtml = `<span class="absolute top-3 right-3 text-[9px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: #AD610E; color: white; border: 1px solid #756205; z-index: 2;">
-            <i class="fa-solid fa-star" style="font-size: 7px;"></i> Especial
-          </span>`;
-        } else {
-          tipoBadgeHtml = `<span class="absolute top-3 right-3 text-[9px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: #756205; color: white; border: 1px solid #AD610E; z-index: 2;">
-            <i class="fa-regular fa-circle" style="font-size: 6px;"></i> Clásico
-          </span>`;
-        }
-        
-        card.innerHTML = `
-          <div class="relative h-40 overflow-hidden" style="background-color: var(--hero-bg);">
-            <img src="${prod.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
-            ${badgeHtml}
-            ${tipoBadgeHtml}
-          </div>
-          <div class="p-4">
-            <h4 class="font-serif font-bold text-sm truncate transition-colors" style="color: var(--card-text-primary);">${prod.nombre}</h4>
-            <div class="flex justify-between items-center pt-2">
-              <span class="text-base font-bold" style="color: var(--accent);">${prod.precio}</span>
-              <span class="btn-ver-detalles" style="font-size: 0.65rem; padding: 0.15rem 0.7rem;">
-                Ver <i class="fa-solid fa-chevron-right" style="font-size: 7px;"></i>
-              </span>
+    function setQty(id, value) {
+      const item = carrito.find(i => i.id === id);
+      if (!item) return;
+      const num = parseInt(value);
+      if (isNaN(num) || num < 1) return;
+      item.cantidad = num;
+      saveCart();
+      renderCartPage();
+    }
+
+    function checkoutWhatsApp() {
+      if (carrito.length === 0) return;
+      let mensaje = 'Hola, vengo de la página web gavymontez-creaciones y estoy interesado en comprar estos artículos:\n\n';
+      carrito.forEach(item => { mensaje += `·${item.nombre} x ${item.cantidad}\n`; });
+      const total = getCartTotal() * 1.1;
+      mensaje += `\nEl precio total sería $${total.toFixed(0)}.`;
+      window.open(`https://wa.me/5358481876?text=${encodeURIComponent(mensaje)}`, '_blank');
+    }
+
+    // ========== MODAL ==========
+    function initModal() {
+      const modal = document.getElementById('addModal');
+      const closeBtn = document.getElementById('modalClose');
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    }
+
+    function openModal() {
+      const modal = document.getElementById('addModal');
+      const grid = document.getElementById('modalProductGrid');
+      selectedProducts = {};
+      updateSelectedCount();
+      const cartIds = carrito.map(i => i.id);
+      const available = productos.filter(p => !cartIds.includes(p.id));
+      if (available.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-primary); opacity: 0.6;">
+          <i class="fa-solid fa-check-circle" style="color: var(--accent); font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+          Ya has añadido todos los artículos disponibles
+        </div>`;
+        document.getElementById('modalAddBtn').disabled = true;
+      } else {
+        grid.innerHTML = available.map(p => {
+          const precioNum = parseFloat(p.precio.replace('$', '').replace('.', '').trim());
+          return `
+            <div class="modal-product-card" data-id="${p.id}" onclick="toggleProductSelection(${p.id})">
+              <span class="selection-check"><i class="fa-solid fa-check"></i></span>
+              <img src="${p.img}" onerror="this.src='https://picsum.photos/seed/${p.id}/150/120'" alt="${p.nombre}">
+              <h4>${p.nombre}</h4>
+              <span class="price">${p.precio}</span>
+              <div class="qty-control" onclick="event.stopPropagation();">
+                <button onclick="changeModalQty(${p.id}, -1)"><i class="fa-solid fa-minus"></i></button>
+                <input type="number" id="modalQty_${p.id}" value="1" min="1" onchange="event.stopPropagation(); updateModalQty(${p.id}, this.value)">
+                <button onclick="changeModalQty(${p.id}, 1)"><i class="fa-solid fa-plus"></i></button>
+              </div>
+              <span class="subtotal-preview" id="modalSubtotal_${p.id}">$${precioNum}</span>
             </div>
-          </div>
-        `;
-        carousel.appendChild(card);
-      });
+          `;
+        }).join('');
+        document.getElementById('modalAddBtn').disabled = true;
+      }
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
+
+    function closeModal() {
+      document.getElementById('addModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function toggleProductSelection(id) {
+      if (selectedProducts[id]) {
+        delete selectedProducts[id];
+        const card = document.querySelector(`.modal-product-card[data-id="${id}"]`);
+        if (card) card.classList.remove('selected');
+      } else {
+        const producto = productos.find(p => p.id === id);
+        if (!producto) return;
+        const qtyInput = document.getElementById(`modalQty_${id}`);
+        const qty = parseInt(qtyInput?.value) || 1;
+        selectedProducts[id] = { producto, cantidad: qty };
+        const card = document.querySelector(`.modal-product-card[data-id="${id}"]`);
+        if (card) card.classList.add('selected');
+      }
+      updateSelectedCount();
+      updateModalAddButton();
+    }
+
+    function changeModalQty(id, delta) {
+      const input = document.getElementById(`modalQty_${id}`);
+      if (!input) return;
+      let val = parseInt(input.value) || 1;
+      val = Math.max(1, val + delta);
+      input.value = val;
+      updateModalQty(id, val);
+    }
+
+    function updateModalQty(id, value) {
+      const num = parseInt(value);
+      if (isNaN(num) || num < 1) return;
+      if (selectedProducts[id]) {
+        selectedProducts[id].cantidad = num;
+        const producto = selectedProducts[id].producto;
+        const precioNum = parseFloat(producto.precio.replace('$', '').replace('.', '').trim());
+        const subtotalSpan = document.getElementById(`modalSubtotal_${id}`);
+        if (subtotalSpan) { subtotalSpan.textContent = `$${(precioNum * num).toFixed(0)}`; }
+      }
+      if (!selectedProducts[id] && num > 0) {
+        const producto = productos.find(p => p.id === id);
+        if (producto) {
+          selectedProducts[id] = { producto, cantidad: num };
+          const card = document.querySelector(`.modal-product-card[data-id="${id}"]`);
+          if (card) card.classList.add('selected');
+          const precioNum = parseFloat(producto.precio.replace('$', '').replace('.', '').trim());
+          const subtotalSpan = document.getElementById(`modalSubtotal_${id}`);
+          if (subtotalSpan) { subtotalSpan.textContent = `$${(precioNum * num).toFixed(0)}`; }
+          updateSelectedCount();
+          updateModalAddButton();
+        }
+      }
+    }
+
+    function updateSelectedCount() {
+      const count = Object.keys(selectedProducts).length;
+      document.getElementById('selectedCount').textContent = count;
+    }
+
+    function updateModalAddButton() {
+      const btn = document.getElementById('modalAddBtn');
+      const count = Object.keys(selectedProducts).length;
+      btn.disabled = count === 0;
+      btn.innerHTML = count > 0 ? `Añadir ${count} artículo${count > 1 ? 's' : ''} al carrito` : 'Añadir seleccionados al carrito';
+    }
+
+    document.getElementById('modalAddBtn')?.addEventListener('click', function() {
+      const ids = Object.keys(selectedProducts);
+      if (ids.length === 0) return;
+      ids.forEach(id => {
+        const { producto, cantidad } = selectedProducts[id];
+        const existing = carrito.find(i => i.id === parseInt(id));
+        if (existing) { existing.cantidad += cantidad; } else { carrito.push({ ...producto, cantidad }); }
+      });
+      saveCart();
+      closeModal();
+      renderCartPage();
+      this.innerHTML = '✅ ¡Añadido!';
+      setTimeout(() => {
+        this.innerHTML = `Añadir ${ids.length} artículo${ids.length > 1 ? 's' : ''} al carrito`;
+      }, 1500);
+    });
 
     // ========== INICIALIZACIÓN ==========
     document.addEventListener('DOMContentLoaded', function() {
@@ -1094,21 +1150,18 @@
       initSearch();
       loadCart();
       initCartUI();
+      renderCartPage();
+      initModal();
       
-      const urlParams = new URLSearchParams(window.location.search);
-      const productoId = parseInt(urlParams.get('id'));
-      if (productoId && !isNaN(productoId)) {
-        cargarDetalleProducto(productoId);
-      } else {
-        document.getElementById('detalle-container').innerHTML = `
-          <div class="text-center py-12">
-            <i class="fa-solid fa-triangle-exclamation text-5xl mb-4" style="color: var(--accent);"></i>
-            <h2 class="text-2xl font-serif font-bold" style="color: var(--text-primary);">Producto no encontrado</h2>
-            <p class="mt-2" style="color: var(--text-primary); opacity: 0.7;">No se especificó un producto válido.</p>
-            <a href="catalogo.html" class="inline-block mt-6 text-white px-6 py-3 rounded-full" style="background-color: var(--accent);">Ver catálogo</a>
-          </div>
-        `;
-      }
+      window.toggleProductSelection = toggleProductSelection;
+      window.changeModalQty = changeModalQty;
+      window.updateModalQty = updateModalQty;
+      window.openModal = openModal;
+      window.closeModal = closeModal;
+      window.updateQty = updateQty;
+      window.setQty = setQty;
+      window.removeItem = removeItem;
+      window.checkoutWhatsApp = checkoutWhatsApp;
     });
 
     function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
