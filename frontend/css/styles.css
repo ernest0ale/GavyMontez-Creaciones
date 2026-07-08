@@ -10,6 +10,7 @@
   /* Colores Principales (Otoñales) */
   --text-primary: #3E2C1B;
   --accent: #AD610E;
+  --brand-dark: #8B4E0B; /* Tono más oscuro de #AD610E para el logo */
   --secondary: #756205;
   --accent-light: #D4A06A;
   --secondary-light: #A8954A;
@@ -53,6 +54,7 @@ body.dark-mode {
   /* Colores Principales (Ajustados para oscuro) */
   --text-primary: #D4C4B2;
   --accent: #D68C5C;
+  --brand-dark: #B87A4A; /* Versión oscura del tono oscuro */
   --secondary: #8AA86C;
   --accent-light: #4A3A2E;
   --secondary-light: #5A4A3A;
@@ -268,7 +270,7 @@ body.dark-mode #theme-toggle-mobile:hover {
   font-weight: 700;
   letter-spacing: 0.025em;
   line-height: 1.2;
-  color: var(--text-primary);
+  color: var(--brand-dark);
   transition: color 0.3s ease;
 }
 
