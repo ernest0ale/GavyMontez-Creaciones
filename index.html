@@ -84,7 +84,7 @@
       align-items: center;
       gap: 0.5rem;
     }
-    .btn-primary-hero:hover { background: var(--art-hover); transform: translateY(-2px); }
+    .btn-primary-hero:hover { background: var(--btn-hover-bg); transform: translateY(-2px); }
     .btn-outline-hero {
       background: transparent;
       color: white;
@@ -212,7 +212,7 @@
       font-size: 1rem;
       flex-shrink: 0;
     }
-    .search-btn:hover { background: var(--art-hover); transform: scale(1.05); }
+    .search-btn:hover { background: var(--btn-hover-bg); transform: scale(1.05); }
     .search-close {
       background: none;
       border: none;
@@ -386,7 +386,19 @@
       transition: all 0.2s ease;
     }
     .cart-item-actions button:hover { background: var(--accent); color: white; border-color: var(--accent); }
-    .cart-item-qty { font-weight: 600; min-width: 24px; text-align: center; color: var(--text-primary); }
+    .cart-item-actions input {
+      width: 35px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      outline: none;
+    }
+    .cart-item-actions input::-webkit-outer-spin-button,
+    .cart-item-actions input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .cart-item-actions input[type=number] { -moz-appearance: textfield; }
     .cart-item-price { font-weight: 600; color: var(--accent); font-size: 0.85rem; min-width: 50px; text-align: right; }
     .cart-footer {
       padding: 1rem 1.5rem;
@@ -431,7 +443,7 @@
       justify-content: center;
       gap: 0.5rem;
     }
-    .cart-go-to-btn:hover { background: var(--art-hover); }
+    .cart-go-to-btn:hover { background: var(--btn-hover-bg); }
 
     .service-card {
       padding: 1.5rem;
@@ -462,6 +474,39 @@
       align-items: center;
       gap: 0.75rem;
     }
+
+    /* ===== DISTRIBUCIÓN DE TARJETAS DE SERVICIOS ===== */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding-top: 2rem;
+    }
+    @media (min-width: 768px) {
+      .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .services-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    /* ===== CORRECCIÓN: TÍTULO DE FAVORITOS EN MÓVIL ===== */
+    @media (max-width: 768px) {
+      .featured-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+      }
+      .featured-header .featured-title-group {
+        width: 100%;
+      }
+      .featured-header .featured-link {
+        align-self: flex-start;
+      }
+    }
   </style>
 
   <script>
@@ -486,6 +531,7 @@
     <button class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
+  <!-- HEADER -->
   <header class="sticky top-0 z-40 backdrop-blur-md border-b shadow-sm" style="background-color: var(--surface); border-color: var(--border);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="h-20 flex items-center justify-between">
@@ -496,9 +542,9 @@
           </button>
         </div>
 
-        <a href="index.html" class="flex flex-col items-start group flex-shrink-0 md:ml-0 ml-2" style="text-decoration: none;">
-          <span class="font-serif text-xl md:text-2xl font-bold tracking-wide leading-tight" style="color: var(--text-primary);">GavyMontez</span>
-          <span class="text-[10px] font-light tracking-[0.2em] uppercase" style="color: var(--accent); opacity: 0.7;">Creaciones</span>
+        <a href="index.html" class="header-logo" style="text-decoration: none;">
+          <span class="logo-main">GavyMontez</span>
+          <span class="logo-sub">Creaciones</span>
         </a>
 
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
@@ -531,6 +577,7 @@
     </div>
   </header>
 
+  <!-- SEARCH OVERLAY -->
   <div class="search-overlay" id="searchOverlay">
     <div class="search-container">
       <div class="search-bar">
@@ -543,6 +590,7 @@
     </div>
   </div>
 
+  <!-- CART OVERLAY -->
   <div class="cart-overlay-backdrop" id="cartBackdrop"></div>
   <div class="cart-overlay" id="cartOverlay">
     <div class="cart-header">
@@ -567,7 +615,9 @@
     </div>
   </div>
 
+  <!-- MAIN -->
   <main class="flex-grow">
+    <!-- HERO CAROUSEL -->
     <div class="hero-carousel" id="heroCarousel">
       <div class="carousel-slide active" data-slide="0">
         <div class="carousel-bg" style="background-image: url('resources/carrucel/slide1.jpg');"></div>
@@ -631,6 +681,7 @@
       <div class="carousel-arrow next" id="carouselNext"><i class="fa-solid fa-chevron-right"></i></div>
     </div>
 
+    <!-- SOBRE NOSOTROS -->
     <section id="sobre-nosotros" class="py-16 border-y" style="background-color: var(--card-bg); border-color: var(--border);">
       <div class="max-w-5xl mx-auto px-4 text-center space-y-6">
         <h2 class="text-3xl md:text-4xl font-serif font-bold" style="color: var(--text-primary);">El valor de lo hecho a mano con amor</h2>
@@ -638,11 +689,16 @@
         <p class="text-lg max-w-3xl mx-auto leading-relaxed" style="color: var(--text-primary); opacity: 0.8;">
           En el taller de GavyMontez Creaciones, seleccionamos hilos de algodón, maderas nobles y pigmentos naturales. Cada creación es un reflejo de nuestra pasión por la artesanía cubana, con esmero y cariño. No hay dos iguales.
         </p>
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 pt-8">
+        <div class="services-grid">
           <div class="service-card">
             <span class="icon"><i class="fa-solid fa-feather-pointed"></i></span>
             <h3>Atrapasueños</h3>
             <p>Tejidos a mano con esencia cubana</p>
+          </div>
+          <div class="service-card">
+            <span class="icon"><i class="fa-solid fa-gem"></i></span>
+            <h3>Collares</h3>
+            <p>Piezas únicas con semillas y cuentas</p>
           </div>
           <div class="service-card">
             <span class="icon"><i class="fa-solid fa-hand-sparkles"></i></span>
@@ -668,6 +724,7 @@
       </div>
     </section>
 
+    <!-- COMBOS -->
     <section id="combos-section" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="display: none;">
       <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
         <div>
@@ -679,13 +736,14 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="combos-grid"></div>
     </section>
 
+    <!-- PRODUCTOS DESTACADOS -->
     <section id="featured-products" class="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-        <div>
+      <div class="featured-header flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+        <div class="featured-title-group">
           <span class="uppercase tracking-widest text-xs font-bold" style="color: var(--accent);">Favoritos del taller</span>
           <h2 class="text-3xl md:text-4xl font-serif font-bold mt-1" style="color: var(--text-primary);">Creaciones destacadas</h2>
         </div>
-        <a href="catalogo.html" class="font-semibold flex items-center gap-2 group transition-all duration-300" style="color: var(--accent);">Ver todo el catálogo <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i></a>
+        <a href="catalogo.html" class="featured-link font-semibold flex items-center gap-2 group transition-all duration-300" style="color: var(--accent);">Ver todo el catálogo <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i></a>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="featured-grid"></div>
       <div class="mt-16 text-center">
@@ -694,10 +752,10 @@
     </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer-gavy">
     <div class="footer-container">
       <div class="footer-columns">
-        <!-- Columna 1: Navegación (izquierda en escritorio, segundo en móvil) -->
         <div class="footer-col-1">
           <h3>Navegación</h3>
           <ul class="footer-links">
@@ -706,8 +764,6 @@
             <li><a href="catalogo.html">Catálogo</a></li>
           </ul>
         </div>
-        
-        <!-- Columna 2: Logo, descripción y redes sociales (centro en escritorio, primero en móvil) -->
         <div class="footer-col-2">
           <div class="footer-logo">
             <div class="logo-icon">GM</div>
@@ -721,8 +777,6 @@
             <a href="mailto:gavymontez@creaciones.com" target="_blank" class="social-icon-link" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
           </div>
         </div>
-        
-        <!-- Columna 3: Información (derecha en escritorio, tercero en móvil) -->
         <div class="footer-col-3">
           <h3>Información</h3>
           <ul class="footer-links">
@@ -907,6 +961,26 @@
       if (nueva <= 0) { carrito = carrito.filter(i => i.id !== productoId); saveCart(); return; }
       item.cantidad = nueva; saveCart();
     }
+    function updateQtyFromInput(id, value) {
+      const num = parseInt(value);
+      if (isNaN(num) || num < 1) {
+        const item = carrito.find(i => i.id === id);
+        const input = document.querySelector(`#cartBody input[onchange*="updateQtyFromInput(${id}"]`);
+        if (item && input) {
+          input.value = item.cantidad;
+        }
+        return;
+      }
+      const item = carrito.find(i => i.id === id);
+      if (!item) return;
+      if (num === 0) {
+        carrito = carrito.filter(i => i.id !== id);
+        saveCart();
+        return;
+      }
+      item.cantidad = num;
+      saveCart();
+    }
     function getCartTotal() { return carrito.reduce((sum, item) => sum + parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad, 0); }
     function getCartProductCount() { return carrito.length; }
     function updateCartUI() {
@@ -927,7 +1001,7 @@
           <div class="cart-item-info"><div class="cart-item-name">${item.nombre}</div><div class="cart-item-meta">${item.precio} c/u</div></div>
           <div class="cart-item-actions">
             <button onclick="updateQuantity(${item.id}, -1)"><i class="fa-solid fa-minus"></i></button>
-            <span class="cart-item-qty">${item.cantidad}</span>
+            <input type="number" value="${item.cantidad}" min="1" onchange="updateQtyFromInput(${item.id}, this.value)">
             <button onclick="updateQuantity(${item.id}, 1)"><i class="fa-solid fa-plus"></i></button>
             <span class="cart-item-price">$${(parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad).toFixed(0)}</span>
           </div>
@@ -974,15 +1048,19 @@
       div.setAttribute('onclick', `window.location.href='detalles.html?id=${p.id}'`);
 
       const categoryIcons = {
-        pulseras: 'fa-solid fa-hand-sparkles',
         atrapasuenos: 'fa-solid fa-feather-pointed',
+        collares: 'fa-solid fa-gem',
+        aretes: 'fa-regular fa-circle',
+        pulseras: 'fa-solid fa-hand-sparkles',
         esculturas: 'fa-solid fa-palette',
         sombreros: 'fa-solid fa-hat-cowboy',
         combos: 'fa-solid fa-gift'
       };
       const categoryLabels = {
-        pulseras: 'Pulseras',
         atrapasuenos: 'Atrapasueños',
+        collares: 'Collares',
+        aretes: 'Aretes',
+        pulseras: 'Pulseras',
         esculturas: 'Esculturas',
         sombreros: 'Sombreros',
         combos: 'Combos'

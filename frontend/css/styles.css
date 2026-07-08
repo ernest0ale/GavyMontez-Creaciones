@@ -214,7 +214,7 @@ body.dark-mode #theme-toggle-mobile:hover {
   filter: brightness(1.2);
 }
 
-/* Botón de catálogo completo con desplazamiento hacia arriba */
+/* Botón de catálogo completo */
 .btn-catalogo-completo {
   transition: all 0.3s ease;
 }
@@ -251,6 +251,48 @@ body.dark-mode #theme-toggle-mobile:hover {
 }
 .nav-link:hover {
   opacity: 1;
+}
+
+/* ========== HEADER LOGO ========== */
+.header-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.header-logo .logo-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  line-height: 1.2;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.header-logo .logo-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  opacity: 0.9;
+  transition: color 0.3s ease;
+  width: 100%;
+  text-align: center;
+  margin-top: -0.1rem;
+}
+
+@media (min-width: 768px) {
+  .header-logo .logo-main {
+    font-size: 1.75rem;
+  }
+  .header-logo .logo-sub {
+    font-size: 0.7rem;
+  }
 }
 
 /* ========== FOOTER SOCIAL ICONS ========== */
@@ -314,16 +356,14 @@ body.dark-mode #theme-toggle-mobile:hover {
   margin-bottom: 2rem;
 }
 
-/* Columna 1: Navegación (izquierda) */
 .footer-gavy .footer-col-1 {
   flex: 0.8;
   min-width: 140px;
   text-align: left;
-  margin-left: 17rem;
-  margin-right: -17rem;
+  margin-left: 18rem;
+  margin-right: -18rem;
 }
 
-/* Columna 2: Logo, descripción y redes sociales (centro) */
 .footer-gavy .footer-col-2 {
   flex: 1.2;
   min-width: 220px;
@@ -331,7 +371,6 @@ body.dark-mode #theme-toggle-mobile:hover {
   text-align: center;
 }
 
-/* Columna 3: Información (derecha) */
 .footer-gavy .footer-col-3 {
   flex: 0.8;
   min-width: 140px;
@@ -343,6 +382,7 @@ body.dark-mode #theme-toggle-mobile:hover {
   flex-direction: column;
   align-items: center;
   margin-bottom: 0.8rem;
+  width: 100%;
 }
 
 .footer-gavy .footer-logo .logo-icon {
@@ -371,7 +411,8 @@ body.dark-mode #theme-toggle-mobile:hover {
 
 .footer-gavy .footer-logo .logo-sub {
   font-size: 0.55rem;
-  font-weight: 300;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.5);
@@ -472,7 +513,7 @@ body.dark-mode #theme-toggle-mobile:hover {
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* ========== FOOTER RESPONSIVE - ORDEN CORRECTO EN MÓVIL ========== */
+/* ========== FOOTER RESPONSIVE ========== */
 @media (max-width: 768px) {
   .footer-gavy .footer-columns {
     flex-direction: column;
@@ -492,7 +533,6 @@ body.dark-mode #theme-toggle-mobile:hover {
     margin-right: 0 !important;
   }
   
-  /* En móvil: Logo primero, navegación segundo, información tercero */
   .footer-gavy .footer-col-2 {
     order: 1 !important;
   }
@@ -1106,7 +1146,7 @@ body.dark-mode .compartir-modal .share-option {
   color: var(--accent);
 }
 
-/* ========== ESTILOS PARA EL INPUT DE CANTIDAD EN EL CARRITO ========== */
+/* ========== CARRITO - INPUT DE CANTIDAD ========== */
 .cart-item-actions input {
   width: 35px;
   text-align: center;
@@ -1124,4 +1164,37 @@ body.dark-mode .compartir-modal .share-option {
 }
 .cart-item-actions input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* ===== DISTRIBUCIÓN DE TARJETAS DE SERVICIOS ===== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding-top: 2rem;
+}
+@media (min-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* ===== CORRECCIÓN: TÍTULO DE FAVORITOS EN MÓVIL ===== */
+@media (max-width: 768px) {
+  .featured-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+  .featured-header .featured-title-group {
+    width: 100%;
+  }
+  .featured-header .featured-link {
+    align-self: flex-start;
+  }
 }

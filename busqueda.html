@@ -22,7 +22,7 @@
     .search-bar input { flex: 1; background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 1rem; padding: 0.4rem 0; min-width: 60px; }
     .search-bar input::placeholder { color: var(--text-primary); opacity: 0.5; }
     .search-btn { background: var(--accent); border: none; border-radius: 50%; width: 38px; height: 38px; color: white; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-    .search-btn:hover { background: var(--art-hover); transform: scale(1.05); }
+    .search-btn:hover { background: var(--btn-hover-bg); transform: scale(1.05); }
     .search-close { background: none; border: none; color: var(--text-primary); font-size: 1.3rem; cursor: pointer; padding: 0.2rem; opacity: 0.6; transition: opacity 0.2s ease; flex-shrink: 0; }
     .search-close:hover { opacity: 1; }
     .search-results { background: var(--card-bg); border-radius: 16px; margin-top: 0.5rem; max-height: 400px; overflow-y: auto; box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: 1px solid var(--border); display: none; }
@@ -75,7 +75,7 @@
     .cart-checkout-btn { width: 100%; padding: 0.8rem; background: #25D366; color: white; border: none; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
     .cart-checkout-btn:hover { background: #1da851; transform: scale(1.02); }
     .cart-go-to-btn { width: 100%; padding: 0.7rem; background: var(--accent); color: white; border: none; border-radius: 30px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-    .cart-go-to-btn:hover { background: var(--art-hover); }
+    .cart-go-to-btn:hover { background: var(--btn-hover-bg); }
 
     .page-input-no-buttons { width: 60px; text-align: center; padding: 0.3rem 0.5rem; border-radius: 8px; border: 1px solid var(--border); background-color: var(--card-bg); color: var(--text-primary); font-size: 0.95rem; outline: none; transition: border-color 0.3s ease; -moz-appearance: textfield; }
     .page-input-no-buttons::-webkit-outer-spin-button, .page-input-no-buttons::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
@@ -113,9 +113,9 @@
           </button>
         </div>
 
-        <a href="index.html" class="flex flex-col items-start group flex-shrink-0 md:ml-0 ml-2" style="text-decoration: none;">
-          <span class="font-serif text-xl md:text-2xl font-bold tracking-wide leading-tight" style="color: var(--text-primary);">GavyMontez</span>
-          <span class="text-[10px] font-light tracking-[0.2em] uppercase" style="color: var(--accent); opacity: 0.7;">Creaciones</span>
+        <a href="index.html" class="header-logo" style="text-decoration: none;">
+          <span class="logo-main">GavyMontez</span>
+          <span class="logo-sub">Creaciones</span>
         </a>
 
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
@@ -454,15 +454,19 @@
       div.setAttribute('onclick', `window.location.href='detalles.html?id=${p.id}'`);
 
       const categoryIcons = {
-        pulseras: 'fa-solid fa-hand-sparkles',
         atrapasuenos: 'fa-solid fa-feather-pointed',
+        collares: 'fa-solid fa-gem',
+        aretes: 'fa-regular fa-circle',
+        pulseras: 'fa-solid fa-hand-sparkles',
         esculturas: 'fa-solid fa-palette',
         sombreros: 'fa-solid fa-hat-cowboy',
         combos: 'fa-solid fa-gift'
       };
       const categoryLabels = {
-        pulseras: 'Pulseras',
         atrapasuenos: 'Atrapasueños',
+        collares: 'Collares',
+        aretes: 'Aretes',
+        pulseras: 'Pulseras',
         esculturas: 'Esculturas',
         sombreros: 'Sombreros',
         combos: 'Combos'

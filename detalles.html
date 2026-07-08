@@ -71,7 +71,7 @@
       font-size: 1rem;
       flex-shrink: 0;
     }
-    .search-btn:hover { background: var(--art-hover); transform: scale(1.05); }
+    .search-btn:hover { background: var(--btn-hover-bg); transform: scale(1.05); }
     .search-close {
       background: none;
       border: none;
@@ -245,7 +245,19 @@
       transition: all 0.2s ease;
     }
     .cart-item-actions button:hover { background: var(--accent); color: white; border-color: var(--accent); }
-    .cart-item-qty { font-weight: 600; min-width: 24px; text-align: center; color: var(--text-primary); }
+    .cart-item-actions input {
+      width: 35px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      outline: none;
+    }
+    .cart-item-actions input::-webkit-outer-spin-button,
+    .cart-item-actions input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .cart-item-actions input[type=number] { -moz-appearance: textfield; }
     .cart-item-price { font-weight: 600; color: var(--accent); font-size: 0.85rem; min-width: 50px; text-align: right; }
     .cart-footer {
       padding: 1rem 1.5rem;
@@ -290,7 +302,7 @@
       justify-content: center;
       gap: 0.5rem;
     }
-    .cart-go-to-btn:hover { background: var(--art-hover); }
+    .cart-go-to-btn:hover { background: var(--btn-hover-bg); }
 
     .add-to-cart-btn {
       padding: 0.8rem 1.5rem;
@@ -310,7 +322,7 @@
       min-width: 150px;
     }
     .add-to-cart-btn:hover {
-      background: var(--btn-hover-bg, #756205);
+      background: var(--btn-hover-bg);
       color: var(--btn-hover-text, white);
       transform: scale(1.02);
     }
@@ -450,6 +462,260 @@
       border-color: var(--accent);
       color: var(--accent);
     }
+
+    /* Detalle producto */
+    .detalle-container {
+      background-color: var(--card-bg);
+      border-radius: 1.5rem;
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+    }
+    @media (min-width: 768px) {
+      .detalle-container {
+        padding: 2.5rem;
+      }
+    }
+
+    .detalle-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 1024px) {
+      .detalle-grid {
+        grid-template-columns: 7fr 5fr;
+        gap: 3rem;
+      }
+    }
+
+    .detalle-imagen-principal {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 1rem;
+      background-color: var(--hero-bg);
+    }
+    @media (min-width: 768px) {
+      .detalle-imagen-principal {
+        height: 450px;
+      }
+    }
+
+    .detalle-miniaturas {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+    .detalle-miniaturas img {
+      width: 80px;
+      height: 80px;
+      border-radius: 0.75rem;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .detalle-miniaturas img:hover {
+      border-color: var(--accent);
+    }
+
+    .detalle-badges {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .detalle-badges .badge-categoria {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      background-color: var(--secondary);
+      color: white;
+    }
+    .detalle-badges .badge-categoria i {
+      font-size: 0.625rem;
+    }
+
+    .detalle-nombre {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--detail-text-primary);
+    }
+    @media (min-width: 768px) {
+      .detalle-nombre {
+        font-size: 2.5rem;
+      }
+    }
+
+    .detalle-precio {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .detalle-descripcion-box {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 0;
+    }
+    .detalle-descripcion-box .label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--detail-title-descrip);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .detalle-descripcion-box p {
+      line-height: 1.8;
+      color: var(--detail-text-desc);
+    }
+
+    .btn-info-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    /* Productos similares */
+    .similares-carousel {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      scroll-snap-type: x mandatory;
+    }
+    .similares-carousel .sim-item {
+      flex-shrink: 0;
+      width: 256px;
+      scroll-snap-align: start;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background-color: var(--card-bg);
+    }
+    .similares-carousel .sim-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .similares-carousel .sim-item .sim-img {
+      height: 160px;
+      overflow: hidden;
+      background-color: var(--hero-bg);
+      position: relative;
+    }
+    .similares-carousel .sim-item .sim-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .similares-carousel .sim-item:hover .sim-img img {
+      transform: scale(1.05);
+    }
+    .similares-carousel .sim-item .sim-body {
+      padding: 1rem;
+    }
+    .similares-carousel .sim-item .sim-body h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: var(--card-text-primary);
+      margin-bottom: 0.25rem;
+    }
+    .similares-carousel .sim-item .sim-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .similares-carousel .sim-item .sim-footer .price {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1rem;
+    }
+    .similares-carousel .sim-item .sim-footer .btn-ver {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.7rem;
+      border-radius: 9999px;
+      border: 1px solid var(--btn-border);
+      color: var(--btn-text);
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .similares-carousel .sim-item .sim-footer .btn-ver:hover {
+      background: var(--btn-hover-bg);
+      color: var(--btn-hover-text);
+    }
+    .similares-carousel .sim-item .sim-footer .btn-ver i {
+      font-size: 0.5rem;
+    }
+
+    .sim-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      background-color: var(--card-bg);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      z-index: 2;
+      box-shadow: var(--shadow-sm);
+    }
+    .sim-badge i {
+      font-size: 0.5rem;
+    }
+    .sim-tipo-badge {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      font-size: 0.5625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      z-index: 2;
+      box-shadow: var(--shadow-sm);
+    }
+    .sim-tipo-badge.espiritual {
+      background-color: #AD610E;
+      color: white;
+      border: 1px solid #756205;
+    }
+    .sim-tipo-badge.clasico {
+      background-color: #756205;
+      color: white;
+      border: 1px solid #AD610E;
+    }
+    .sim-tipo-badge i {
+      font-size: 0.4375rem;
+    }
   </style>
 
   <script>
@@ -483,13 +749,13 @@
           </button>
         </div>
 
-        <a href="index.html" class="flex flex-col items-start group flex-shrink-0 md:ml-0 ml-2" style="text-decoration: none;">
-          <span class="font-serif text-xl md:text-2xl font-bold tracking-wide leading-tight" style="color: var(--text-primary);">GavyMontez</span>
-          <span class="text-[10px] font-light tracking-[0.2em] uppercase" style="color: var(--accent); opacity: 0.7;">Creaciones</span>
+        <a href="index.html" class="header-logo" style="text-decoration: none;">
+          <span class="logo-main">GavyMontez</span>
+          <span class="logo-sub">Creaciones</span>
         </a>
 
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
-          <a href="index.html" class="nav-link active font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
+          <a href="index.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
           <a href="novedades.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-star"></i> Novedades</a>
           <a href="catalogo.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
         </nav>
@@ -561,7 +827,7 @@
         <i class="fa-solid fa-arrow-left"></i> Volver al catálogo
       </a>
 
-      <div id="detalle-container" class="rounded-3xl p-6 md:p-10 border shadow-md" style="background-color: var(--card-bg); border-color: var(--border);">
+      <div id="detalle-container" class="detalle-container">
         <div class="text-center py-12">
           <i class="fa-solid fa-spinner fa-spin text-3xl" style="color: var(--accent);"></i>
           <p class="mt-3" style="color: var(--text-primary); opacity: 0.7;">Cargando información de la pieza...</p>
@@ -570,7 +836,7 @@
 
       <div class="mt-16" id="similares-section" style="display: none;">
         <h2 class="text-2xl md:text-3xl font-serif font-bold mb-6" style="color: var(--text-primary);">También te puede gustar</h2>
-        <div id="similares-carousel" class="flex gap-6 overflow-x-auto pb-4 custom-scrollbar snap-x snap-mandatory"></div>
+        <div id="similares-carousel" class="similares-carousel"></div>
       </div>
     </div>
   </main>
@@ -586,6 +852,7 @@
             <li><a href="catalogo.html">Catálogo</a></li>
           </ul>
         </div>
+        
         <div class="footer-col-2">
           <div class="footer-logo">
             <div class="logo-icon">GM</div>
@@ -599,6 +866,7 @@
             <a href="mailto:gavymontez@creaciones.com" target="_blank" class="social-icon-link" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
           </div>
         </div>
+        
         <div class="footer-col-3">
           <h3>Información</h3>
           <ul class="footer-links">
@@ -618,7 +886,6 @@
   <a href="https://wa.me/5358481876" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-xl hover:bg-[#20ba5a] hover:scale-110 transition-all group"><i class="fa-brands fa-whatsapp"></i></a>
 
   <script src="backend/data.js"></script>
-  <script src="frontend/scripts/ui.js"></script>
   <script>
     // ========== TEMA OSCURO ==========
     function initTheme() {
@@ -808,7 +1075,7 @@
           <div class="cart-item-info"><div class="cart-item-name">${item.nombre}</div><div class="cart-item-meta">${item.precio} c/u</div></div>
           <div class="cart-item-actions">
             <button onclick="updateQuantity(${item.id}, -1)"><i class="fa-solid fa-minus"></i></button>
-            <input type="number" value="${item.cantidad}" min="1" onchange="updateQtyFromInput(${item.id}, this.value)" style="width: 35px; text-align: center; border: none; background: transparent; font-weight: 600; font-size: 0.9rem; color: var(--text-primary); outline: none;">
+            <input type="number" value="${item.cantidad}" min="1" onchange="updateQtyFromInput(${item.id}, this.value)">
             <button onclick="updateQuantity(${item.id}, 1)"><i class="fa-solid fa-plus"></i></button>
             <span class="cart-item-price">$${(parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad).toFixed(0)}</span>
           </div>
@@ -905,16 +1172,19 @@
       guardarVisto(id);
       
       const categoryIcons = {
-        pulseras: 'fa-solid fa-hand-sparkles',
         atrapasuenos: 'fa-solid fa-feather-pointed',
+        collares: 'fa-solid fa-gem',
+        aretes: 'fa-regular fa-circle',
+        pulseras: 'fa-solid fa-hand-sparkles',
         esculturas: 'fa-solid fa-palette',
         sombreros: 'fa-solid fa-hat-cowboy',
         combos: 'fa-solid fa-gift'
       };
-      
       const categoryLabels = {
-        pulseras: 'Pulseras',
         atrapasuenos: 'Atrapasueños',
+        collares: 'Collares',
+        aretes: 'Aretes',
+        pulseras: 'Pulseras',
         esculturas: 'Esculturas',
         sombreros: 'Sombreros',
         combos: 'Combos'
@@ -935,35 +1205,36 @@
       const materiales = producto.materiales || 'No especificado';
       const tamano = producto.tamano || 'No especificado';
       const tieneSignificado = producto.significado && producto.significado.items && producto.significado.items.length > 0;
+
+      let miniaturasHTML = '';
+      if (producto.miniaturas && producto.miniaturas.length > 0) {
+        miniaturasHTML = producto.miniaturas.map(url => `
+          <img src="${url}" onerror="this.style.display='none'" onclick="document.getElementById('detalle-img-principal').src='${url}'">
+        `).join('');
+      }
       
       const detalleHTML = `
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          <div class="lg:col-span-7">
+        <div class="detalle-grid">
+          <div>
             <div class="rounded-2xl overflow-hidden border" style="background-color: var(--hero-bg); border-color: var(--border);">
-              <img id="detalle-img-principal" src="${producto.img}" alt="${producto.nombre}" class="w-full h-[350px] md:h-[450px] object-cover" loading="lazy">
+              <img id="detalle-img-principal" src="${producto.img}" alt="${producto.nombre}" class="detalle-imagen-principal">
             </div>
-            <div class="flex gap-3 mt-4 overflow-x-auto pb-2" id="detalle-miniaturas">
-              ${producto.miniaturas ? producto.miniaturas.map(url => `
-                <img src="${url}" class="w-20 h-20 rounded-xl object-cover border-2 cursor-pointer transition-all miniatura-producto" style="border-color: var(--border);" onmouseenter="this.style.borderColor='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)'" onclick="document.getElementById('detalle-img-principal').src='${url}'" loading="lazy">
-              `).join('') : ''}
-            </div>
+            ${miniaturasHTML ? `<div class="detalle-miniaturas">${miniaturasHTML}</div>` : ''}
           </div>
           
-          <div class="lg:col-span-5 space-y-5">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="inline-flex items-center gap-1.5 text-white text-xs font-bold uppercase px-3 py-1.5 rounded-full" style="background-color: var(--secondary);">
-                <i class="${categoryIcons[producto.categoria] || 'fa-solid fa-tag'}" style="font-size: 10px;"></i> ${categoryLabels[producto.categoria] || producto.categoria}
-              </span>
+          <div class="space-y-5">
+            <div class="detalle-badges">
+              <span class="badge-categoria"><i class="${categoryIcons[producto.categoria] || 'fa-solid fa-tag'}"></i> ${categoryLabels[producto.categoria] || producto.categoria}</span>
               ${tipoBadge}
             </div>
-            <h1 class="text-3xl md:text-4xl font-serif font-bold" style="color: var(--detail-text-primary);">${producto.nombre}</h1>
-            <p class="text-3xl font-bold" style="color: var(--accent);">${producto.precio}</p>
+            <h1 class="detalle-nombre">${producto.nombre}</h1>
+            <p class="detalle-precio">${producto.precio}</p>
             
-            <div class="border-t border-b py-4" style="border-color: var(--border);">
-              <p class="text-sm font-bold uppercase tracking-wider mb-2" style="color: var(--detail-title-descrip);">Descripción de la artesana</p>
-              <p class="leading-relaxed" style="color: var(--detail-text-desc);">${producto.descripcion}</p>
+            <div class="detalle-descripcion-box">
+              <span class="label">Descripción de la artesana</span>
+              <p>${producto.descripcion}</p>
               
-              <div class="flex flex-wrap gap-2 mt-3">
+              <div class="btn-info-group">
                 <button class="btn-info" onclick="abrirInformacion('${materiales.replace(/'/g, "\\'")}', '${tamano.replace(/'/g, "\\'")}')">
                   <i class="fa-solid fa-circle-info"></i> Materiales y medidas
                 </button>
@@ -987,7 +1258,7 @@
                 
                 <div class="cart-qty-elipse ${enCarrito ? 'visible' : ''}" id="cartQtyElipse" style="${enCarrito ? 'display: flex;' : 'display: none;'}">
                   <button class="qty-btn" onclick="updateQuantity(${producto.id}, -1)"><i class="fa-solid fa-minus"></i></button>
-                  <input type="number" class="qty-input" id="qtyInput" value="${enCarrito ? existing.cantidad : 1}" min="1" onchange="updateQtyFromInput(${producto.id}, this.value)" onkeydown="if(event.key==='Enter'){this.blur();}">
+                  <input type="number" class="qty-input" id="qtyInput" value="${enCarrito ? existing.cantidad : 1}" min="1" onchange="updateQtyFromInput(${producto.id}, this.value)">
                   <button class="qty-btn" onclick="updateQuantity(${producto.id}, 1)"><i class="fa-solid fa-plus"></i></button>
                 </div>
                 
@@ -1015,6 +1286,7 @@
       addToCart(currentProducto.id, 1);
     }
 
+    // ========== CARGAR SIMILARES ==========
     function cargarSimilares(categoria, idActual) {
       const carousel = document.getElementById('similares-carousel');
       const section = document.getElementById('similares-section');
@@ -1027,66 +1299,259 @@
       if (similares.length === 0) { if (section) section.style.display = 'none'; return; }
       if (section) section.style.display = 'block';
       carousel.innerHTML = '';
+      
+      const categoryIcons = {
+        pulseras: 'fa-solid fa-hand-sparkles',
+        atrapasuenos: 'fa-solid fa-feather-pointed',
+        esculturas: 'fa-solid fa-palette',
+        sombreros: 'fa-solid fa-hat-cowboy',
+        combos: 'fa-solid fa-gift'
+      };
+      const categoryLabels = {
+        pulseras: 'Pulseras',
+        atrapasuenos: 'Atrapasueños',
+        esculturas: 'Esculturas',
+        sombreros: 'Sombreros',
+        combos: 'Combos'
+      };
+
       similares.forEach(prod => {
-        const card = document.createElement('div');
-        card.className = "flex-shrink-0 w-64 snap-start rounded-2xl border overflow-hidden cursor-pointer transition-all hover:shadow-md group";
-        card.style.backgroundColor = "var(--card-bg)";
-        card.style.borderColor = "var(--border)";
-        card.setAttribute('onclick', `window.location.href='detalles.html?id=${prod.id}'`);
+        const div = document.createElement('div');
+        div.className = 'sim-item';
+        div.setAttribute('onclick', `window.location.href='detalles.html?id=${prod.id}'`);
         
-        const categoryIcons = {
-          pulseras: 'fa-solid fa-hand-sparkles',
-          atrapasuenos: 'fa-solid fa-feather-pointed',
-          esculturas: 'fa-solid fa-palette',
-          sombreros: 'fa-solid fa-hat-cowboy',
-          combos: 'fa-solid fa-gift'
-        };
-        const categoryLabels = {
-          pulseras: 'Pulseras',
-          atrapasuenos: 'Atrapasueños',
-          esculturas: 'Esculturas',
-          sombreros: 'Sombreros',
-          combos: 'Combos'
-        };
-        
-        // Badge de categoría (esquina superior izquierda)
-        let badgeHtml = `<span class="absolute top-3 left-3 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: var(--card-bg); color: var(--accent); z-index: 2;">
-          <i class="${categoryIcons[prod.categoria] || 'fa-solid fa-tag'}" style="font-size: 8px;"></i> ${categoryLabels[prod.categoria] || prod.categoria}
-        </span>`;
-        
-        // Badge de tipo (esquina superior derecha)
-        let tipoBadgeHtml = '';
+        let tipoBadge = '';
         if (prod.tipo === 'espiritual') {
-          tipoBadgeHtml = `<span class="absolute top-3 right-3 text-[9px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: #AD610E; color: white; border: 1px solid #756205; z-index: 2;">
-            <i class="fa-solid fa-star" style="font-size: 7px;"></i> Especial
-          </span>`;
+          tipoBadge = `<span class="sim-tipo-badge espiritual"><i class="fa-solid fa-star"></i> Especial</span>`;
         } else {
-          tipoBadgeHtml = `<span class="absolute top-3 right-3 text-[9px] font-bold uppercase px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1" style="background-color: #756205; color: white; border: 1px solid #AD610E; z-index: 2;">
-            <i class="fa-regular fa-circle" style="font-size: 6px;"></i> Clásico
-          </span>`;
+          tipoBadge = `<span class="sim-tipo-badge clasico"><i class="fa-regular fa-circle"></i> Clásico</span>`;
         }
         
-        card.innerHTML = `
-          <div class="relative h-40 overflow-hidden" style="background-color: var(--hero-bg);">
-            <img src="${prod.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">
-            ${badgeHtml}
-            ${tipoBadgeHtml}
+        div.innerHTML = `
+          <div class="sim-img">
+            <img src="${prod.img}" alt="${prod.nombre}" loading="lazy">
+            <span class="sim-badge"><i class="${categoryIcons[prod.categoria] || 'fa-solid fa-tag'}"></i> ${categoryLabels[prod.categoria] || prod.categoria}</span>
+            ${tipoBadge}
           </div>
-          <div class="p-4">
-            <h4 class="font-serif font-bold text-sm truncate transition-colors" style="color: var(--card-text-primary);">${prod.nombre}</h4>
-            <div class="flex justify-between items-center pt-2">
-              <span class="text-base font-bold" style="color: var(--accent);">${prod.precio}</span>
-              <span class="btn-ver-detalles" style="font-size: 0.65rem; padding: 0.15rem 0.7rem;">
-                Ver <i class="fa-solid fa-chevron-right" style="font-size: 7px;"></i>
-              </span>
+          <div class="sim-body">
+            <h4>${prod.nombre}</h4>
+            <div class="sim-footer">
+              <span class="price">${prod.precio}</span>
+              <span class="btn-ver">Ver <i class="fa-solid fa-chevron-right"></i></span>
             </div>
           </div>
         `;
-        carousel.appendChild(card);
+        carousel.appendChild(div);
       });
     }
 
-    // ========== INICIALIZACIÓN ==========
+    // ========== GUARDAR VISTOS ==========
+    function guardarVisto(productoId) {
+      try {
+        let vistos = JSON.parse(localStorage.getItem('gavy_vistos') || '[]');
+        vistos = vistos.filter(id => id !== productoId);
+        vistos.unshift(productoId);
+        if (vistos.length > 10) vistos.pop();
+        localStorage.setItem('gavy_vistos', JSON.stringify(vistos));
+      } catch(e) { /* ignore */ }
+    }
+
+    // ========== MODALES ==========
+    function abrirSignificado(titulo, items) {
+      const overlay = document.getElementById('significadoModal');
+      if (!overlay) {
+        const modalHTML = `
+          <div class="significado-modal-overlay" id="significadoModal">
+            <div class="significado-modal">
+              <button class="modal-close" onclick="cerrarSignificado()"><i class="fa-solid fa-xmark"></i></button>
+              <h3 id="significadoModalTitulo">Significado Espiritual</h3>
+              <ul id="significadoModalItems"></ul>
+            </div>
+          </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        setTimeout(() => abrirSignificado(titulo, items), 50);
+        return;
+      }
+      
+      document.getElementById('significadoModalTitulo').textContent = titulo || 'Significado Espiritual';
+      const list = document.getElementById('significadoModalItems');
+      list.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+      
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarSignificado() {
+      const overlay = document.getElementById('significadoModal');
+      if (overlay) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function abrirInformacion(materiales, tamano) {
+      const overlay = document.getElementById('infoModal');
+      if (!overlay) {
+        const modalHTML = `
+          <div class="info-modal-overlay" id="infoModal">
+            <div class="info-modal">
+              <button class="modal-close" onclick="cerrarInformacion()"><i class="fa-solid fa-xmark"></i></button>
+              <h3>Información del producto</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="label"><i class="fa-solid fa-cube"></i> Materiales</span>
+                  <span class="value" id="infoMateriales">-</span>
+                </div>
+                <div class="info-item">
+                  <span class="label"><i class="fa-solid fa-ruler"></i> Tamaño / Medidas</span>
+                  <span class="value" id="infoTamano">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        setTimeout(() => abrirInformacion(materiales, tamano), 50);
+        return;
+      }
+      
+      document.getElementById('infoMateriales').textContent = materiales || 'No especificado';
+      document.getElementById('infoTamano').textContent = tamano || 'No especificado';
+      
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarInformacion() {
+      const overlay = document.getElementById('infoModal');
+      if (overlay) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function abrirCompartir() {
+      const overlay = document.getElementById('compartirModal');
+      if (!overlay) {
+        const modalHTML = `
+          <div class="compartir-modal-overlay" id="compartirModal">
+            <div class="compartir-modal">
+              <button class="modal-close" onclick="cerrarCompartir()"><i class="fa-solid fa-xmark"></i></button>
+              <h3><i class="fa-regular fa-share-from-square"></i> Compartir</h3>
+              <div class="share-grid">
+                <button class="share-option whatsapp" onclick="compartirRed('whatsapp')"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+                <button class="share-option facebook" onclick="compartirRed('facebook')"><i class="fa-brands fa-facebook-f"></i> Facebook</button>
+                <button class="share-option telegram" onclick="compartirRed('telegram')"><i class="fa-brands fa-telegram"></i> Telegram</button>
+                <button class="share-option copy" onclick="compartirRed('copy')"><i class="fa-regular fa-copy"></i> Copiar</button>
+                <button class="share-option cancelar" onclick="cerrarCompartir()">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        setTimeout(abrirCompartir, 50);
+        return;
+      }
+      
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrarCompartir() {
+      const overlay = document.getElementById('compartirModal');
+      if (overlay) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function compartirRed(red) {
+      const url = window.location.href;
+      const texto = 'Mira esta hermosa creación de GavyMontez Creaciones';
+      
+      const redes = {
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(texto)}`,
+        whatsapp: `https://api.whatsapp.com/send?text=${encodeURIComponent(texto + '\n' + url)}`,
+        telegram: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(texto)}`,
+        copy: url
+      };
+      
+      if (red === 'copy') {
+        navigator.clipboard.writeText(url).then(() => {
+          showToast('Enlace copiado al portapapeles', 'success');
+          cerrarCompartir();
+        }).catch(() => {
+          const input = document.createElement('input');
+          input.value = url;
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          document.body.removeChild(input);
+          showToast('Enlace copiado al portapapeles', 'success');
+          cerrarCompartir();
+        });
+        return;
+      }
+      
+      if (redes[red]) {
+        window.open(redes[red], '_blank', 'width=600,height=500');
+        cerrarCompartir();
+      }
+    }
+
+    // Cerrar modales con ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        cerrarSignificado();
+        cerrarInformacion();
+        cerrarCompartir();
+      }
+    });
+
+    // Cerrar modales al hacer clic en overlay
+    document.addEventListener('click', function(e) {
+      const significado = document.getElementById('significadoModal');
+      if (significado && e.target === significado) { cerrarSignificado(); }
+      const info = document.getElementById('infoModal');
+      if (info && e.target === info) { cerrarInformacion(); }
+      const compartir = document.getElementById('compartirModal');
+      if (compartir && e.target === compartir) { cerrarCompartir(); }
+    });
+
+    // ========== TOAST ==========
+    function showToast(message, type = 'success', duration = 3000) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      const icon = toast.querySelector('.toast-icon');
+      const messageEl = toast.querySelector('.toast-message');
+      icon.className = 'toast-icon';
+      icon.innerHTML = '';
+      if (type === 'success') {
+        icon.classList.add('success');
+        icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+      } else if (type === 'error') {
+        icon.classList.add('error');
+        icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+      } else {
+        icon.classList.add('info');
+        icon.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+      }
+      messageEl.textContent = message;
+      toast.classList.add('show');
+      if (window.toastTimeout) clearTimeout(window.toastTimeout);
+      window.toastTimeout = setTimeout(hideToast, duration);
+    }
+    function hideToast() {
+      const toast = document.getElementById('toast');
+      if (toast) toast.classList.remove('show');
+      if (window.toastTimeout) {
+        clearTimeout(window.toastTimeout);
+        window.toastTimeout = null;
+      }
+    }
+
+    // ========== INIT ==========
     document.addEventListener('DOMContentLoaded', function() {
       if (typeof productos === 'undefined') { console.warn('La variable productos no está definida.'); }
       initTheme();
@@ -1111,7 +1576,9 @@
       }
     });
 
-    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
   </script>
 </body>
 </html>

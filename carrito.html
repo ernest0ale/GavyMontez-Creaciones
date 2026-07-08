@@ -71,7 +71,7 @@
       font-size: 1rem;
       flex-shrink: 0;
     }
-    .search-btn:hover { background: var(--art-hover); transform: scale(1.05); }
+    .search-btn:hover { background: var(--btn-hover-bg); transform: scale(1.05); }
     .search-close {
       background: none;
       border: none;
@@ -245,7 +245,19 @@
       transition: all 0.2s ease;
     }
     .cart-item-actions button:hover { background: var(--accent); color: white; border-color: var(--accent); }
-    .cart-item-qty { font-weight: 600; min-width: 24px; text-align: center; color: var(--text-primary); }
+    .cart-item-actions input {
+      width: 35px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      outline: none;
+    }
+    .cart-item-actions input::-webkit-outer-spin-button,
+    .cart-item-actions input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .cart-item-actions input[type=number] { -moz-appearance: textfield; }
     .cart-item-price { font-weight: 600; color: var(--accent); font-size: 0.85rem; min-width: 50px; text-align: right; }
     .cart-footer {
       padding: 1rem 1.5rem;
@@ -290,7 +302,7 @@
       justify-content: center;
       gap: 0.5rem;
     }
-    .cart-go-to-btn:hover { background: var(--art-hover); }
+    .cart-go-to-btn:hover { background: var(--btn-hover-bg); }
 
     .cart-item-row {
       display: flex;
@@ -299,12 +311,16 @@
       padding: 1rem 0;
       border-bottom: 1px solid var(--border);
     }
+    .cart-item-row:last-child {
+      border-bottom: none;
+    }
     .cart-item-row img {
       width: 80px;
       height: 80px;
       object-fit: cover;
       border-radius: 12px;
       background: var(--hero-bg);
+      flex-shrink: 0;
     }
     .cart-item-info { flex: 1; }
     .cart-item-info h3 { font-family: 'Playfair Display', serif; font-weight: 600; color: var(--text-primary); }
@@ -458,21 +474,22 @@
     .modal-product-card .qty-control input { width: 28px; font-size: 0.8rem; }
     .modal-product-card .qty-control button { width: 24px; height: 24px; font-size: 0.7rem; }
     .modal-product-card .subtotal-preview { font-size: 0.7rem; color: var(--text-primary); opacity: 0.6; margin-top: 0.2rem; display: block; }
-    .modal-product-card .check-mark {
+    .modal-product-card .selection-check {
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: 6px;
+      right: 6px;
       background: var(--accent);
       color: white;
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       display: none;
       align-items: center;
       justify-content: center;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
+      box-shadow: 0 2px 8px rgba(193, 122, 77, 0.4);
     }
-    .modal-product-card.selected .check-mark { display: flex; }
+    .modal-product-card.selected .selection-check { display: flex; }
 
     .modal-selection-counter {
       display: flex;
@@ -499,25 +516,8 @@
       transition: all 0.3s ease;
       margin-top: 1rem;
     }
-    .modal-add-btn:hover { background: var(--art-hover); transform: scale(1.02); }
+    .modal-add-btn:hover { background: var(--btn-hover-bg); transform: scale(1.02); }
     .modal-add-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-    .selection-check {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: var(--accent);
-      color: white;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.65rem;
-      box-shadow: 0 2px 8px rgba(193, 122, 77, 0.4);
-    }
-    .modal-product-card.selected .selection-check { display: flex; }
   </style>
 
   <script>
@@ -551,9 +551,9 @@
           </button>
         </div>
 
-        <a href="index.html" class="flex flex-col items-start group flex-shrink-0 md:ml-0 ml-2" style="text-decoration: none;">
-          <span class="font-serif text-xl md:text-2xl font-bold tracking-wide leading-tight" style="color: var(--text-primary);">GavyMontez</span>
-          <span class="text-[10px] font-light tracking-[0.2em] uppercase" style="color: var(--accent); opacity: 0.7;">Creaciones</span>
+        <a href="index.html" class="header-logo" style="text-decoration: none;">
+          <span class="logo-main">GavyMontez</span>
+          <span class="logo-sub">Creaciones</span>
         </a>
 
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
@@ -622,6 +622,21 @@
     </div>
   </div>
 
+  <!-- MODAL PARA AÑADIR PRODUCTOS -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-xl font-serif font-bold" style="color: var(--text-primary);">Selecciona artículos</h3>
+      <p class="text-sm" style="color: var(--text-primary); opacity: 0.6;">Haz clic en las tarjetas para seleccionar múltiples artículos. Ajusta la cantidad con los botones.</p>
+      <div class="modal-selection-counter">
+        <span>Artículos seleccionados:</span>
+        <span class="count" id="selectedCount">0</span>
+      </div>
+      <div class="modal-product-grid" id="modalProductGrid"></div>
+      <button class="modal-add-btn" id="modalAddBtn" disabled>Añadir seleccionados al carrito</button>
+    </div>
+  </div>
+
   <main class="flex-grow py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
       <div class="flex items-center justify-between mb-8">
@@ -639,35 +654,18 @@
     </div>
   </main>
 
-  <div class="modal-overlay" id="addModal">
-    <div class="modal-content">
-      <button class="modal-close" id="modalClose"><i class="fa-solid fa-xmark"></i></button>
-      <h3 class="text-xl font-serif font-bold" style="color: var(--text-primary);">Selecciona artículos</h3>
-      <p class="text-sm" style="color: var(--text-primary); opacity: 0.6;">Haz clic en las tarjetas para seleccionar múltiples artículos. Ajusta la cantidad con los botones.</p>
-      <div class="modal-selection-counter">
-        <span>Artículos seleccionados:</span>
-        <span class="count" id="selectedCount">0</span>
-      </div>
-      <div class="modal-product-grid" id="modalProductGrid"></div>
-      <button class="modal-add-btn" id="modalAddBtn" disabled>Añadir seleccionados al carrito</button>
-    </div>
-  </div>
-
   <footer class="footer-gavy">
     <div class="footer-container">
       <div class="footer-columns">
-        <!-- Columna 1: Navegación (izquierda en escritorio, segundo en móvil) -->
         <div class="footer-col-1">
           <h3>Navegación</h3>
           <ul class="footer-links">
             <li><a href="index.html">Inicio</a></li>
             <li><a href="novedades.html">Novedades</a></li>
             <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
           </ul>
         </div>
         
-        <!-- Columna 2: Logo, descripción y redes sociales (centro en escritorio, primero en móvil) -->
         <div class="footer-col-2">
           <div class="footer-logo">
             <div class="logo-icon">GM</div>
@@ -682,7 +680,6 @@
           </div>
         </div>
         
-        <!-- Columna 3: Información (derecha en escritorio, tercero en móvil) -->
         <div class="footer-col-3">
           <h3>Información</h3>
           <ul class="footer-links">
@@ -853,7 +850,7 @@
           <div class="cart-item-info"><div class="cart-item-name">${item.nombre}</div><div class="cart-item-meta">${item.precio} c/u</div></div>
           <div class="cart-item-actions">
             <button onclick="updateQuantity(${item.id}, -1)"><i class="fa-solid fa-minus"></i></button>
-            <input type="number" value="${item.cantidad}" min="1" onchange="updateQtyFromInput(${item.id}, this.value)" style="width: 35px; text-align: center; border: none; background: transparent; font-weight: 600; font-size: 0.9rem; color: var(--text-primary); outline: none;">
+            <input type="number" value="${item.cantidad}" min="1" onchange="updateQtyFromInput(${item.id}, this.value)">
             <button onclick="updateQuantity(${item.id}, 1)"><i class="fa-solid fa-plus"></i></button>
             <span class="cart-item-price">$${(parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad).toFixed(0)}</span>
           </div>
@@ -880,9 +877,22 @@
 
     function updateQtyFromInput(id, value) {
       const num = parseInt(value);
-      if (isNaN(num) || num < 1) return;
+      if (isNaN(num) || num < 1) {
+        const item = carrito.find(i => i.id === id);
+        const input = document.querySelector(`#cartBody input[onchange*="updateQtyFromInput(${id}"]`);
+        if (item && input) {
+          input.value = item.cantidad;
+        }
+        return;
+      }
       const item = carrito.find(i => i.id === id);
       if (!item) return;
+      if (num === 0) {
+        carrito = carrito.filter(i => i.id !== id);
+        saveCart();
+        renderCartPage();
+        return;
+      }
       item.cantidad = num;
       saveCart();
       renderCartPage();
@@ -1009,6 +1019,38 @@
       const total = getCartTotal() * 1.1;
       mensaje += `\nEl precio total sería $${total.toFixed(0)}.`;
       window.open(`https://wa.me/5358481876?text=${encodeURIComponent(mensaje)}`, '_blank');
+    }
+
+    // ========== TOAST ==========
+    function showToast(message, type = 'success', duration = 3000) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      const icon = toast.querySelector('.toast-icon');
+      const messageEl = toast.querySelector('.toast-message');
+      icon.className = 'toast-icon';
+      icon.innerHTML = '';
+      if (type === 'success') {
+        icon.classList.add('success');
+        icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+      } else if (type === 'error') {
+        icon.classList.add('error');
+        icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+      } else {
+        icon.classList.add('info');
+        icon.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
+      }
+      messageEl.textContent = message;
+      toast.classList.add('show');
+      if (window.toastTimeout) clearTimeout(window.toastTimeout);
+      window.toastTimeout = setTimeout(hideToast, duration);
+    }
+    function hideToast() {
+      const toast = document.getElementById('toast');
+      if (toast) toast.classList.remove('show');
+      if (window.toastTimeout) {
+        clearTimeout(window.toastTimeout);
+        window.toastTimeout = null;
+      }
     }
 
     // ========== MODAL ==========
@@ -1164,7 +1206,9 @@
       window.checkoutWhatsApp = checkoutWhatsApp;
     });
 
-    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
   </script>
 </body>
 </html>
