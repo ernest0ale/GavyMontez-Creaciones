@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Detalles de producto | GavyMontez Creaciones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página no encontrada | GavyMontez Creaciones</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,17 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="frontend/css/styles.css">
-  <link rel="stylesheet" href="frontend/css/detalles.css">
-  <script src="frontend/scripts/tailwindConfig.js"></script>
-  
 </head>
 <body class="min-h-screen flex flex-col antialiased">
-
-  <div id="toast">
-    <span class="toast-icon success"><i class="fa-solid fa-circle-check"></i></span>
-    <span class="toast-message"></span>
-    <button class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></button>
-  </div>
 
   <!-- HEADER -->
   <header class="sticky top-0 z-40 backdrop-blur-md border-b shadow-sm" style="background-color: var(--surface); border-color: var(--border);">
@@ -73,59 +64,24 @@ class="header-logo-img">
     </div>
   </header>
 
-  <div class="search-overlay" id="searchOverlay">
-    <div class="search-container">
-      <div class="search-bar">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="searchInput" placeholder="Buscar artículos..." autocomplete="off">
-        <button class="search-btn" id="searchSubmitBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <button class="search-close" id="searchClose"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div id="searchResults" class="search-results"></div>
-    </div>
-  </div>
-
-  <div class="cart-overlay-backdrop" id="cartBackdrop"></div>
-  <div class="cart-overlay" id="cartOverlay">
-    <div class="cart-header">
-      <h2><i class="fa-solid fa-cart-shopping" style="color: var(--accent);"></i> Tu carrito</h2>
-      <button class="cart-close-btn" id="cartClose"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="cart-body" id="cartBody">
-      <div class="cart-empty">
-        <i class="fa-solid fa-basket-shopping"></i>
-        <p>Tu carrito está vacío</p>
-        <p style="font-size: 0.85rem; margin-top: 0.3rem;">Explora nuestro catálogo y añade tus piezas favoritas</p>
-      </div>
-    </div>
-    <div class="cart-footer" id="cartFooter" style="display: none;">
-      <button class="cart-go-to-btn" id="cartGoToBtn"><i class="fa-solid fa-arrow-right"></i> Ir al carrito</button>
-      <div class="cart-totals">
-        <div class="cart-total-row"><span>Subtotal</span><span class="price" id="cartSubtotal">$0</span></div>
-        <div class="cart-total-row"><span>Comisión (10%)</span><span class="price" id="cartCommission">$0</span></div>
-        <div class="cart-total-row total"><span>Total</span><span class="price" id="cartTotal">$0</span></div>
-      </div>
-      <button class="cart-checkout-btn" id="cartCheckoutBtn"><i class="fa-brands fa-whatsapp"></i> Comprar por WhatsApp</button>
-    </div>
-  </div>
-
-  <main class="flex-grow py-12">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <a href="catalogo.html" class="inline-flex items-center gap-2 font-medium mb-4 transition-all duration-300 hover:gap-3" style="color: var(--text-primary);">
-        <i class="fa-solid fa-arrow-left"></i> Volver al catálogo
-      </a>
-
-      <div id="detalle-container" class="detalle-container">
-        <div class="text-center py-12">
-          <i class="fa-solid fa-spinner fa-spin text-3xl" style="color: var(--accent);"></i>
-          <p class="mt-3" style="color: var(--text-primary); opacity: 0.7;">Cargando información de la pieza...</p>
-        </div>
-      </div>
-
-      <div class="mt-16" id="similares-section" style="display: none;">
-        <h2 class="text-2xl md:text-3xl font-serif font-bold mb-6" style="color: var(--text-primary);">También te puede gustar</h2>
-        <div id="similares-carousel" class="similares-carousel"></div>
+  <!-- CONTENIDO 404 -->
+  <main class="flex-grow flex items-center justify-center py-16">
+    <div class="text-center max-w-2xl mx-auto px-4">
+      <div class="text-9xl font-serif font-bold" style="color: var(--accent); opacity: 0.15;">404</div>
+      <h1 class="text-4xl font-serif font-bold mt-4" style="color: var(--text-primary);">Página no encontrada</h1>
+      <p class="mt-4 text-lg" style="color: var(--text-primary); opacity: 0.7;">
+        Lo sentimos, la página que buscas no existe o fue movida.
+      </p>
+      <p class="mt-2" style="color: var(--text-primary); opacity: 0.5;">
+        Quizás puedas encontrar lo que buscas en nuestro catálogo.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4 justify-center">
+        <a href="index.html" class="text-white px-6 py-3 rounded-full transition-all hover:scale-102" style="background-color: var(--accent);">
+          <i class="fa-solid fa-house"></i> Volver al inicio
+        </a>
+        <a href="catalogo.html" class="px-6 py-3 rounded-full border transition-all hover:bg-opacity-10" style="border-color: var(--border); color: var(--text-primary);">
+          <i class="fa-regular fa-rectangle-list"></i> Ver catálogo
+        </a>
       </div>
     </div>
   </main>
@@ -172,7 +128,8 @@ class="header-logo-img">
 
   <a href="https://wa.me/5358481876" target="_blank" class="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-xl hover:bg-[#20ba5a] hover:scale-110 transition-all group"><i class="fa-brands fa-whatsapp"></i></a>
 
-  <script src="backend/data.js"></script>
-  <script src="js/detalles.js"></script>
+  <script src="frontend/scripts/ui.js"></script>
+  <script src="backend/main.js"></script>
+  <script src="js/404.js"></script>  
 </body>
 </html>

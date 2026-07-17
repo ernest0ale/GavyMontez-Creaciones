@@ -1,4 +1,47 @@
-// js/ui.js - Renderizado de UI (tarjetas, detalles, filtros)
+// js/ui.js - Renderizado de UI (tarjetas, detalles, filtros, tema, logo)
+
+// ========== TEMA Y LOGO ==========
+function initTheme() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    updateThemeIcons('dark');
+  } else {
+    document.body.classList.remove('dark-mode');
+    updateThemeIcons('light');
+  }
+}
+
+function updateHeaderLogo(theme) {
+  const logo = document.getElementById('headerLogo');
+  if (!logo) return;
+  if (theme === 'dark') {
+    logo.src = 'resources/gavyMontezCreaciones_darkLogo.png';
+  } else {
+    logo.src = 'resources/gavyMontezCreaciones_lightLogo.png';
+  }
+}
+
+function updateThemeIcons(theme) {
+  const icon = document.getElementById('theme-icon');
+  if (icon) {
+    icon.className = theme === 'dark' ? 'fa-regular fa-sun text-xl' : 'fa-regular fa-moon text-xl';
+  }
+  updateHeaderLogo(theme);
+}
+
+function toggleTheme() {
+  const isDark = document.body.classList.contains('dark-mode');
+  if (isDark) {
+    document.body.classList.remove('dark-mode');
+    localStorage.setItem('theme', 'light');
+    updateThemeIcons('light');
+  } else {
+    document.body.classList.add('dark-mode');
+    localStorage.setItem('theme', 'dark');
+    updateThemeIcons('dark');
+  }
+}
 
 // ========== TOAST NOTIFICATION ==========
 function showToast(message, type = 'success', duration = 3000) {
@@ -226,26 +269,28 @@ function compartirRed(red) {
   }
 }
 
-// Cerrar modales con tecla ESC
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    cerrarSignificado();
-    cerrarInformacion();
-    cerrarCompartir();
+// ========== SKELETON LOADER ==========
+function showSkeleton(containerId, count = 8) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const skeleton = document.createElement('div');
+    skeleton.className = 'skeleton-card';
+    skeleton.innerHTML = `
+      <div class="skeleton-image"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text short"></div>
+    `;
+    container.appendChild(skeleton);
   }
-});
+}
 
-// Cerrar modales al hacer clic en el overlay
-document.addEventListener('click', function(e) {
-  const significado = document.getElementById('significadoModal');
-  if (significado && e.target === significado) { cerrarSignificado(); }
-  
-  const info = document.getElementById('infoModal');
-  if (info && e.target === info) { cerrarInformacion(); }
-  
-  const compartir = document.getElementById('compartirModal');
-  if (compartir && e.target === compartir) { cerrarCompartir(); }
-});
+function hideSkeleton(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.querySelectorAll('.skeleton-card').forEach(el => el.remove());
+}
 
 // ========== FUNCIONES DE UI ==========
 function createProductCard(p) {
@@ -256,16 +301,20 @@ function createProductCard(p) {
   div.setAttribute('onclick', `window.location.href='detalles.html?id=${p.id}'`);
   
   const categoryIcons = {
-    pulseras: 'fa-solid fa-hand-sparkles',
     atrapasuenos: 'fa-solid fa-feather-pointed',
+    collares: 'fa-solid fa-gem',
+    aretes: 'fa-regular fa-circle',
+    pulseras: 'fa-solid fa-hand-sparkles',
     esculturas: 'fa-solid fa-palette',
     sombreros: 'fa-solid fa-hat-cowboy',
     combos: 'fa-solid fa-gift'
   };
   
   const categoryLabels = {
-    pulseras: 'Pulseras',
     atrapasuenos: 'Atrapasueños',
+    collares: 'Collares',
+    aretes: 'Aretes',
+    pulseras: 'Pulseras',
     esculturas: 'Esculturas',
     sombreros: 'Sombreros',
     combos: 'Combos'
@@ -347,7 +396,28 @@ function filterCategory(catId) {
   renderCatalogo(catId);
 }
 
-// Exponer funciones globales
+// ========== CARGAR DATA.JS SOLO DONDE SE NECESITA ==========
+function loadDataAndRender(renderFn) {
+  if (typeof productos !== 'undefined') {
+    renderFn();
+  } else {
+    // Intentar cargar data.js dinámicamente
+    const script = document.createElement('script');
+    script.src = 'backend/data.js';
+    script.onload = function() {
+      if (typeof productos !== 'undefined') {
+        renderFn();
+      }
+    };
+    document.head.appendChild(script);
+  }
+}
+
+// ========== EXPONER FUNCIONES GLOBALES ==========
+window.initTheme = initTheme;
+window.toggleTheme = toggleTheme;
+window.updateThemeIcons = updateThemeIcons;
+window.updateHeaderLogo = updateHeaderLogo;
 window.filterCategory = filterCategory;
 window.cargarDetalleProducto = cargarDetalleProducto;
 window.showToast = showToast;
@@ -361,3 +431,9 @@ window.cerrarInformacion = cerrarInformacion;
 window.abrirCompartir = abrirCompartir;
 window.cerrarCompartir = cerrarCompartir;
 window.compartirRed = compartirRed;
+window.showSkeleton = showSkeleton;
+window.hideSkeleton = hideSkeleton;
+window.loadDataAndRender = loadDataAndRender;
+window.createProductCard = createProductCard;
+window.renderFeatured = renderFeatured;
+window.renderCatalogo = renderCatalogo;

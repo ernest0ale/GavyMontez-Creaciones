@@ -11,313 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="frontend/css/styles.css">
-  
-  <style>
-    .search-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding-top: 4rem;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-    .search-overlay.active { opacity: 1; visibility: visible; }
-    .search-container { max-width: 600px; width: 90%; position: relative; }
-    .search-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--card-bg);
-      border-radius: 30px;
-      padding: 0.6rem 1rem;
-      border: 2px solid var(--border);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-      transition: border-color 0.3s ease;
-    }
-    .search-bar:focus-within { border-color: var(--accent); }
-    .search-bar .search-icon { color: var(--text-primary); opacity: 0.5; font-size: 1.1rem; }
-    .search-bar input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text-primary);
-      font-size: 1rem;
-      padding: 0.4rem 0;
-      min-width: 60px;
-    }
-    .search-bar input::placeholder { color: var(--text-primary); opacity: 0.5; }
-    .search-btn {
-      background: var(--accent);
-      border: none;
-      border-radius: 50%;
-      width: 38px;
-      height: 38px;
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-    .search-btn:hover { background: var(--btn-hover-bg); transform: scale(1.05); }
-    .search-close {
-      background: none;
-      border: none;
-      color: var(--text-primary);
-      font-size: 1.3rem;
-      cursor: pointer;
-      padding: 0.2rem;
-      opacity: 0.6;
-      transition: opacity 0.2s ease;
-      flex-shrink: 0;
-    }
-    .search-close:hover { opacity: 1; }
-    .search-results {
-      background: var(--card-bg);
-      border-radius: 16px;
-      margin-top: 0.5rem;
-      max-height: 400px;
-      overflow-y: auto;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-      border: 1px solid var(--border);
-      display: none;
-    }
-    .search-results.active { display: block; }
-    .search-results::-webkit-scrollbar { width: 4px; }
-    .search-results::-webkit-scrollbar-track { background: transparent; }
-    .search-results::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-    .search-result-item {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      padding: 0.6rem 1rem;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      border-bottom: 1px solid var(--border);
-    }
-    .search-result-item:last-child { border-bottom: none; }
-    .search-result-item:hover { background: var(--bg-primary); }
-    .search-result-item img {
-      width: 45px;
-      height: 45px;
-      border-radius: 8px;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: var(--hero-bg);
-    }
-    .search-result-info { flex: 1; min-width: 0; }
-    .search-result-name {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .search-result-meta { display: flex; gap: 0.8rem; margin-top: 0.1rem; flex-wrap: wrap; }
-    .search-result-categoria {
-      font-size: 0.7rem;
-      color: var(--accent);
-      font-weight: 500;
-      background: var(--bg-primary);
-      padding: 0.05rem 0.6rem;
-      border-radius: 20px;
-    }
-    .search-result-precio { font-size: 0.7rem; color: var(--text-primary); opacity: 0.7; font-weight: 600; }
-    .search-result-empty {
-      padding: 2rem 1rem;
-      text-align: center;
-      color: var(--text-primary);
-      opacity: 0.6;
-      font-size: 0.9rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .search-result-empty i { font-size: 1.5rem; opacity: 0.4; }
-
-    .cart-icon-wrapper { position: relative; cursor: pointer; }
-    .cart-badge {
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      background: #e74c3c;
-      color: white;
-      font-size: 0.6rem;
-      font-weight: 700;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-    .cart-badge.hidden { transform: scale(0); }
-    .cart-overlay {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 100%;
-      max-width: 420px;
-      height: 100vh;
-      background: var(--card-bg);
-      z-index: 1000;
-      transform: translateX(100%);
-      transition: transform 0.3s ease;
-      box-shadow: -4px 0 30px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .cart-overlay.open { transform: translateX(0); }
-    .cart-overlay-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-    .cart-overlay-backdrop.open { opacity: 1; visibility: visible; }
-    .cart-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
-    }
-    .cart-header h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--text-primary); }
-    .cart-close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); padding: 0.3rem; }
-    .cart-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
-    .cart-empty {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      text-align: center;
-      color: var(--text-primary);
-      opacity: 0.6;
-    }
-    .cart-empty i { font-size: 3rem; margin-bottom: 1rem; color: var(--accent); opacity: 0.4; }
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .cart-item-info { flex: 1; }
-    .cart-item-name { font-size: 0.85rem; font-weight: 500; color: var(--text-primary); }
-    .cart-item-meta { font-size: 0.75rem; color: var(--text-primary); opacity: 0.6; }
-    .cart-item-actions { display: flex; align-items: center; gap: 0.5rem; }
-    .cart-item-actions button {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      transition: all 0.2s ease;
-    }
-    .cart-item-actions button:hover { background: var(--accent); color: white; border-color: var(--accent); }
-    .cart-item-actions input {
-      width: 35px;
-      text-align: center;
-      border: none;
-      background: transparent;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-primary);
-      outline: none;
-    }
-    .cart-item-actions input::-webkit-outer-spin-button,
-    .cart-item-actions input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-    .cart-item-actions input[type=number] { -moz-appearance: textfield; }
-    .cart-item-price { font-weight: 600; color: var(--accent); font-size: 0.85rem; min-width: 50px; text-align: right; }
-    .cart-footer {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-    .cart-totals { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
-    .cart-total-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-primary); }
-    .cart-total-row.total { font-weight: 700; font-size: 1.1rem; border-top: 1px solid var(--border); padding-top: 0.5rem; margin-top: 0.3rem; }
-    .cart-total-row.total .price { color: var(--accent); }
-    .cart-checkout-btn {
-      width: 100%;
-      padding: 0.8rem;
-      background: #25D366;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    .cart-checkout-btn:hover { background: #1da851; transform: scale(1.02); }
-    .cart-go-to-btn {
-      width: 100%;
-      padding: 0.7rem;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    .cart-go-to-btn:hover { background: var(--btn-hover-bg); }
-  </style>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'art-bg': '#FDF8F0', 'art-text': '#4A3728', 'art-accent': '#C17A4D',
-            'art-secondary': '#8BAA7B', 'art-border': '#E6D5B8', 'art-hover': '#B06B40',
-          },
-          fontFamily: { serif: ['"Playfair Display"', 'serif'], sans: ['Inter', 'sans-serif'] }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="frontend/css/politicaEnvios.css">
+  <script src="frontend/scripts/tailwindConfig.js"></script>
 </head>
 <body class="min-h-screen flex flex-col antialiased">
 
@@ -327,22 +22,28 @@
     <button class="toast-close" onclick="hideToast()"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
+  <!-- HEADER -->
   <header class="sticky top-0 z-40 backdrop-blur-md border-b shadow-sm" style="background-color: var(--surface); border-color: var(--border);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="h-20 flex items-center justify-between">
+        
         <div class="md:hidden flex items-center">
           <button onclick="toggleMobileMenu()" class="focus:outline-none p-2" style="color: var(--text-primary);">
             <i class="fa-solid fa-bars text-2xl"></i>
           </button>
         </div>
 
-        <a href="index.html" class="header-logo" style="text-decoration: none;">
-          <span class="logo-main">GavyMontez</span>
-          <span class="logo-sub">Creaciones</span>
+        <a href="index.html" class="header-logo">
+          <img id="headerLogo" src="resources/gavyMontezCreaciones_lightLogo.png" alt="GavyMontez Creaciones" 
+class="header-logo-img">
+          <div class="logo-text-group">
+            <span class="logo-main">GavyMontez</span>
+            <span class="logo-sub">Creaciones</span>
+          </div>
         </a>
 
         <nav class="hidden md:flex items-center justify-center flex-1 space-x-8">
-          <a href="index.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
+          <a href="index.html" class="nav-link active font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-solid fa-house"></i> Inicio</a>
           <a href="novedades.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-star"></i> Novedades</a>
           <a href="catalogo.html" class="nav-link font-medium text-base transition-all duration-300" style="color: var(--text-primary);"><i class="fa-regular fa-rectangle-list"></i> Catálogo</a>
         </nav>
@@ -510,6 +211,7 @@
     </div>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer-gavy">
     <div class="footer-container">
       <div class="footer-columns">
@@ -521,21 +223,18 @@
             <li><a href="catalogo.html">Catálogo</a></li>
           </ul>
         </div>
-        
         <div class="footer-col-2">
           <div class="footer-logo">
-            <div class="logo-icon">GM</div>
+            <img src="resources/gavyMontezCreaciones_darkLogo.png" alt="GavyMontez Creaciones" loading="lazy">
             <span class="logo-text">GavyMontez</span>
             <span class="logo-sub">Creaciones</span>
           </div>
-          <p class="footer-description">Creaciones hechas a mano con Amor. Cada puntada, cada pincelada, lleva esencia cubana.</p>
+          <p class="footer-description">Arte con intención y alma.</p>
           <div class="footer-social">
             <a href="https://instagram.com/gavymontez_creaciones" target="_blank" class="social-icon-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://wa.me/5358481876" target="_blank" class="social-icon-link" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-            <a href="mailto:gavymontez@creaciones.com" target="_blank" class="social-icon-link" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
           </div>
         </div>
-        
         <div class="footer-col-3">
           <h3>Información</h3>
           <ul class="footer-links">
@@ -547,7 +246,7 @@
       </div>
       <hr class="footer-divider">
       <div class="footer-bottom">
-        <p class="footer-copyright">© 2026 GavyMontez Creaciones · Arte con intención y alma.</p>
+        <p class="footer-copyright">© 2026 GavyMontez Creaciones · Todos los derechos reservados.</p>
       </div>
     </div>
   </footer>
@@ -556,231 +255,6 @@
 
   <script src="backend/data.js"></script>
   <script src="frontend/scripts/ui.js"></script>
-  <script>
-    function initTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        updateThemeIcons('dark');
-      } else {
-        document.body.classList.remove('dark-mode');
-        updateThemeIcons('light');
-      }
-    }
-    function updateThemeIcons(theme) {
-      const icon = document.getElementById('theme-icon');
-      if (icon) { icon.className = theme === 'dark' ? 'fa-regular fa-sun text-xl' : 'fa-regular fa-moon text-xl'; }
-    }
-    function toggleTheme() {
-      const isDark = document.body.classList.contains('dark-mode');
-      if (isDark) {
-        document.body.classList.remove('dark-mode');
-        localStorage.setItem('theme', 'light');
-        updateThemeIcons('light');
-      } else {
-        document.body.classList.add('dark-mode');
-        localStorage.setItem('theme', 'dark');
-        updateThemeIcons('dark');
-      }
-    }
-
-    function initSearch() {
-      const trigger = document.getElementById('searchTrigger');
-      const overlay = document.getElementById('searchOverlay');
-      const close = document.getElementById('searchClose');
-      const submitBtn = document.getElementById('searchSubmitBtn');
-      const input = document.getElementById('searchInput');
-      const results = document.getElementById('searchResults');
-
-      function openSearch() { overlay.classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(() => input.focus(), 150); }
-      function closeSearch() { overlay.classList.remove('active'); document.body.style.overflow = ''; input.value = ''; results.classList.remove('active'); }
-      function ejecutarBusqueda() { const termino = input.value.trim(); if (termino) { closeSearch(); window.location.href = `busqueda.html?q=${encodeURIComponent(termino)}`; } }
-      trigger.addEventListener('click', openSearch);
-      close.addEventListener('click', closeSearch);
-      submitBtn.addEventListener('click', ejecutarBusqueda);
-      overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSearch(); });
-
-      let timeoutId = null;
-      input.addEventListener('input', () => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          const termino = input.value.trim();
-          if (termino.length < 2) { results.classList.remove('active'); return; }
-          const resultados = buscarProductos(termino);
-          renderSearchResults(resultados, results);
-          results.classList.add('active');
-        }, 200);
-      });
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') { e.preventDefault(); ejecutarBusqueda(); }
-        if (e.key === 'Escape') closeSearch();
-      });
-    }
-
-    function buscarProductos(termino) {
-      if (typeof productos === 'undefined') return [];
-      const terminoLower = termino.toLowerCase().trim();
-      return productos.filter(p =>
-        p.nombre.toLowerCase().includes(terminoLower) ||
-        p.categoria.toLowerCase().includes(terminoLower) ||
-        (p.descripcion && p.descripcion.toLowerCase().includes(terminoLower))
-      ).slice(0, 8);
-    }
-
-    function renderSearchResults(resultados, container) {
-      if (resultados.length === 0) {
-        container.innerHTML = `<div class="search-result-empty"><i class="fa-regular fa-face-frown"></i><span>No se encontraron artículos</span></div>`;
-        return;
-      }
-      container.innerHTML = resultados.map(p => `
-        <div class="search-result-item" onclick="window.location.href='detalles.html?id=${p.id}'">
-          <img src="${p.img}" onerror="this.src='https://picsum.photos/seed/${p.id}/50/50'" alt="${p.nombre}" loading="lazy">
-          <div class="search-result-info">
-            <div class="search-result-name">${p.nombre}</div>
-            <div class="search-result-meta">
-              <span class="search-result-categoria">${p.categoria}</span>
-              <span class="search-result-precio">${p.precio}</span>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    let carrito = [];
-    function loadCart() {
-      const saved = localStorage.getItem('gavy_cart');
-      if (saved) { try { carrito = JSON.parse(saved); } catch(e) { carrito = []; } }
-      updateCartUI();
-    }
-    function saveCart() { localStorage.setItem('gavy_cart', JSON.stringify(carrito)); updateCartUI(); }
-    function updateQuantity(productoId, delta) {
-      const item = carrito.find(i => i.id === productoId);
-      if (!item) return;
-      const nueva = item.cantidad + delta;
-      if (nueva <= 0) { carrito = carrito.filter(i => i.id !== productoId); saveCart(); return; }
-      item.cantidad = nueva; saveCart();
-    }
-    function updateQtyFromInput(id, value) {
-      const num = parseInt(value);
-      if (isNaN(num) || num < 1) {
-        const item = carrito.find(i => i.id === id);
-        const input = document.querySelector(`#cartBody input[onchange*="updateQtyFromInput(${id}"]`);
-        if (item && input) {
-          input.value = item.cantidad;
-        }
-        return;
-      }
-      const item = carrito.find(i => i.id === id);
-      if (!item) return;
-      if (num === 0) {
-        carrito = carrito.filter(i => i.id !== id);
-        saveCart();
-        return;
-      }
-      item.cantidad = num;
-      saveCart();
-    }
-    function getCartTotal() { return carrito.reduce((sum, item) => sum + parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad, 0); }
-    function getCartProductCount() { return carrito.length; }
-    function updateCartUI() {
-      const badge = document.getElementById('cartBadge');
-      const count = getCartProductCount();
-      if (count > 0) { badge.textContent = count; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
-      renderCartItems();
-    }
-    function renderCartItems() {
-      const body = document.getElementById('cartBody');
-      const footer = document.getElementById('cartFooter');
-      if (carrito.length === 0) {
-        body.innerHTML = `<div class="cart-empty"><i class="fa-solid fa-basket-shopping"></i><p>Tu carrito está vacío</p><p style="font-size: 0.85rem; margin-top: 0.3rem;">Explora nuestro catálogo y añade tus piezas favoritas</p></div>`;
-        footer.style.display = 'none'; return;
-      }
-      body.innerHTML = carrito.map(item => `
-        <div class="cart-item">
-          <div class="cart-item-info"><div class="cart-item-name">${item.nombre}</div><div class="cart-item-meta">${item.precio} c/u</div></div>
-          <div class="cart-item-actions">
-            <button onclick="updateQuantity(${item.id}, -1)"><i class="fa-solid fa-minus"></i></button>
-            <input type="number" value="${item.cantidad}" min="1" onchange="updateQtyFromInput(${item.id}, this.value)">
-            <button onclick="updateQuantity(${item.id}, 1)"><i class="fa-solid fa-plus"></i></button>
-            <span class="cart-item-price">$${(parseFloat(item.precio.replace('$', '').replace('.', '').trim()) * item.cantidad).toFixed(0)}</span>
-          </div>
-        </div>
-      `).join('');
-      const subtotal = getCartTotal();
-      const comision = subtotal * 0.1;
-      const total = subtotal + comision;
-      document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(0)}`;
-      document.getElementById('cartCommission').textContent = `$${comision.toFixed(0)}`;
-      document.getElementById('cartTotal').textContent = `$${total.toFixed(0)}`;
-      footer.style.display = 'block';
-    }
-    function toggleCart() {
-      const overlay = document.getElementById('cartOverlay');
-      const backdrop = document.getElementById('cartBackdrop');
-      overlay.classList.toggle('open');
-      backdrop.classList.toggle('open');
-      document.body.style.overflow = overlay.classList.contains('open') ? 'hidden' : '';
-    }
-    function initCartUI() {
-      const toggle = document.getElementById('cartToggle');
-      const close = document.getElementById('cartClose');
-      const backdrop = document.getElementById('cartBackdrop');
-      toggle.addEventListener('click', toggleCart);
-      close.addEventListener('click', toggleCart);
-      backdrop.addEventListener('click', toggleCart);
-      document.getElementById('cartGoToBtn').addEventListener('click', () => { toggleCart(); window.location.href = 'carrito.html'; });
-      document.getElementById('cartCheckoutBtn').addEventListener('click', () => {
-        if (carrito.length === 0) return;
-        let mensaje = 'Hola, vengo de la página web gavymontez-creaciones y estoy interesado en comprar estos artículos:\n\n';
-        carrito.forEach(item => { mensaje += `·${item.nombre} x ${item.cantidad}\n`; });
-        const total = getCartTotal() + (getCartTotal() * 0.1);
-        mensaje += `\nEl precio total sería $${total.toFixed(0)}.`;
-        window.open(`https://wa.me/5358481876?text=${encodeURIComponent(mensaje)}`, '_blank');
-      });
-    }
-
-    // ========== TOAST ==========
-    function showToast(message, type = 'success', duration = 3000) {
-      const toast = document.getElementById('toast');
-      if (!toast) return;
-      const icon = toast.querySelector('.toast-icon');
-      const messageEl = toast.querySelector('.toast-message');
-      icon.className = 'toast-icon';
-      icon.innerHTML = '';
-      if (type === 'success') {
-        icon.classList.add('success');
-        icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-      } else if (type === 'error') {
-        icon.classList.add('error');
-        icon.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
-      } else {
-        icon.classList.add('info');
-        icon.innerHTML = '<i class="fa-solid fa-circle-info"></i>';
-      }
-      messageEl.textContent = message;
-      toast.classList.add('show');
-      if (window.toastTimeout) clearTimeout(window.toastTimeout);
-      window.toastTimeout = setTimeout(hideToast, duration);
-    }
-    function hideToast() {
-      const toast = document.getElementById('toast');
-      if (toast) toast.classList.remove('show');
-      if (window.toastTimeout) {
-        clearTimeout(window.toastTimeout);
-        window.toastTimeout = null;
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      if (typeof productos === 'undefined') { console.warn('La variable productos no está definida.'); }
-      initTheme();
-      document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-      initSearch();
-      loadCart();
-      initCartUI();
-    });
-
-    function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
-  </script>
+  <script src="js/politicaEnvios.js"></script>
 </body>
 </html>
