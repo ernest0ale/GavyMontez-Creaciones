@@ -262,7 +262,7 @@ body.dark-mode header::after {
 }
 
 .header-logo-img {
-  height: 40px;
+  height: 60px;
   width: auto;
   transition: opacity 0.3s ease;
   flex-shrink: 0;
@@ -273,7 +273,6 @@ body.dark-mode header::after {
   flex-direction: column;
   align-items: center;
   line-height: 1.1;
-  margin-left: 0.4rem;
 }
 
 .header-logo .logo-main {
@@ -307,7 +306,7 @@ body.dark-mode .header-logo .logo-sub {
 
 @media (min-width: 768px) {
   .header-logo-img {
-    height: 48px;
+    height: 64px;
   }
   .header-logo .logo-main {
     font-size: 1.6rem;
@@ -319,13 +318,13 @@ body.dark-mode .header-logo .logo-sub {
 
 @media (max-width: 480px) {
   .header-logo-img {
-    height: 32px;
+    height: 48px;
   }
   .header-logo .logo-main {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
   .header-logo .logo-sub {
-    font-size: 0.45rem;
+    font-size: 0.7rem;
   }
   .header-logo {
     gap: 0.3rem;
@@ -391,7 +390,7 @@ body.dark-mode .footer-gavy {
 }
 
 .footer-gavy .footer-logo img {
-  height: 56px;
+  height: 80px;
   width: auto;
   margin-bottom: 0.4rem;
 }

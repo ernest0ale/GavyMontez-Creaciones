@@ -16,7 +16,7 @@ function updateHeaderLogo(theme) {
   const logo = document.getElementById('headerLogo');
   if (!logo) return;
   if (theme === 'dark') {
-    logo.src = 'resources/gavyMontezCreaciones_darkLogo.png';
+    logo.src = 'resources/gavyMontezCreaciones_darkLogo_2.png';
   } else {
     logo.src = 'resources/gavyMontezCreaciones_lightLogo.png';
   }
