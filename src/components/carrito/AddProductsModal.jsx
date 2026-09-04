@@ -44,10 +44,11 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
     return filtered;
   }, [existingProductIds, filterCategory, searchTerm]);
 
+  // 🔥 CORRECCIÓN: Usar productos completo, no availableProducts
   const categories = useMemo(() => {
-    const cats = new Set(availableProducts.map(p => p.categoria));
+    const cats = new Set(productos.map(p => p.categoria));
     return ['todos', ...Array.from(cats)];
-  }, [availableProducts]);
+  }, []);
 
   const categoryLabels = {
     todos: 'Todos',
@@ -87,7 +88,6 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
   };
 
   const updateModalQty = (productId, value) => {
-    // Permitir campo vacío para que el usuario pueda escribir
     if (value === '') {
       setSelectedProducts(prev => {
         const newSelection = { ...prev };
@@ -115,7 +115,6 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
     setSelectedProducts(prev => {
       const newSelection = { ...prev };
       if (newSelection[productId]) {
-        // Si el campo está vacío o es 0, establecer a 1
         if (!newSelection[productId].quantity || newSelection[productId].quantity < 1) {
           newSelection[productId].quantity = 1;
         }
@@ -169,7 +168,7 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
           <span className="count">{selectedCount}</span>
         </div>
 
-        {/* ===== BÚSQUEDA Y FILTRO - ESTILO SEARCH-OVERLAY ===== */}
+        {/* ===== BÚSQUEDA Y FILTRO ===== */}
         <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <div
             className="flex-1 flex items-center gap-2 rounded-full px-4 py-2 transition-all focus-within:border-[var(--accent)]"
@@ -186,12 +185,15 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Buscar productos..."
-              className="flex-1 bg-transparent border-none outline-none text-sm"
+              className="flex-1 bg-transparent text-sm"
               style={{
                 color: 'var(--text-primary)',
                 fontFamily: 'inherit',
                 background: 'transparent',
-                padding: '0.2rem 0'
+                border: 'none',
+                outline: 'none',
+                padding: '0.2rem 0',
+                boxShadow: 'none'
               }}
               autoComplete="off"
             />
@@ -199,12 +201,14 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
               <button
                 onClick={() => setSearchTerm('')}
                 className="text-[var(--text-primary)] opacity-40 hover:opacity-100 text-sm"
+                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 <i className="fa-solid fa-xmark"></i>
               </button>
             )}
           </div>
 
+          {/* 🔥 SELECT CORREGIDO */}
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
@@ -223,7 +227,15 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
             }}
           >
             {categories.map((cat) => (
-              <option key={cat} value={cat} style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)' }}>
+              <option 
+                key={cat} 
+                value={cat} 
+                style={{ 
+                  backgroundColor: 'var(--card-bg)', 
+                  color: 'var(--text-primary)',
+                  padding: '0.5rem'
+                }}
+              >
                 {categoryLabels[cat] || cat}
               </option>
             ))}
@@ -330,7 +342,6 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
                           onChange={(e) => {
                             const val = e.target.value;
                             if (val === '') {
-                              // Permitir campo vacío
                               setSelectedProducts(prev => {
                                 const newSelection = { ...prev };
                                 if (newSelection[product.id]) {
