@@ -36,6 +36,7 @@ export default function Header() {
       <header className="header">
         <div className="header-container">
           <div className="header-inner">
+            {/* Botón menú móvil con la clase correcta */}
             <button
               onClick={toggleMobileMenu}
               className="mobile-menu-btn"

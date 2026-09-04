@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import PageTitle from '../../components/ui/PageTitle';
 
 export default function PreguntasFrecuentesPage() {
   const [openIndex, setOpenIndex] = useState(null);
@@ -131,70 +132,74 @@ export default function PreguntasFrecuentesPage() {
   ];
 
   return (
-    <main className="flex-grow py-12 md:py-16">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-8 md:mb-12">
-          <span className="uppercase tracking-widest text-xs font-bold" style={{ color: 'var(--accent)' }}>
-            Ayuda y soporte
-          </span>
-          <h1 className="text-3xl md:text-4xl font-serif font-bold mt-1 text-[var(--text-primary)]">
-            Preguntas Frecuentes
-          </h1>
-          <p className="mt-2 text-sm md:text-base text-[var(--text-primary)] opacity-70">
-            Encuentra respuestas a las dudas más comunes sobre nuestras creaciones.
-          </p>
-        </div>
+    <>
+      <PageTitle title="Preguntas Frecuentes" />
 
-        <div
-          className="rounded-2xl md:rounded-3xl p-6 md:p-8 border shadow-md"
-          style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border)' }}
-        >
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="faq-item border-b last:border-b-0 py-2"
-              style={{ borderColor: 'var(--border)' }}
-            >
-              <button
-                onClick={() => toggleFaq(index)}
-                className="faq-question w-full py-2 md:py-3 bg-none border-none flex justify-between items-center cursor-pointer font-serif font-semibold text-sm md:text-base text-left text-[var(--text-primary)] transition-all hover:text-[var(--accent)]"
-              >
-                <span>{faq.pregunta}</span>
-                <i
-                  className={`fa-solid fa-chevron-down transition-transform duration-300 ${
-                    openIndex === index ? 'rotate-180' : ''
-                  }`}
-                  style={{ color: 'var(--accent)' }}
-                ></i>
-              </button>
-              <div
-                className={`faq-answer overflow-hidden transition-all duration-300 ease-in-out ${
-                  openIndex === index ? 'max-h-[500px] py-2 md:py-3' : 'max-h-0 py-0'
-                }`}
-                style={{ color: 'var(--text-primary)', opacity: 0.8, lineHeight: 1.7 }}
-              >
-                {faq.respuesta}
-              </div>
-            </div>
-          ))}
-
-          <div className="pt-6 border-t text-center" style={{ borderColor: 'var(--border)' }}>
-            <p className="text-sm text-[var(--text-primary)] opacity-60">
-              <i className="fa-regular fa-message"></i> ¿No encontraste lo que buscabas?
+      <main className="flex-grow py-12 md:py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 md:mb-12">
+            <span className="uppercase tracking-widest text-xs font-bold" style={{ color: 'var(--accent)' }}>
+              Ayuda y soporte
+            </span>
+            <h1 className="text-3xl md:text-4xl font-serif font-bold mt-1 text-[var(--text-primary)]">
+              Preguntas Frecuentes
+            </h1>
+            <p className="mt-2 text-sm md:text-base text-[var(--text-primary)] opacity-70">
+              Encuentra respuestas a las dudas más comunes sobre nuestras creaciones.
             </p>
           </div>
 
-          <div className="text-center pt-4">
-            <Link
-              href="/catalogo"
-              className="inline-block text-white px-6 py-3 rounded-full transition-all hover:scale-105"
-              style={{ backgroundColor: 'var(--accent)' }}
-            >
-              <i className="fa-solid fa-arrow-left"></i> Ver catálogo
-            </Link>
+          <div
+            className="rounded-2xl md:rounded-3xl p-6 md:p-8 border shadow-md"
+            style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border)' }}
+          >
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="faq-item border-b last:border-b-0 py-2"
+                style={{ borderColor: 'var(--border)' }}
+              >
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="faq-question w-full py-2 md:py-3 bg-none border-none flex justify-between items-center cursor-pointer font-serif font-semibold text-sm md:text-base text-left text-[var(--text-primary)] transition-all hover:text-[var(--accent)]"
+                >
+                  <span>{faq.pregunta}</span>
+                  <i
+                    className={`fa-solid fa-chevron-down transition-transform duration-300 ${
+                      openIndex === index ? 'rotate-180' : ''
+                    }`}
+                    style={{ color: 'var(--accent)' }}
+                  ></i>
+                </button>
+                <div
+                  className={`faq-answer overflow-hidden transition-all duration-300 ease-in-out ${
+                    openIndex === index ? 'max-h-[500px] py-2 md:py-3' : 'max-h-0 py-0'
+                  }`}
+                  style={{ color: 'var(--text-primary)', opacity: 0.8, lineHeight: 1.7 }}
+                >
+                  {faq.respuesta}
+                </div>
+              </div>
+            ))}
+
+            <div className="pt-6 border-t text-center" style={{ borderColor: 'var(--border)' }}>
+              <p className="text-sm text-[var(--text-primary)] opacity-60">
+                <i className="fa-regular fa-message"></i> ¿No encontraste lo que buscabas?
+              </p>
+            </div>
+
+            <div className="text-center pt-4">
+              <Link
+                href="/catalogo"
+                className="inline-block text-white px-6 py-3 rounded-full transition-all hover:scale-105"
+                style={{ backgroundColor: 'var(--accent)' }}
+              >
+                <i className="fa-solid fa-arrow-left"></i> Ver catálogo
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }

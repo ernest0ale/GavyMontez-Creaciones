@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import HeroCarousel from '../components/ui/HeroCarousel';
 import ProductGrid from '../components/ui/ProductGrid';
+import PageTitle from '../components/ui/PageTitle';
 import { getProductosDestacados, getProductosByCategoria } from '../data/productos';
 import { getProductosVistos } from '../utils/helpers';
 
@@ -16,10 +17,9 @@ export default function HomePage() {
 
   useEffect(() => {
     try {
-      // Filtrar destacados excluyendo combos
-      const destacadosData = getProductosDestacados().filter(p => p.categoria !== 'combos');
+      const allDestacados = getProductosDestacados();
+      const destacadosData = allDestacados.filter(p => p.categoria !== 'combos');
       const combosData = getProductosByCategoria('combos');
-      // Obtener productos vistos (máximo 4)
       const vistosData = getProductosVistos(4);
       
       setDestacados(destacadosData);
@@ -39,7 +39,6 @@ export default function HomePage() {
     }
   };
 
-  // Servicios para la sección "Sobre Nosotros"
   const services = [
     { icon: 'fa-solid fa-feather-pointed', title: 'Atrapasueños', desc: 'Tejidos a mano con esencia cubana' },
     { icon: 'fa-solid fa-gem', title: 'Collares', desc: 'Piezas únicas con semillas y cuentas' },
@@ -51,9 +50,10 @@ export default function HomePage() {
 
   return (
     <>
+      <PageTitle title="Inicio" />
+
       <HeroCarousel />
 
-      {/* Sobre Nosotros */}
       <section
         id="sobre-nosotros"
         className="py-12 md:py-16 border-y"
@@ -68,25 +68,18 @@ export default function HomePage() {
             En el taller de GavyMontez Creaciones, seleccionamos hilos de algodón, maderas nobles y pigmentos naturales. Cada creación es un reflejo de nuestra pasión por la artesanía cubana, con esmero y cariño. No hay dos iguales.
           </p>
 
-          <div className="services-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 pt-4 md:pt-6">
+          <div className="services-grid">
             {services.map((service, index) => (
-              <div
-                key={index}
-                className="service-card p-4 md:p-5 rounded-xl border text-center transition-all hover:-translate-y-1 hover:shadow-md"
-                style={{ borderColor: 'var(--border)', backgroundColor: 'var(--bg-primary)' }}
-              >
-                <span className="icon text-2xl md:text-3xl block mb-1" style={{ color: 'var(--accent)' }}>
-                  <i className={service.icon}></i>
-                </span>
-                <h3 className="font-bold text-xs md:text-sm text-[var(--text-primary)]">{service.title}</h3>
-                <p className="text-[0.65rem] md:text-xs text-[var(--text-primary)] opacity-70">{service.desc}</p>
+              <div key={index} className="service-card">
+                <span className="icon"><i className={service.icon}></i></span>
+                <h3>{service.title}</h3>
+                <p>{service.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Combos */}
       {combos.length > 0 && (
         <section className="py-12 md:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12 gap-4">
@@ -98,20 +91,16 @@ export default function HomePage() {
                 Combos exclusivos
               </h2>
             </div>
-            <Link
-              href="/catalogo?cat=combos"
-              className="font-semibold flex items-center gap-2 group transition-all duration-300 text-[var(--accent)] hover:gap-3"
-            >
-              Ver combos <i className="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            <Link href="/catalogo?cat=combos" className="featured-link">
+              Ver combos <i className="fa-solid fa-arrow-right"></i>
             </Link>
           </div>
           <ProductGrid products={combos} />
         </section>
       )}
 
-      {/* Productos Destacados */}
       <section className="py-12 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="featured-header flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12 gap-4">
+        <div className="featured-header">
           <div className="featured-title-group">
             <span className="uppercase tracking-widest text-xs font-bold" style={{ color: 'var(--accent)' }}>
               Favoritos del taller
@@ -120,11 +109,8 @@ export default function HomePage() {
               Creaciones destacadas
             </h2>
           </div>
-          <Link
-            href="/catalogo"
-            className="featured-link font-semibold flex items-center gap-2 group transition-all duration-300 text-[var(--accent)] hover:gap-3"
-          >
-            Ver todo el catálogo <i className="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+          <Link href="/catalogo" className="featured-link">
+            Ver todo el catálogo <i className="fa-solid fa-arrow-right"></i>
           </Link>
         </div>
 
@@ -132,22 +118,21 @@ export default function HomePage() {
           <div className="flex justify-center py-12">
             <i className="fa-solid fa-spinner fa-spin text-3xl" style={{ color: 'var(--accent)' }}></i>
           </div>
-        ) : (
+        ) : destacados.length > 0 ? (
           <ProductGrid products={destacados} />
+        ) : (
+          <div className="text-center py-12 text-[var(--text-primary)] opacity-60">
+            <p>No hay productos destacados disponibles</p>
+          </div>
         )}
 
         <div className="mt-12 md:mt-16 text-center">
-          <Link
-            href="/catalogo"
-            className="btn-catalogo-completo text-white text-base font-semibold px-8 py-4 rounded-full transition-all shadow-md inline-block hover:scale-105"
-            style={{ backgroundColor: 'var(--accent)' }}
-          >
+          <Link href="/catalogo" className="btn-catalogo-completo">
             Ver catálogo completo
           </Link>
         </div>
       </section>
 
-      {/* Productos Recientemente Vistos - NUEVA SECCIÓN */}
       {!loading && vistos.length > 0 && (
         <section className="py-12 md:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t" style={{ borderColor: 'var(--border)' }}>
           <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12 gap-4">

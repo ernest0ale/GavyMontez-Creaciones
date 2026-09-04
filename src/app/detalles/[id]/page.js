@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import PageTitle from '../../../components/ui/PageTitle';
 import { productos } from '../../../data/productos';
 import { useCart } from '../../../hooks/useCart';
 import SignificadoModal from '../../../components/modals/SignificadoModal';
@@ -54,22 +55,25 @@ export default function DetallesPage() {
 
   if (!product) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-12 text-center">
-        <i className="fa-solid fa-triangle-exclamation text-5xl mb-4" style={{ color: 'var(--accent)' }}></i>
-        <h2 className="text-2xl font-serif font-bold text-[var(--text-primary)]">
-          Producto no encontrado
-        </h2>
-        <p className="mt-2 text-[var(--text-primary)] opacity-70">
-          La pieza que buscas no existe o fue removida.
-        </p>
-        <Link
-          href="/catalogo"
-          className="inline-block mt-6 text-white px-6 py-3 rounded-full transition-all hover:scale-105"
-          style={{ backgroundColor: 'var(--accent)' }}
-        >
-          Ver catálogo
-        </Link>
-      </div>
+      <>
+        <PageTitle title="Producto no encontrado" />
+        <div className="max-w-6xl mx-auto px-4 py-12 text-center">
+          <i className="fa-solid fa-triangle-exclamation text-5xl mb-4" style={{ color: 'var(--accent)' }}></i>
+          <h2 className="text-2xl font-serif font-bold text-[var(--text-primary)]">
+            Producto no encontrado
+          </h2>
+          <p className="mt-2 text-[var(--text-primary)] opacity-70">
+            La pieza que buscas no existe o fue removida.
+          </p>
+          <Link
+            href="/catalogo"
+            className="inline-block mt-6 text-white px-6 py-3 rounded-full transition-all hover:scale-105"
+            style={{ backgroundColor: 'var(--accent)' }}
+          >
+            Ver catálogo
+          </Link>
+        </div>
+      </>
     );
   }
 
@@ -86,10 +90,26 @@ export default function DetallesPage() {
     removeItem(product.id);
   };
 
-  const handleQuantityChange = (e) => {
-    const val = parseInt(e.target.value);
-    if (!isNaN(val) && val > 0) {
-      updateQuantity(product.id, val);
+  const handleQuantityChange = (id, value) => {
+    if (value === '') {
+      // Permitir campo vacío
+      return;
+    }
+    const num = parseInt(value);
+    if (!isNaN(num) && num > 0) {
+      updateQuantity(id, num);
+    }
+  };
+
+  const handleQuantityBlur = (id, e) => {
+    const value = e.target.value.trim();
+    if (value === '') {
+      updateQuantity(id, 1);
+      return;
+    }
+    const num = parseInt(value);
+    if (isNaN(num) || num < 1) {
+      updateQuantity(id, 1);
     }
   };
 
@@ -115,6 +135,8 @@ export default function DetallesPage() {
 
   return (
     <>
+      <PageTitle title={product.nombre} />
+
       <main className="flex-grow py-8 md:py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
@@ -126,7 +148,6 @@ export default function DetallesPage() {
 
           <div className="detalle-container">
             <div className="detalle-grid">
-              {/* Imagen */}
               <div>
                 <div
                   className="rounded-xl md:rounded-2xl overflow-hidden border"
@@ -172,7 +193,6 @@ export default function DetallesPage() {
                 )}
               </div>
 
-              {/* Información */}
               <div className="space-y-4 md:space-y-5">
                 <div className="detalle-badges">
                   <span className="badge-categoria">
@@ -215,7 +235,6 @@ export default function DetallesPage() {
                   </div>
                 </div>
 
-                {/* Acciones */}
                 <div className="detalle-actions">
                   <div className="action-row">
                     {!inCart ? (
@@ -241,11 +260,41 @@ export default function DetallesPage() {
                             <i className="fa-solid fa-minus"></i>
                           </button>
                           <input
-                            type="number"
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             className="qty-input"
                             value={cartItem.cantidad}
-                            onChange={handleQuantityChange}
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              if (val === '') {
+                                // Permitir campo vacío
+                                return;
+                              }
+                              const num = parseInt(val);
+                              if (!isNaN(num) && num > 0) {
+                                updateQuantity(product.id, num);
+                              }
+                            }}
+                            onBlur={(e) => {
+                              const val = e.target.value.trim();
+                              if (val === '') {
+                                updateQuantity(product.id, 1);
+                              }
+                            }}
+                            onFocus={(e) => e.target.select()}
                             min="1"
+                            style={{
+                              width: '36px',
+                              textAlign: 'center',
+                              border: 'none',
+                              background: 'transparent',
+                              fontWeight: 600,
+                              fontSize: '1rem',
+                              color: 'var(--text-primary)',
+                              outline: 'none',
+                              padding: 0
+                            }}
                           />
                           <button
                             onClick={() => updateQuantity(product.id, cartItem.cantidad + 1)}
@@ -270,7 +319,6 @@ export default function DetallesPage() {
             </div>
           </div>
 
-          {/* Productos Similares */}
           {similares.length > 0 && (
             <div className="mt-16">
               <h2 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-[var(--text-primary)]">

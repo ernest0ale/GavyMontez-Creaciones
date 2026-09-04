@@ -94,9 +94,9 @@ export function CartProvider({ children }) {
     [items]
   );
 
-  // Calcular total de items
+  // ===== totalItems = cantidad de productos ÚNICOS =====
   const totalItems = useMemo(() => {
-    return items.reduce((sum, item) => sum + item.cantidad, 0);
+    return items.length;
   }, [items]);
 
   // Calcular subtotal (sin comisión)
@@ -122,7 +122,7 @@ export function CartProvider({ children }) {
     return subtotal + commission;
   }, [subtotal, commission]);
 
-  // Contar productos únicos en el carrito
+  // Contar productos únicos en el carrito (alias)
   const uniqueItems = useMemo(() => {
     return items.length;
   }, [items]);

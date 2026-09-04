@@ -10,7 +10,7 @@ export default function ProductCard({ product }) {
   const isEspecial = tipo === 'espiritual';
 
   return (
-    <Link href={`/detalles/${id}`} className="product-card">
+    <Link href={`/detalles/${id}`} className="product-card" style={{ textDecoration: 'none', color: 'inherit' }}>
       <div>
         <div className="product-card-image">
           <Image
@@ -43,7 +43,7 @@ export default function ProductCard({ product }) {
       </div>
       <div className="product-card-footer">
         <span className="product-card-price">{precio}</span>
-        <span className="btn-ver-detalles">
+        <span className="btn-ver-detalles" style={{ textDecoration: 'none' }}>
           Ver detalles <i className="fa-solid fa-chevron-right"></i>
         </span>
       </div>
