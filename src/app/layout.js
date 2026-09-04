@@ -8,7 +8,10 @@ import WhatsAppButton from '../components/ui/WhatsAppButton';
 import GlobalToast from '../components/ui/GlobalToast';
 
 export const metadata = {
-  title: 'GavyMontez Creaciones',
+  title: {
+    default: 'GavyMontez Creaciones',
+    template: '%s | GavyMontez Creaciones'
+  },
   description: 'Arte con intención y alma. Creaciones únicas hechas a mano en La Habana.',
   keywords: 'artesanía, atrapasueños, pulseras, collares, esculturas, Cuba',
   authors: [{ name: 'GavyMontez Creaciones' }],

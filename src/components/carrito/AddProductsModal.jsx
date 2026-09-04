@@ -1,4 +1,4 @@
-// components/carrito/AddProductsModal.jsx
+// src/components/carrito/AddProductsModal.jsx
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -49,6 +49,17 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
     return ['todos', ...Array.from(cats)];
   }, [availableProducts]);
 
+  const categoryLabels = {
+    todos: 'Todos',
+    atrapasuenos: 'Atrapasueños',
+    collares: 'Collares',
+    aretes: 'Aretes',
+    pulseras: 'Pulseras',
+    esculturas: 'Esculturas',
+    sombreros: 'Sombreros',
+    combos: 'Combos',
+  };
+
   const toggleProductSelection = (productId) => {
     setSelectedProducts(prev => {
       const newSelection = { ...prev };
@@ -70,46 +81,47 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
       if (newSelection[productId]) {
         const newQuantity = Math.max(1, newSelection[productId].quantity + delta);
         newSelection[productId].quantity = newQuantity;
-        const product = newSelection[productId].product;
-        const priceNumber = parseFloat(
-          String(product.precio)
-            .replace(/[$,]/g, '')
-            .replace(' USD', '')
-            .trim()
-        );
-        const subtotal = priceNumber * newQuantity;
-        const subtotalSpan = document.getElementById(`modalSubtotal_${productId}`);
-        if (subtotalSpan) {
-          subtotalSpan.textContent = `$${subtotal.toFixed(0)}`;
-        }
       }
       return newSelection;
     });
   };
 
   const updateModalQty = (productId, value) => {
+    // Permitir campo vacío para que el usuario pueda escribir
+    if (value === '') {
+      setSelectedProducts(prev => {
+        const newSelection = { ...prev };
+        if (newSelection[productId]) {
+          newSelection[productId].quantity = '';
+        }
+        return newSelection;
+      });
+      return;
+    }
+    
     const num = parseInt(value);
     if (!isNaN(num) && num >= 1) {
       setSelectedProducts(prev => {
         const newSelection = { ...prev };
         if (newSelection[productId]) {
           newSelection[productId].quantity = num;
-          const product = newSelection[productId].product;
-          const priceNumber = parseFloat(
-            String(product.precio)
-              .replace(/[$,]/g, '')
-              .replace(' USD', '')
-              .trim()
-          );
-          const subtotal = priceNumber * num;
-          const subtotalSpan = document.getElementById(`modalSubtotal_${productId}`);
-          if (subtotalSpan) {
-            subtotalSpan.textContent = `$${subtotal.toFixed(0)}`;
-          }
         }
         return newSelection;
       });
     }
+  };
+
+  const handleModalQtyBlur = (productId) => {
+    setSelectedProducts(prev => {
+      const newSelection = { ...prev };
+      if (newSelection[productId]) {
+        // Si el campo está vacío o es 0, establecer a 1
+        if (!newSelection[productId].quantity || newSelection[productId].quantity < 1) {
+          newSelection[productId].quantity = 1;
+        }
+      }
+      return newSelection;
+    });
   };
 
   const handleAddSelected = () => {
@@ -118,7 +130,8 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
 
     selectedIds.forEach(id => {
       const { product, quantity } = selectedProducts[id];
-      addItem(product, quantity);
+      const finalQuantity = quantity || 1;
+      addItem(product, finalQuantity);
     });
 
     if (typeof window.showToast === 'function') {
@@ -130,17 +143,6 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
 
   const selectedCount = Object.keys(selectedProducts).length;
 
-  const categoryLabels = {
-    todos: 'Todos',
-    atrapasuenos: 'Atrapasueños',
-    collares: 'Collares',
-    aretes: 'Aretes',
-    pulseras: 'Pulseras',
-    esculturas: 'Esculturas',
-    sombreros: 'Sombreros',
-    combos: 'Combos',
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -151,14 +153,14 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
       }}
     >
       <div className="modal-content">
-        <button onClick={onClose} className="modal-close" aria-label="Cerrar">
+        <button onClick={onClose} className="modal-close-btn" aria-label="Cerrar">
           <i className="fa-solid fa-xmark"></i>
         </button>
 
-        <h3 className="modal-title">
-          <i className="fa-solid fa-plus-circle"></i> Añadir artículos
+        <h3 style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <i className="fa-solid fa-plus-circle" style={{ color: 'var(--accent)' }}></i> Añadir artículos
         </h3>
-        <p className="modal-subtitle">
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-primary)', opacity: 0.6 }}>
           Haz clic en las tarjetas para seleccionar múltiples artículos. Ajusta la cantidad con los botones.
         </p>
 
@@ -167,21 +169,36 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
           <span className="count">{selectedCount}</span>
         </div>
 
+        {/* ===== BÚSQUEDA Y FILTRO - ESTILO SEARCH-OVERLAY ===== */}
         <div className="flex flex-col sm:flex-row gap-2 mb-4">
-          <div className="flex-1 flex items-center gap-2 rounded-full border px-3 py-1.5 border-[var(--border)] bg-[var(--bg-primary)]">
-            <i className="fa-solid fa-search text-[var(--text-primary)] opacity-50"></i>
+          <div
+            className="flex-1 flex items-center gap-2 rounded-full px-4 py-2 transition-all focus-within:border-[var(--accent)]"
+            style={{
+              border: '2px solid var(--border)',
+              backgroundColor: 'var(--card-bg)',
+              fontFamily: 'inherit',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.05)'
+            }}
+          >
+            <i className="fa-solid fa-magnifying-glass" style={{ color: 'var(--text-primary)', opacity: 0.5, fontSize: '0.95rem' }}></i>
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Buscar productos..."
-              className="flex-1 bg-transparent border-none outline-none text-sm text-[var(--text-primary)]"
+              className="flex-1 bg-transparent border-none outline-none text-sm"
+              style={{
+                color: 'var(--text-primary)',
+                fontFamily: 'inherit',
+                background: 'transparent',
+                padding: '0.2rem 0'
+              }}
               autoComplete="off"
             />
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="text-[var(--text-primary)] opacity-40 hover:opacity-100"
+                className="text-[var(--text-primary)] opacity-40 hover:opacity-100 text-sm"
               >
                 <i className="fa-solid fa-xmark"></i>
               </button>
@@ -191,10 +208,22 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-3 py-1.5 rounded-full border text-sm outline-none border-[var(--border)] bg-[var(--bg-primary)] text-[var(--text-primary)]"
+            className="px-4 py-2 rounded-full text-sm outline-none cursor-pointer transition-all focus:border-[var(--accent)]"
+            style={{
+              border: '2px solid var(--border)',
+              backgroundColor: 'var(--card-bg)',
+              color: 'var(--text-primary)',
+              fontFamily: 'inherit',
+              appearance: 'none',
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 0.8rem center',
+              paddingRight: '2.2rem',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.05)'
+            }}
           >
             {categories.map((cat) => (
-              <option key={cat} value={cat}>
+              <option key={cat} value={cat} style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)' }}>
                 {categoryLabels[cat] || cat}
               </option>
             ))}
@@ -202,8 +231,8 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
         </div>
 
         {availableProducts.length === 0 ? (
-          <div className="text-center py-8 text-[var(--text-primary)] opacity-60">
-            <i className="fa-solid fa-check-circle text-4xl block mb-3 text-[var(--accent)]"></i>
+          <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-primary)', opacity: 0.6 }}>
+            <i className="fa-solid fa-check-circle" style={{ color: 'var(--accent)', fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem' }}></i>
             <p>Ya has añadido todos los artículos disponibles</p>
           </div>
         ) : (
@@ -217,7 +246,7 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
                   .replace(' USD', '')
                   .trim()
               );
-              const subtotal = priceNumber * quantity;
+              const subtotal = priceNumber * (quantity || 1);
 
               return (
                 <div
@@ -232,7 +261,13 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
                   <Image
                     src={product.img}
                     alt={product.nombre}
-                    className="w-full h-24 sm:h-28 md:h-32 object-cover rounded-lg bg-[var(--hero-bg)]"
+                    style={{
+                      width: '100%',
+                      height: '120px',
+                      objectFit: 'cover',
+                      borderRadius: '0.5rem',
+                      backgroundColor: 'var(--hero-bg)'
+                    }}
                     width={150}
                     height={120}
                     loading="lazy"
@@ -242,23 +277,144 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
 
                   {isSelected && (
                     <>
-                      <div className="qty-control" onClick={(e) => e.stopPropagation()}>
-                        <button onClick={() => changeModalQty(product.id, -1)}>
+                      <div
+                        className="qty-control"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          background: 'var(--bg-primary)',
+                          border: '1px solid var(--border)',
+                          borderRadius: '30px',
+                          padding: '0.1rem 0.2rem',
+                          marginTop: '0.4rem',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <button
+                          onClick={() => changeModalQty(product.id, -1)}
+                          style={{
+                            width: '26px',
+                            height: '26px',
+                            borderRadius: '50%',
+                            border: '1px solid var(--border)',
+                            background: 'var(--card-bg)',
+                            color: 'var(--text-primary)',
+                            cursor: 'pointer',
+                            fontSize: '0.7rem',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'var(--accent)';
+                            e.currentTarget.style.color = 'white';
+                            e.currentTarget.style.borderColor = 'var(--accent)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'var(--card-bg)';
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.borderColor = 'var(--border)';
+                          }}
+                        >
                           <i className="fa-solid fa-minus"></i>
                         </button>
                         <input
-                          type="number"
-                          id={`modalQty_${product.id}`}
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
                           value={quantity}
-                          onChange={(e) => updateModalQty(product.id, e.target.value)}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '') {
+                              // Permitir campo vacío
+                              setSelectedProducts(prev => {
+                                const newSelection = { ...prev };
+                                if (newSelection[product.id]) {
+                                  newSelection[product.id].quantity = '';
+                                }
+                                return newSelection;
+                              });
+                              return;
+                            }
+                            const num = parseInt(val);
+                            if (!isNaN(num) && num >= 1) {
+                              setSelectedProducts(prev => {
+                                const newSelection = { ...prev };
+                                if (newSelection[product.id]) {
+                                  newSelection[product.id].quantity = num;
+                                }
+                                return newSelection;
+                              });
+                            }
+                          }}
+                          onBlur={() => {
+                            setSelectedProducts(prev => {
+                              const newSelection = { ...prev };
+                              if (newSelection[product.id]) {
+                                if (!newSelection[product.id].quantity || newSelection[product.id].quantity < 1) {
+                                  newSelection[product.id].quantity = 1;
+                                }
+                              }
+                              return newSelection;
+                            });
+                          }}
+                          onFocus={(e) => e.target.select()}
                           min="1"
-                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            width: '32px',
+                            textAlign: 'center',
+                            border: 'none',
+                            background: 'transparent',
+                            fontWeight: 600,
+                            fontSize: '0.85rem',
+                            color: 'var(--text-primary)',
+                            outline: 'none',
+                            padding: 0,
+                            flexShrink: 0
+                          }}
                         />
-                        <button onClick={() => changeModalQty(product.id, 1)}>
+                        <button
+                          onClick={() => changeModalQty(product.id, 1)}
+                          style={{
+                            width: '26px',
+                            height: '26px',
+                            borderRadius: '50%',
+                            border: '1px solid var(--border)',
+                            background: 'var(--card-bg)',
+                            color: 'var(--text-primary)',
+                            cursor: 'pointer',
+                            fontSize: '0.7rem',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'var(--accent)';
+                            e.currentTarget.style.color = 'white';
+                            e.currentTarget.style.borderColor = 'var(--accent)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'var(--card-bg)';
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.borderColor = 'var(--border)';
+                          }}
+                        >
                           <i className="fa-solid fa-plus"></i>
                         </button>
                       </div>
-                      <span className="subtotal-preview" id={`modalSubtotal_${product.id}`}>
+                      <span className="subtotal-preview" style={{
+                        fontSize: '0.7rem',
+                        color: 'var(--text-primary)',
+                        opacity: 0.6,
+                        marginTop: '0.2rem',
+                        display: 'block'
+                      }}>
                         Subtotal: ${subtotal.toFixed(0)}
                       </span>
                     </>
@@ -270,11 +426,37 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
         )}
 
         <button
-          id="modalAddBtn"
           onClick={handleAddSelected}
           disabled={selectedCount === 0}
-          className={`modal-add-btn ${selectedCount > 0 ? 'hover:scale-[1.02] hover:bg-[var(--btn-hover-bg)]' : 'opacity-40 cursor-not-allowed'}`}
-          style={{ backgroundColor: selectedCount > 0 ? 'var(--accent)' : 'var(--border)' }}
+          className="modal-add-btn"
+          style={{
+            backgroundColor: selectedCount > 0 ? 'var(--accent)' : 'var(--border)',
+            opacity: selectedCount > 0 ? 1 : 0.4,
+            cursor: selectedCount > 0 ? 'pointer' : 'not-allowed',
+            display: 'block',
+            width: '100%',
+            padding: '0.8rem',
+            color: 'white',
+            border: 'none',
+            borderRadius: '30px',
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            transition: 'all 0.3s ease',
+            marginTop: '1rem',
+            fontFamily: 'inherit'
+          }}
+          onMouseEnter={(e) => {
+            if (selectedCount > 0) {
+              e.currentTarget.style.backgroundColor = 'var(--btn-hover-bg)';
+              e.currentTarget.style.transform = 'scale(1.02)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (selectedCount > 0) {
+              e.currentTarget.style.backgroundColor = 'var(--accent)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }
+          }}
         >
           {selectedCount > 0
             ? `Añadir ${selectedCount} artículo${selectedCount > 1 ? 's' : ''} al carrito`

@@ -1,4 +1,4 @@
-// components/layout/Footer.jsx
+// src/components/layout/Footer.jsx
 'use client';
 
 import Link from 'next/link';
@@ -13,7 +13,6 @@ export default function Footer() {
       <footer className="footer">
         <div className="footer-container">
           <div className="footer-columns">
-            {/* Columna 1 - Navegación */}
             <div className="footer-col footer-col-1">
               <h3 className="footer-title">Navegación</h3>
               <ul className="footer-links">
@@ -35,13 +34,12 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Columna 2 - Logo y Redes Sociales */}
             <div className="footer-col footer-col-2">
               <div className="footer-logo-block">
                 <Image
                   src="/resources/gavyMontezCreaciones_aro_darkLogo.png"
                   alt="GavyMontez Creaciones"
-                  className="footer-logo-img"
+                  style={{ height: '80px', width: 'auto', marginBottom: '0.4rem' }}
                   width={100}
                   height={100}
                   loading="lazy"
@@ -74,7 +72,6 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Columna 3 - Información */}
             <div className="footer-col footer-col-3">
               <h3 className="footer-title">Información</h3>
               <ul className="footer-links">

@@ -1,4 +1,4 @@
-// components/layout/Header.jsx
+// src/components/layout/Header.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -36,7 +36,7 @@ export default function Header() {
       <header className="header">
         <div className="header-container">
           <div className="header-inner">
-            {/* Botón menú móvil */}
+            {/* Botón menú móvil con la clase correcta */}
             <button
               onClick={toggleMobileMenu}
               className="mobile-menu-btn"
@@ -45,7 +45,6 @@ export default function Header() {
               <i className="fa-solid fa-bars"></i>
             </button>
 
-            {/* Logo */}
             <Link href="/" className="header-logo">
               <Image
                 id="headerLogo"
@@ -55,7 +54,7 @@ export default function Header() {
                     : '/resources/gavyMontezCreaciones_lightLogo.png'
                 }
                 alt="GavyMontez Creaciones"
-                className="header-logo-img"
+                style={{ height: '60px', width: 'auto' }}
                 width={64}
                 height={64}
                 priority
@@ -66,7 +65,6 @@ export default function Header() {
               </div>
             </Link>
 
-            {/* Navegación Desktop */}
             <nav className="nav-desktop">
               <Link
                 href="/"
@@ -88,7 +86,6 @@ export default function Header() {
               </Link>
             </nav>
 
-            {/* Botones de acción */}
             <div className="header-actions">
               <button
                 onClick={toggleSearch}
@@ -117,7 +114,6 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Menú móvil */}
           <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
             <Link href="/" className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>
               <i className="fa-solid fa-house"></i> Inicio

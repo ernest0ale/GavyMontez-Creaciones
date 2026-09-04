@@ -1,4 +1,4 @@
-// components/ui/SearchOverlay.jsx
+// src/components/ui/SearchOverlay.jsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -116,7 +116,14 @@ export default function SearchOverlay({ isOpen, onClose }) {
                 <Image
                   src={product.img}
                   alt={product.nombre}
-                  className="w-11 h-11 rounded-lg object-cover bg-[var(--hero-bg)] flex-shrink-0"
+                  style={{ 
+                    width: '44px', 
+                    height: '44px', 
+                    objectFit: 'cover', 
+                    borderRadius: '0.5rem',
+                    backgroundColor: 'var(--hero-bg)',
+                    flexShrink: 0
+                  }}
                   width={44}
                   height={44}
                 />

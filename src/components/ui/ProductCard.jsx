@@ -1,4 +1,4 @@
-// components/ui/ProductCard.jsx
+// src/components/ui/ProductCard.jsx
 'use client';
 
 import Link from 'next/link';
@@ -10,13 +10,13 @@ export default function ProductCard({ product }) {
   const isEspecial = tipo === 'espiritual';
 
   return (
-    <Link href={`/detalles/${id}`} className="product-card">
+    <Link href={`/detalles/${id}`} className="product-card" style={{ textDecoration: 'none', color: 'inherit' }}>
       <div>
         <div className="product-card-image">
           <Image
             src={img}
             alt={nombre}
-            className="w-full h-full object-cover"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             width={400}
             height={300}
             loading="lazy"
@@ -43,7 +43,7 @@ export default function ProductCard({ product }) {
       </div>
       <div className="product-card-footer">
         <span className="product-card-price">{precio}</span>
-        <span className="btn-ver-detalles">
+        <span className="btn-ver-detalles" style={{ textDecoration: 'none' }}>
           Ver detalles <i className="fa-solid fa-chevron-right"></i>
         </span>
       </div>
