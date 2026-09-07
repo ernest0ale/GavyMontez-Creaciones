@@ -45,8 +45,8 @@ export const TIPOS = {
 // Etiquetas de tipos
 export const TIPO_LABELS = {
   [TIPOS.TODOS]: 'Todos',
-  [TIPOS.CLASICO]: 'Clásicos (CUP)',
-  [TIPOS.ESPIRITUAL]: 'Especiales (USD)',
+  [TIPOS.CLASICO]: 'Clásicos',
+  [TIPOS.ESPIRITUAL]: 'Especiales',
 };
 
 // Número de items por página

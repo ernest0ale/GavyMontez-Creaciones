@@ -17,32 +17,6 @@ export default function CarritoPage() {
     setCartProductIds(items.map(item => item.id));
   }, [items]);
 
-  const handleQuantityChange = (id, value) => {
-    // Permitir campo vacío para que el usuario pueda escribir
-    if (value === '') {
-      // Actualizamos el estado local para mostrar el campo vacío
-      // La actualización real se hará en onBlur o cuando se presione Enter
-      return;
-    }
-    const num = parseInt(value);
-    if (!isNaN(num) && num > 0) {
-      updateQuantity(id, num);
-    }
-  };
-
-  const handleQuantityBlur = (id, e) => {
-    const value = e.target.value.trim();
-    if (value === '') {
-      // Si el campo está vacío, restaurar a 1
-      updateQuantity(id, 1);
-      return;
-    }
-    const num = parseInt(value);
-    if (isNaN(num) || num < 1) {
-      updateQuantity(id, 1);
-    }
-  };
-
   const handleDecrement = (item) => {
     if (item.cantidad > 1) {
       updateQuantity(item.id, item.cantidad - 1);
@@ -86,18 +60,15 @@ export default function CarritoPage() {
           {items.length === 0 ? (
             <div className="cart-empty-state">
               <i className="fa-solid fa-basket-shopping"></i>
-              <h3>Tu carrito está vacío</h3>
-              <p className="text-sm mt-1">Explora nuestro catálogo y añade tus piezas favoritas</p>
+              <h3 className="font-bold">Tu carrito está vacío</h3>
+              <p className="text-sm mt-1" style={{ color: 'var(--text-primary)', opacity: 0.6 }}>
+                Explora nuestro catálogo y añade tus piezas favoritas
+              </p>
               <Link
                 href="/catalogo"
-                className="mt-6 inline-block px-8 py-3 rounded-full font-semibold transition-all hover:scale-[1.02]"
-                style={{
-                  backgroundColor: 'var(--accent)',
-                  color: 'white',
-                  textDecoration: 'none !important'
-                }}
+                className="btn-ver-catalogo"
               >
-                <i className="fa-solid fa-arrow-left mr-2"></i> Ver catálogo
+                Ver catálogo
               </Link>
             </div>
           ) : (
@@ -180,7 +151,6 @@ export default function CarritoPage() {
                             onChange={(e) => {
                               const val = e.target.value;
                               if (val === '') {
-                                // Permitir campo vacío
                                 return;
                               }
                               const num = parseInt(val);
@@ -240,7 +210,7 @@ export default function CarritoPage() {
                           </button>
                         </div>
 
-                        <span className="font-semibold min-w-[50px] text-right text-[var(--accent)]">
+                        <span className="font-semibold min-w-[50px] text-right" style={{ color: 'var(--accent)' }}>
                           ${itemTotal.toFixed(0)}
                         </span>
                         <button
@@ -294,7 +264,7 @@ export default function CarritoPage() {
                 <i className="fa-solid fa-plus-circle"></i> Añadir otro artículo
               </button>
 
-              <div className="mt-6 pt-4 border-t border-[var(--border)]">
+              <div className="mt-6 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
                 <div className="cart-totals">
                   <div className="cart-total-row">
                     <span>Subtotal</span>
@@ -310,31 +280,18 @@ export default function CarritoPage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 mt-2">
+                {/* ===== BOTONES EN DOS COLUMNAS EN ESCRITORIO ===== */}
+                <div className="cart-actions-grid">
                   <Link
                     href="/catalogo"
-                    className="flex-1 py-3 rounded-full font-semibold text-center transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
-                    style={{
-                      backgroundColor: 'var(--bg-primary)',
-                      color: 'var(--text-primary)',
-                      border: '1px solid var(--border)',
-                      textDecoration: 'none !important',
-                      fontSize: '1rem'
-                    }}
+                    className="cart-btn-seguir"
                   >
                     <i className="fa-solid fa-arrow-left"></i> Seguir comprando
                   </Link>
 
                   <button
                     onClick={handleCheckout}
-                    className="flex-1 py-3 rounded-full font-semibold transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
-                    style={{
-                      backgroundColor: '#25d366',
-                      color: 'white',
-                      border: 'none',
-                      textDecoration: 'none !important',
-                      fontSize: '1rem'
-                    }}
+                    className="cart-btn-comprar"
                   >
                     <i className="fa-brands fa-whatsapp"></i> Comprar
                   </button>

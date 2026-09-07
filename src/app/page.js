@@ -6,7 +6,7 @@ import Link from 'next/link';
 import HeroCarousel from '../components/ui/HeroCarousel';
 import ProductGrid from '../components/ui/ProductGrid';
 import PageTitle from '../components/ui/PageTitle';
-import { getProductosDestacados, getProductosByCategoria } from '../data/productos';
+import { getProductosDestacados, getProductosByCategoria, getProductos } from '../data/productos';
 import { getProductosVistos } from '../utils/helpers';
 
 export default function HomePage() {
@@ -20,11 +20,18 @@ export default function HomePage() {
       const allDestacados = getProductosDestacados();
       const destacadosData = allDestacados.filter(p => p.categoria !== 'combos');
       const combosData = getProductosByCategoria('combos');
-      const vistosData = getProductosVistos(4);
+      
+      // CORRECCIÓN: Obtener todos los productos y pasarlos a getProductosVistos
+      const allProductos = getProductos();
+      const vistosData = getProductosVistos(allProductos, 4);
       
       setDestacados(destacadosData);
       setCombos(combosData);
       setVistos(vistosData);
+      
+      console.log('Destacados:', destacadosData.length);
+      console.log('Combos:', combosData.length);
+      console.log('Vistos:', vistosData.length);
     } catch (error) {
       console.error('Error cargando productos:', error);
     } finally {
@@ -109,9 +116,6 @@ export default function HomePage() {
               Creaciones destacadas
             </h2>
           </div>
-          <Link href="/catalogo" className="featured-link">
-            Ver todo el catálogo <i className="fa-solid fa-arrow-right"></i>
-          </Link>
         </div>
 
         {loading ? (

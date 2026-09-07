@@ -16,6 +16,7 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
     if (isOpen) {
       setSelectedProducts({});
       setSearchTerm('');
+      setFilterCategory('todos'); // Resetear filtro al abrir
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -24,6 +25,18 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  // Obtener TODAS las categorías disponibles de TODOS los productos
+  const allCategories = useMemo(() => {
+    const cats = new Set();
+    // Usar productos completos, no los filtrados
+    productos.forEach(p => {
+      if (!existingProductIds.includes(p.id)) {
+        cats.add(p.categoria);
+      }
+    });
+    return ['todos', ...Array.from(cats)];
+  }, [existingProductIds]);
 
   const availableProducts = useMemo(() => {
     let filtered = productos.filter(p => !existingProductIds.includes(p.id));
@@ -43,11 +56,6 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
 
     return filtered;
   }, [existingProductIds, filterCategory, searchTerm]);
-
-  const categories = useMemo(() => {
-    const cats = new Set(availableProducts.map(p => p.categoria));
-    return ['todos', ...Array.from(cats)];
-  }, [availableProducts]);
 
   const categoryLabels = {
     todos: 'Todos',
@@ -81,44 +89,6 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
       if (newSelection[productId]) {
         const newQuantity = Math.max(1, newSelection[productId].quantity + delta);
         newSelection[productId].quantity = newQuantity;
-      }
-      return newSelection;
-    });
-  };
-
-  const updateModalQty = (productId, value) => {
-    // Permitir campo vacío para que el usuario pueda escribir
-    if (value === '') {
-      setSelectedProducts(prev => {
-        const newSelection = { ...prev };
-        if (newSelection[productId]) {
-          newSelection[productId].quantity = '';
-        }
-        return newSelection;
-      });
-      return;
-    }
-    
-    const num = parseInt(value);
-    if (!isNaN(num) && num >= 1) {
-      setSelectedProducts(prev => {
-        const newSelection = { ...prev };
-        if (newSelection[productId]) {
-          newSelection[productId].quantity = num;
-        }
-        return newSelection;
-      });
-    }
-  };
-
-  const handleModalQtyBlur = (productId) => {
-    setSelectedProducts(prev => {
-      const newSelection = { ...prev };
-      if (newSelection[productId]) {
-        // Si el campo está vacío o es 0, establecer a 1
-        if (!newSelection[productId].quantity || newSelection[productId].quantity < 1) {
-          newSelection[productId].quantity = 1;
-        }
       }
       return newSelection;
     });
@@ -169,65 +139,91 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
           <span className="count">{selectedCount}</span>
         </div>
 
-        {/* ===== BÚSQUEDA Y FILTRO - ESTILO SEARCH-OVERLAY ===== */}
-        <div className="flex flex-col sm:flex-row gap-2 mb-4">
-          <div
-            className="flex-1 flex items-center gap-2 rounded-full px-4 py-2 transition-all focus-within:border-[var(--accent)]"
-            style={{
+        {/* ===== BÚSQUEDA Y FILTRO - DOS COLUMNAS EN ESCRITORIO ===== */}
+        <div className="modal-filters-grid">
+          {/* Columna 1: Search */}
+          <div className="modal-search-wrapper">
+            <div className="modal-search-bar" style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              borderRadius: '9999px',
+              padding: '0.5rem 1rem',
               border: '2px solid var(--border)',
               backgroundColor: 'var(--card-bg)',
-              fontFamily: 'inherit',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.05)'
-            }}
-          >
-            <i className="fa-solid fa-magnifying-glass" style={{ color: 'var(--text-primary)', opacity: 0.5, fontSize: '0.95rem' }}></i>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Buscar productos..."
-              className="flex-1 bg-transparent border-none outline-none text-sm"
-              style={{
-                color: 'var(--text-primary)',
-                fontFamily: 'inherit',
-                background: 'transparent',
-                padding: '0.2rem 0'
-              }}
-              autoComplete="off"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm('')}
-                className="text-[var(--text-primary)] opacity-40 hover:opacity-100 text-sm"
-              >
-                <i className="fa-solid fa-xmark"></i>
-              </button>
-            )}
+              boxShadow: '0 8px 30px rgba(0,0,0,0.05)',
+              transition: 'border-color 0.3s ease',
+	      width: '500px'
+            }}>
+              <i className="fa-solid fa-magnifying-glass" style={{ color: 'var(--text-primary)', opacity: 0.5, fontSize: '0.95rem' }}></i>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Buscar productos..."
+                style={{
+                  flex: 1,
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  color: 'var(--text-primary)',
+                  fontFamily: 'inherit',
+                  padding: '0.2rem 0',
+                  fontSize: '0.9rem'
+                }}
+                autoComplete="off"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--text-primary)',
+                    opacity: 0.4,
+                    cursor: 'pointer',
+                    padding: '0.2rem',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              )}
+            </div>
           </div>
 
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-4 py-2 rounded-full text-sm outline-none cursor-pointer transition-all focus:border-[var(--accent)]"
-            style={{
-              border: '2px solid var(--border)',
-              backgroundColor: 'var(--card-bg)',
-              color: 'var(--text-primary)',
-              fontFamily: 'inherit',
-              appearance: 'none',
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'right 0.8rem center',
-              paddingRight: '2.2rem',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.05)'
-            }}
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat} style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)' }}>
-                {categoryLabels[cat] || cat}
-              </option>
-            ))}
-          </select>
+          {/* Columna 2: Category Filter - Usando TODAS las categorías */}
+          <div className="modal-filter-wrapper">
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="modal-filter-select"
+              style={{
+                width: '100%',
+                padding: '0.5rem 2.2rem 0.5rem 1rem',
+                borderRadius: '9999px',
+                border: '2px solid var(--border)',
+                backgroundColor: 'var(--card-bg)',
+                color: 'var(--text-primary)',
+                fontFamily: 'inherit',
+                fontSize: '0.9rem',
+                outline: 'none',
+                cursor: 'pointer',
+                appearance: 'none',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 0.8rem center',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.05)',
+                transition: 'border-color 0.3s ease'
+              }}
+            >
+              {allCategories.map((cat) => (
+                <option key={cat} value={cat} style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)' }}>
+                  {categoryLabels[cat] || cat}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {availableProducts.length === 0 ? (
@@ -330,7 +326,6 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
                           onChange={(e) => {
                             const val = e.target.value;
                             if (val === '') {
-                              // Permitir campo vacío
                               setSelectedProducts(prev => {
                                 const newSelection = { ...prev };
                                 if (newSelection[product.id]) {
