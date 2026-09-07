@@ -326,9 +326,36 @@ export const obtenerVistos = () => {
 };
 
 /**
- * Obtiene los productos vistos con sus datos completos
+ * Obtiene los productos vistos con sus datos completos (NUEVA VERSIÓN)
+ * @param {Array} productos - Array de productos completo
+ * @param {number} limit - Límite de productos a devolver
+ * @returns {Array} - Productos vistos
  */
-export const getProductosVistos = (productos) => {
+export const getProductosVistos = (productos, limit = 4) => {
   const ids = obtenerVistos();
-  return ids.map(id => productos.find(p => p.id === id)).filter(Boolean);
+  const productosVistos = ids
+    .map(id => productos.find(p => p.id === id))
+    .filter(Boolean);
+  return productosVistos.slice(0, limit);
 };
+
+// ============================================
+// VERSIÓN COMPATIBLE CON LA LLAMADA ANTERIOR
+// Si llamas a getProductosVistos(4) sin pasar el array de productos,
+// esta versión intentará obtener los productos de manera global
+// ============================================
+
+/**
+ * Versión con parámetro único (limit) - Solo para uso en page.js
+ * NOTA: Esta función requiere que los productos estén disponibles globalmente
+ * Para evitar problemas, es mejor usar la versión con dos parámetros
+ */
+export const getProductosVistosFromStorage = (limit = 4) => {
+  // Esta es una versión especial para page.js
+  // Como page.js importa los productos, mejor usar la función original
+  // Esta función solo devuelve IDs
+  return obtenerVistos().slice(0, limit);
+};
+
+// Para evitar confusiones, exportamos también la función original
+// y creamos una nueva función específica para page.js

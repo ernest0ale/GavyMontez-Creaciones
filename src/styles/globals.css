@@ -154,28 +154,43 @@ body {
 }
 
 /* ============================================
-   BODY - FONDO CON DEGRADADO FIJO
+   BODY - FONDO CON DEGRADADO FIJO (CORREGIDO)
    ============================================ */
 
-body {
-  background: linear-gradient(
-    180deg,
-    #ede0d4 0%,
-    #e0d3c4 20%,
-    #d3c6b4 40%,
-    #c6b9a4 60%,
-    #b9ac94 80%,
-    #a8954a 100%
-  ) !important;
-  background-attachment: fixed !important;
+/* El fondo se aplica con un pseudo-elemento fijo */
+html {
   min-height: 100vh;
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh; /* Para dispositivos móviles */
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
+  background: none !important; /* IMPORTANTE: Quitar el fondo del body */
+  position: relative;
+  overflow-x: hidden;
 }
 
-body.dark-mode {
+/* Fondo fijo usando ::before */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -10;
+  min-height: 100vh;
+  background: linear-gradient( 180deg, #ede0d4 0%, #d9c8b8 25%, #c6b09a 50%, #b8a392 75%, #a8954a 100% );
+  pointer-events: none;
+}
+
+/* Modo oscuro */
+body.dark-mode::before {
   background: linear-gradient(
     180deg,
     #332a24 0%,
@@ -186,9 +201,7 @@ body.dark-mode {
     #1a1612 75%,
     #15120e 90%,
     #0f0d0a 100%
-  ) !important;
-  background-attachment: fixed !important;
-  min-height: 100vh;
+  );
 }
 
 body.dark-mode::after {
@@ -197,11 +210,27 @@ body.dark-mode::after {
   inset: 0;
   background: radial-gradient(ellipse at 50% 30%, rgba(138, 168, 108, 0.04) 0%, transparent 70%);
   pointer-events: none;
-  z-index: 0;
+  z-index: -9;
 }
 
-body.dark-mode::before {
-  opacity: 0.02;
+/* Contenedor principal de Next.js */
+#__next {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+/* Main debe ocupar todo el espacio disponible */
+main {
+  flex: 1 0 auto;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  width: 100%;
 }
 
 /* ============================================
@@ -686,11 +715,13 @@ body.dark-mode .logo-sub {
 .footer {
   background: radial-gradient(ellipse at center bottom, var(--footer-gradient-start) 0%, var(--footer-gradient-end) 100%);
   color: white;
-  margin-top: 3rem;
   padding: 2rem 1rem 1rem;
-  border-top: 1px solid var(--border);
+  border-top: none;
   position: relative;
   overflow: hidden;
+  width: 100%;
+  flex-shrink: 0;
+  z-index: 2;
 }
 
 body.dark-mode .footer {
@@ -727,7 +758,10 @@ body.dark-mode .footer {
   height: 6px;
   background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 50%, var(--accent) 100%);
   opacity: 0.3;
-  margin-bottom: -1px;
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .footer-columns {
@@ -766,6 +800,8 @@ body.dark-mode .footer {
     text-align: left;
     flex: 0.8;
     min-width: 140px;
+    margin-left: 20rem;
+    margin-right: -20rem;
   }
   .footer-col-2 {
     text-align: center;
@@ -1305,7 +1341,6 @@ body.dark-mode .footer {
   justify-content: space-between;
   align-items: flex-start;
   gap: 0.5rem;
-  margin-bottom: 2rem;
 }
 
 @media (min-width: 768px) {
@@ -1313,7 +1348,6 @@ body.dark-mode .footer {
     flex-direction: row;
     align-items: flex-end;
     gap: 1rem;
-    margin-bottom: 3rem;
   }
 }
 
@@ -4446,6 +4480,7 @@ body.dark-mode .skeleton-card .skeleton-text {
 }
 .gap-2 {
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 .gap-3 {
   gap: 0.75rem;
@@ -5079,4 +5114,280 @@ input[type=number] {
 .qty-control input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none !important;
   margin: 0 !important;
+}
+
+/* ============================================
+   CART EMPTY STATE IMPROVEMENTS
+   ============================================ */
+
+.cart-empty-state {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 2rem 1rem !important;
+  text-align: center !important;
+  color: var(--text-primary) !important;
+}
+.cart-empty-state i {
+  font-size: 3.5rem !important;
+  color: var(--accent) !important;
+  opacity: 0.3 !important;
+  margin-bottom: 1rem !important;
+}
+.cart-empty-state .font-bold {
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  font-family: 'Playfair Display', serif !important;
+  font-size: 1.3rem !important;
+  margin-bottom: 0.3rem !important;
+}
+.cart-empty-state .text-muted {
+  color: var(--text-primary) !important;
+  opacity: 0.6 !important;
+}
+.cart-empty-state .mt-2 {
+  margin-top: 0.5rem !important;
+}
+
+.cart-empty-state .btn-ver-catalogo {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.75rem 2rem !important;
+  border-radius: 9999px !important;
+  background-color: var(--accent) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  margin-top: 1rem !important;
+  font-size: 1rem !important;
+}
+.cart-empty-state .btn-ver-catalogo:hover {
+  background-color: var(--btn-hover-bg) !important;
+  transform: translateY(-2px) !important;
+  text-decoration: none !important;
+}
+
+/* ============================================
+   CART ACTIONS - DESKTOP VS MOBILE
+   ============================================ */
+
+.cart-actions-row {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
+  margin-top: 1rem !important;
+}
+
+@media (min-width: 640px) {
+  .cart-actions-row {
+    flex-direction: row !important;
+    gap: 1rem !important;
+  }
+  .cart-actions-row .btn-seguir-comprando {
+    flex: 1 !important;
+  }
+  .cart-actions-row .cart-checkout-btn {
+    flex: 1 !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .cart-actions-row {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  .cart-actions-row .btn-seguir-comprando {
+    width: 100% !important;
+  }
+  .cart-actions-row .cart-checkout-btn {
+    width: 100% !important;
+  }
+}
+
+/* ============================================
+   REMOVE ICON FROM VER CATÁLOGO BUTTON
+   ============================================ */
+
+.btn-ver-catalogo i {
+  display: none !important;
+}
+
+/* ============================================
+   MODAL FILTERS - SIDE BY SIDE ON DESKTOP
+   ============================================ */
+
+.modal-filters-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+@media (min-width: 640px) {
+  .modal-filters-container {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+  .modal-search-bar {
+    flex: 1 !important;
+  }
+  .modal-filter-select {
+    width: auto !important;
+    min-width: 150px !important;
+    flex-shrink: 0 !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .modal-filters-container {
+    flex-direction: column !important;
+  }
+  .modal-search-bar {
+    width: 100% !important;
+  }
+  .modal-filter-select {
+    width: 100% !important;
+  }
+}
+
+/* ============================================
+   MODAL FILTERS - GRID LAYOUT (NUEVO)
+   ============================================ */
+
+.modal-filters-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.75rem !important;
+  margin-bottom: 1rem !important;
+  align-items: center !important;
+}
+
+.modal-search-wrapper {
+  grid-column: 1 / 2 !important;
+}
+
+.modal-filter-wrapper {
+  grid-column: 2 / 3 !important;
+}
+
+/* En móviles: una sola columna */
+@media (max-width: 640px) {
+  .modal-filters-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+  .modal-search-wrapper {
+    grid-column: 1 / 2 !important;
+  }
+  .modal-filter-wrapper {
+    grid-column: 1 / 2 !important;
+  }
+}
+
+/* Hacer el search un poco más ancho en escritorio */
+@media (min-width: 641px) {
+  .modal-filters-grid {
+    grid-template-columns: 1.2fr 0.8fr !important;
+  }
+}
+
+/* ============================================
+   CART ACTIONS - GRID LAYOUT (NUEVO)
+   ============================================ */
+
+.cart-actions-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.75rem !important;
+  margin-top: 0.5rem !important;
+}
+
+.cart-btn-seguir {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 30px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  transition: all 0.3s ease !important;
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  text-decoration: none !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+}
+
+.cart-btn-seguir:hover {
+  transform: scale(1.02) !important;
+  text-decoration: none !important;
+}
+
+.cart-btn-comprar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 30px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  transition: all 0.3s ease !important;
+  background-color: #25d366 !important;
+  color: white !important;
+  border: none !important;
+  text-decoration: none !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+}
+
+.cart-btn-comprar:hover {
+  transform: scale(1.02) !important;
+  text-decoration: none !important;
+}
+
+/* En móviles: una sola columna */
+@media (max-width: 640px) {
+  .cart-actions-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+  .cart-btn-seguir {
+    order: 1 !important;
+  }
+  .cart-btn-comprar {
+    order: 2 !important;
+  }
+}
+
+/* Ajustes para dispositivos muy pequeños */
+@media (max-width: 480px) {
+  .cart-btn-seguir,
+  .cart-btn-comprar {
+    font-size: 0.85rem !important;
+    padding: 0.6rem 0.75rem !important;
+  }
+}
+
+/* ============================================
+   MODAL SEARCH BAR FOCUS
+   ============================================ */
+
+.modal-search-bar:focus-within {
+  border-color: var(--accent) !important;
+}
+
+/* ============================================
+   MODAL FILTER SELECT FOCUS
+   ============================================ */
+
+.modal-filter-select:focus {
+  border-color: var(--accent) !important;
 }

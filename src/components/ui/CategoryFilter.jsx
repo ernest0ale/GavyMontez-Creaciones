@@ -16,7 +16,7 @@ export default function CategoryFilter({ selectedCategory, onCategoryChange, sel
   ];
 
   const tipos = [
-    { key: TIPOS.TODOS, label: TIPO_LABELS[TIPOS.TODOS], icon: 'fa-regular fa-circle' },
+    { key: TIPOS.TODOS, label: TIPO_LABELS[TIPOS.TODOS] },
     { key: TIPOS.CLASICO, label: TIPO_LABELS[TIPOS.CLASICO], icon: 'fa-regular fa-circle', color: '#756205' },
     { key: TIPOS.ESPIRITUAL, label: TIPO_LABELS[TIPOS.ESPIRITUAL], icon: 'fa-solid fa-star', color: '#AD610E' },
   ];
