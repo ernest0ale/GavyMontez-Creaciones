@@ -5391,3 +5391,21 @@ input[type=number] {
 .modal-filter-select:focus {
   border-color: var(--accent) !important;
 }
+
+/* Header - z-index debe ser menor que el modal */
+.header {
+  /* ... */
+  z-index: 40;
+}
+
+/* Footer - z-index debe ser menor que el modal */
+.footer {
+  /* ... */
+  z-index: 2;
+}
+
+/* Modal overlay - z-index debe ser el más alto */
+.modal-overlay {
+  /* ... */
+  z-index: 9999 !important;
+}

@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { productos } from '../../data/productos';
 import { useCart } from '../../hooks/useCart';
@@ -11,25 +12,34 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
   const [selectedProducts, setSelectedProducts] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('todos');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
       setSelectedProducts({});
       setSearchTerm('');
-      setFilterCategory('todos'); // Resetear filtro al abrir
+      setFilterCategory('todos');
+      // Prevenir scroll en body Y html
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [isOpen]);
 
   // Obtener TODAS las categorías disponibles de TODOS los productos
   const allCategories = useMemo(() => {
     const cats = new Set();
-    // Usar productos completos, no los filtrados
     productos.forEach(p => {
       if (!existingProductIds.includes(p.id)) {
         cats.add(p.categoria);
@@ -113,9 +123,9 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
 
   const selectedCount = Object.keys(selectedProducts).length;
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
+  const modalContent = (
     <div
       className={`modal-overlay ${isOpen ? 'open' : ''}`}
       onClick={(e) => {
@@ -152,8 +162,7 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
               border: '2px solid var(--border)',
               backgroundColor: 'var(--card-bg)',
               boxShadow: '0 8px 30px rgba(0,0,0,0.05)',
-              transition: 'border-color 0.3s ease',
-	      width: '500px'
+              transition: 'border-color 0.3s ease'
             }}>
               <i className="fa-solid fa-magnifying-glass" style={{ color: 'var(--text-primary)', opacity: 0.5, fontSize: '0.95rem' }}></i>
               <input
@@ -460,4 +469,7 @@ export default function AddProductsModal({ isOpen, onClose, existingProductIds =
       </div>
     </div>
   );
+
+  // Renderizar usando createPortal para que el modal esté directamente en el body
+  return createPortal(modalContent, document.body);
 }
