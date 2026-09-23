@@ -156,26 +156,22 @@ export default function PreguntasFrecuentesPage() {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className="faq-item border-b last:border-b-0 py-2"
+                className="faq-item"
                 style={{ borderColor: 'var(--border)' }}
               >
                 <button
                   onClick={() => toggleFaq(index)}
-                  className="faq-question w-full py-2 md:py-3 bg-none border-none flex justify-between items-center cursor-pointer font-serif font-semibold text-sm md:text-base text-left text-[var(--text-primary)] transition-all hover:text-[var(--accent)]"
+                  className={`faq-question ${openIndex === index ? 'open' : ''}`}
+                  style={{ color: 'var(--text-primary)' }}
                 >
                   <span>{faq.pregunta}</span>
                   <i
-                    className={`fa-solid fa-chevron-down transition-transform duration-300 ${
-                      openIndex === index ? 'rotate-180' : ''
-                    }`}
+                    className="fa-solid fa-chevron-down"
                     style={{ color: 'var(--accent)' }}
                   ></i>
                 </button>
                 <div
-                  className={`faq-answer overflow-hidden transition-all duration-300 ease-in-out ${
-                    openIndex === index ? 'max-h-[500px] py-2 md:py-3' : 'max-h-0 py-0'
-                  }`}
-                  style={{ color: 'var(--text-primary)', opacity: 0.8, lineHeight: 1.7 }}
+                  className={`faq-answer ${openIndex === index ? 'open' : ''}`}
                 >
                   {faq.respuesta}
                 </div>
