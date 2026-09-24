@@ -23,6 +23,11 @@ export const metadata = {
     locale: 'es_ES',
     type: 'website',
   },
+  // 👇 ESTA es la única forma oficial que Next.js traduce a
+  // <meta name="google-site-verification" content="..." />
+  verification: {
+    google: 'APl7R9jLPAZuySiLVj3gSrFkP2tJEG_3b2Nn1dEfvFA',
+  },
 };
 
 export default function RootLayout({ children }) {
