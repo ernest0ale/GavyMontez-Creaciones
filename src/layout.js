@@ -17,21 +17,25 @@ export const metadata = {
   authors: [{ name: 'GavyMontez Creaciones' }],
   openGraph: {
     title: 'GavyMontez Creaciones',
-    description: 'Arte con intención y alma. Creaciones únicas hechas a mano.',
-    url: 'https://gavymontez-creaciones.com',
+    description: 'Arte con intención y alma.',
+    url: 'https://gavymontez-creaciones.vercel.app',
     siteName: 'GavyMontez Creaciones',
     locale: 'es_ES',
     type: 'website',
   },
-  verification: {
-    google: 'APl7R9jLPAZuySiLVj3gSrFkP2tJEG_3b2Nn1dEfvFA',
-  },
+  // 👇 Eliminado el bloque verification (se pone directamente en el <head>)
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="es" className="scroll-smooth">
       <head>
+        {/* ✅ Verificación de Google Search Console */}
+        <meta
+          name="google-site-verification"
+          content="APl7R9jLPAZuySiLVj3gSrFkP2tJEG_3b2Nn1dEfvFA"
+        />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
