@@ -18,7 +18,7 @@ export const metadata = {
   openGraph: {
     title: 'GavyMontez Creaciones',
     description: 'Arte con intención y alma. Creaciones únicas hechas a mano.',
-    url: 'https://gavymontez-creaciones.com',
+    url: 'https://gavymontez-creaciones.vercel.app',
     siteName: 'GavyMontez Creaciones',
     locale: 'es_ES',
     type: 'website',
