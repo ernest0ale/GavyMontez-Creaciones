@@ -34,8 +34,14 @@ export const metadata = {
 
   // Autoría / creador / publicador
   authors: [
-    { name: 'GavyMontez Creaciones', url: 'https://instagram.com/gavymontez_creaciones' },
-    { name: 'Ernesto Alejandro García Seuret', url: 'https://github.com/ernest0ale' },
+    {
+      name: 'GavyMontez Creaciones',
+      url: 'https://instagram.com/gavymontez_creaciones',
+    },
+    {
+      name: 'Ernesto Alejandro García Seuret',
+      url: 'https://github.com/ernest0ale',
+    },
   ],
   creator: 'GavyMontez Creaciones',
   publisher: 'Ernesto Alejandro García Seuret (ernest0ale)',
@@ -54,11 +60,11 @@ export const metadata = {
 
   // Metas adicionales de autoría
   other: {
-    'author': 'Ernesto Alejandro García Seuret',
-    'designer': 'Ernesto Alejandro García Seuret',
-    'developer': 'Ernesto Alejandro García Seuret',
-    'publisher': 'Ernesto Alejandro García Seuret (ernest0ale)',
-    'contact': 'ernest0ale',
+    author: 'Ernesto Alejandro García Seuret',
+    designer: 'Ernesto Alejandro García Seuret',
+    developer: 'Ernesto Alejandro García Seuret',
+    publisher: 'Ernesto Alejandro García Seuret (ernest0ale)',
+    contact: 'ernest0ale',
     'instagram:creator': '@gavymontez_creaciones',
     'instagram:developer': '@ernest0ale',
   },
@@ -75,8 +81,17 @@ export const metadata = {
     siteName: 'GavyMontez Creaciones',
     locale: 'es_ES',
     type: 'website',
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'GavyMontez Creaciones — Arte hecho a mano',
+      },
+    ],
     authors: [
       'https://github.com/ernest0ale',
+      'https://instagram.com/ernest0ale',
       'https://instagram.com/gavymontez_creaciones',
     ],
   },
@@ -85,6 +100,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'GavyMontez Creaciones',
     description: 'Arte con intención y alma. Creaciones únicas hechas a mano.',
+    images: [`${SITE_URL}/opengraph-image`],
   },
 
   robots: {
