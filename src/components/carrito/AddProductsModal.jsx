@@ -1,0 +1,475 @@
+// src/components/carrito/AddProductsModal.jsx
+'use client';
+
+import { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
+import Image from 'next/image';
+import { productos } from '../../data/productos';
+import { useCart } from '../../hooks/useCart';
+
+export default function AddProductsModal({ isOpen, onClose, existingProductIds = [] }) {
+  const { addItem } = useCart();
+  const [selectedProducts, setSelectedProducts] = useState({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState('todos');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedProducts({});
+      setSearchTerm('');
+      setFilterCategory('todos');
+      // Prevenir scroll en body Y html
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  // Obtener TODAS las categorías disponibles de TODOS los productos
+  const allCategories = useMemo(() => {
+    const cats = new Set();
+    productos.forEach(p => {
+      if (!existingProductIds.includes(p.id)) {
+        cats.add(p.categoria);
+      }
+    });
+    return ['todos', ...Array.from(cats)];
+  }, [existingProductIds]);
+
+  const availableProducts = useMemo(() => {
+    let filtered = productos.filter(p => !existingProductIds.includes(p.id));
+
+    if (filterCategory !== 'todos') {
+      filtered = filtered.filter(p => p.categoria === filterCategory);
+    }
+
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase().trim();
+      filtered = filtered.filter(p =>
+        p.nombre.toLowerCase().includes(term) ||
+        p.categoria.toLowerCase().includes(term) ||
+        (p.descripcion && p.descripcion.toLowerCase().includes(term))
+      );
+    }
+
+    return filtered;
+  }, [existingProductIds, filterCategory, searchTerm]);
+
+  const categoryLabels = {
+    todos: 'Todos',
+    atrapasuenos: 'Atrapasueños',
+    collares: 'Collares',
+    aretes: 'Aretes',
+    pulseras: 'Pulseras',
+    esculturas: 'Esculturas',
+    sombreros: 'Sombreros',
+    combos: 'Combos',
+  };
+
+  const toggleProductSelection = (productId) => {
+    setSelectedProducts(prev => {
+      const newSelection = { ...prev };
+      if (newSelection[productId]) {
+        delete newSelection[productId];
+      } else {
+        const product = productos.find(p => p.id === productId);
+        if (product) {
+          newSelection[productId] = { product, quantity: 1 };
+        }
+      }
+      return newSelection;
+    });
+  };
+
+  const changeModalQty = (productId, delta) => {
+    setSelectedProducts(prev => {
+      const newSelection = { ...prev };
+      if (newSelection[productId]) {
+        const newQuantity = Math.max(1, newSelection[productId].quantity + delta);
+        newSelection[productId].quantity = newQuantity;
+      }
+      return newSelection;
+    });
+  };
+
+  const handleAddSelected = () => {
+    const selectedIds = Object.keys(selectedProducts);
+    if (selectedIds.length === 0) return;
+
+    selectedIds.forEach(id => {
+      const { product, quantity } = selectedProducts[id];
+      const finalQuantity = quantity || 1;
+      addItem(product, finalQuantity);
+    });
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`¡${selectedIds.length} artículo${selectedIds.length > 1 ? 's' : ''} añadido${selectedIds.length > 1 ? 's' : ''} al carrito!`, 'success');
+    }
+
+    onClose();
+  };
+
+  const selectedCount = Object.keys(selectedProducts).length;
+
+  if (!isOpen || !mounted) return null;
+
+  const modalContent = (
+    <div
+      className={`modal-overlay ${isOpen ? 'open' : ''}`}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className="modal-content">
+        <button onClick={onClose} className="modal-close-btn" aria-label="Cerrar">
+          <i className="fa-solid fa-xmark"></i>
+        </button>
+
+        <h3 style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <i className="fa-solid fa-plus-circle" style={{ color: 'var(--accent)' }}></i> Añadir artículos
+        </h3>
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-primary)', opacity: 0.6 }}>
+          Haz clic en las tarjetas para seleccionar múltiples artículos. Ajusta la cantidad con los botones.
+        </p>
+
+        <div className="modal-selection-counter">
+          <span>Artículos seleccionados:</span>
+          <span className="count">{selectedCount}</span>
+        </div>
+
+        {/* ===== BÚSQUEDA Y FILTRO - DOS COLUMNAS EN ESCRITORIO ===== */}
+        <div className="modal-filters-grid">
+          {/* Columna 1: Search */}
+          <div className="modal-search-wrapper">
+            <div className="modal-search-bar" style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              borderRadius: '9999px',
+              padding: '0.5rem 1rem',
+              border: '2px solid var(--border)',
+              backgroundColor: 'var(--card-bg)',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.05)',
+              transition: 'border-color 0.3s ease'
+            }}>
+              <i className="fa-solid fa-magnifying-glass" style={{ color: 'var(--text-primary)', opacity: 0.5, fontSize: '0.95rem' }}></i>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Buscar productos..."
+                style={{
+                  flex: 1,
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  color: 'var(--text-primary)',
+                  fontFamily: 'inherit',
+                  padding: '0.2rem 0',
+                  fontSize: '0.9rem'
+                }}
+                autoComplete="off"
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--text-primary)',
+                    opacity: 0.4,
+                    cursor: 'pointer',
+                    padding: '0.2rem',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Columna 2: Category Filter - Usando TODAS las categorías */}
+          <div className="modal-filter-wrapper">
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="modal-filter-select"
+              style={{
+                width: '100%',
+                padding: '0.5rem 2.2rem 0.5rem 1rem',
+                borderRadius: '9999px',
+                border: '2px solid var(--border)',
+                backgroundColor: 'var(--card-bg)',
+                color: 'var(--text-primary)',
+                fontFamily: 'inherit',
+                fontSize: '0.9rem',
+                outline: 'none',
+                cursor: 'pointer',
+                appearance: 'none',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 0.8rem center',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.05)',
+                transition: 'border-color 0.3s ease'
+              }}
+            >
+              {allCategories.map((cat) => (
+                <option key={cat} value={cat} style={{ backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)' }}>
+                  {categoryLabels[cat] || cat}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {availableProducts.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-primary)', opacity: 0.6 }}>
+            <i className="fa-solid fa-check-circle" style={{ color: 'var(--accent)', fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem' }}></i>
+            <p>Ya has añadido todos los artículos disponibles</p>
+          </div>
+        ) : (
+          <div className="modal-product-grid">
+            {availableProducts.map((product) => {
+              const isSelected = !!selectedProducts[product.id];
+              const quantity = selectedProducts[product.id]?.quantity || 1;
+              const priceNumber = parseFloat(
+                String(product.precio)
+                  .replace(/[$,]/g, '')
+                  .replace(' USD', '')
+                  .trim()
+              );
+              const subtotal = priceNumber * (quantity || 1);
+
+              return (
+                <div
+                  key={product.id}
+                  className={`modal-product-card ${isSelected ? 'selected' : ''}`}
+                  onClick={() => toggleProductSelection(product.id)}
+                >
+                  <span className="selection-check">
+                    <i className="fa-solid fa-check"></i>
+                  </span>
+
+                  <Image
+                    src={product.img}
+                    alt={product.nombre}
+                    style={{
+                      width: '100%',
+                      height: '120px',
+                      objectFit: 'cover',
+                      borderRadius: '0.5rem',
+                      backgroundColor: 'var(--hero-bg)'
+                    }}
+                    width={150}
+                    height={120}
+                    loading="lazy"
+                  />
+                  <h4>{product.nombre}</h4>
+                  <span className="price">{product.precio}</span>
+
+                  {isSelected && (
+                    <>
+                      <div
+                        className="qty-control"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          background: 'var(--bg-primary)',
+                          border: '1px solid var(--border)',
+                          borderRadius: '30px',
+                          padding: '0.1rem 0.2rem',
+                          marginTop: '0.4rem',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <button
+                          onClick={() => changeModalQty(product.id, -1)}
+                          style={{
+                            width: '26px',
+                            height: '26px',
+                            borderRadius: '50%',
+                            border: '1px solid var(--border)',
+                            background: 'var(--card-bg)',
+                            color: 'var(--text-primary)',
+                            cursor: 'pointer',
+                            fontSize: '0.7rem',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'var(--accent)';
+                            e.currentTarget.style.color = 'white';
+                            e.currentTarget.style.borderColor = 'var(--accent)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'var(--card-bg)';
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.borderColor = 'var(--border)';
+                          }}
+                        >
+                          <i className="fa-solid fa-minus"></i>
+                        </button>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          value={quantity}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (val === '') {
+                              setSelectedProducts(prev => {
+                                const newSelection = { ...prev };
+                                if (newSelection[product.id]) {
+                                  newSelection[product.id].quantity = '';
+                                }
+                                return newSelection;
+                              });
+                              return;
+                            }
+                            const num = parseInt(val);
+                            if (!isNaN(num) && num >= 1) {
+                              setSelectedProducts(prev => {
+                                const newSelection = { ...prev };
+                                if (newSelection[product.id]) {
+                                  newSelection[product.id].quantity = num;
+                                }
+                                return newSelection;
+                              });
+                            }
+                          }}
+                          onBlur={() => {
+                            setSelectedProducts(prev => {
+                              const newSelection = { ...prev };
+                              if (newSelection[product.id]) {
+                                if (!newSelection[product.id].quantity || newSelection[product.id].quantity < 1) {
+                                  newSelection[product.id].quantity = 1;
+                                }
+                              }
+                              return newSelection;
+                            });
+                          }}
+                          onFocus={(e) => e.target.select()}
+                          min="1"
+                          style={{
+                            width: '32px',
+                            textAlign: 'center',
+                            border: 'none',
+                            background: 'transparent',
+                            fontWeight: 600,
+                            fontSize: '0.85rem',
+                            color: 'var(--text-primary)',
+                            outline: 'none',
+                            padding: 0,
+                            flexShrink: 0
+                          }}
+                        />
+                        <button
+                          onClick={() => changeModalQty(product.id, 1)}
+                          style={{
+                            width: '26px',
+                            height: '26px',
+                            borderRadius: '50%',
+                            border: '1px solid var(--border)',
+                            background: 'var(--card-bg)',
+                            color: 'var(--text-primary)',
+                            cursor: 'pointer',
+                            fontSize: '0.7rem',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'var(--accent)';
+                            e.currentTarget.style.color = 'white';
+                            e.currentTarget.style.borderColor = 'var(--accent)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'var(--card-bg)';
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                            e.currentTarget.style.borderColor = 'var(--border)';
+                          }}
+                        >
+                          <i className="fa-solid fa-plus"></i>
+                        </button>
+                      </div>
+                      <span className="subtotal-preview" style={{
+                        fontSize: '0.7rem',
+                        color: 'var(--text-primary)',
+                        opacity: 0.6,
+                        marginTop: '0.2rem',
+                        display: 'block'
+                      }}>
+                        Subtotal: ${subtotal.toFixed(0)}
+                      </span>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <button
+          onClick={handleAddSelected}
+          disabled={selectedCount === 0}
+          className="modal-add-btn"
+          style={{
+            backgroundColor: selectedCount > 0 ? 'var(--accent)' : 'var(--border)',
+            opacity: selectedCount > 0 ? 1 : 0.4,
+            cursor: selectedCount > 0 ? 'pointer' : 'not-allowed',
+            display: 'block',
+            width: '100%',
+            padding: '0.8rem',
+            color: 'white',
+            border: 'none',
+            borderRadius: '30px',
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            transition: 'all 0.3s ease',
+            marginTop: '1rem',
+            fontFamily: 'inherit'
+          }}
+          onMouseEnter={(e) => {
+            if (selectedCount > 0) {
+              e.currentTarget.style.backgroundColor = 'var(--btn-hover-bg)';
+              e.currentTarget.style.transform = 'scale(1.02)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (selectedCount > 0) {
+              e.currentTarget.style.backgroundColor = 'var(--accent)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }
+          }}
+        >
+          {selectedCount > 0
+            ? `Añadir ${selectedCount} artículo${selectedCount > 1 ? 's' : ''} al carrito`
+            : 'Selecciona artículos para añadir'}
+        </button>
+      </div>
+    </div>
+  );
+
+  // Renderizar usando createPortal para que el modal esté directamente en el body
+  return createPortal(modalContent, document.body);
+}
