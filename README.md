@@ -62,12 +62,13 @@ La aplicación ha sido migrada desde HTML/CSS vanilla a **Next.js**, manteniendo
 - ✅ **Custom Hooks** - `useCart`, `useTheme`, `useSearch`
 - ✅ **CSS Variables** - Paleta de colores otoñal con modo oscuro
 - ✅ **Imágenes optimizadas** - Componente `next/image`
-- ✅ **Rutas dinámicas** - Páginas de detalles de producto
+- ✅ **Rutas dinámicas** - Páginas de detalles de producto por `slug`
 - ✅ **Página 404 personalizada** - Not Found
+- ✅ **Open Graph dinámico** - Vista previa en WhatsApp/Telegram/Redes
 
 ## 🎨 Estilos
 
-El proyecto utiliza **CSS puro** con variables CSS para el tema. Todos los estilos están centralizados en `app/globals.css`.
+El proyecto utiliza **CSS puro** con variables CSS para el tema. Todos los estilos están centralizados en `src/styles/globals.css`.
 
 ### Paleta de Colores
 
@@ -91,87 +92,121 @@ El modo oscuro se activa mediante la clase `dark-mode` en el elemento `body`, qu
 
 ```
 gavymontez-creaciones-project/
-├── app/                                    # Páginas y layout (App Router)
-│   ├── busqueda/
-│   │   └── page.js                         # Búsqueda de productos
-│   ├── carrito/
-│   │   └── page.js                         # Carrito de compras
-│   ├── catalogo/
-│   │   └── page.js                         # Catálogo con filtros
-│   ├── contacto/
-│   │   └── page.js                         # Contacto y redes sociales
-│   ├── detalles/
-│   │   └── [id]/                           # Ruta dinámica
-│   │       └── page.js                     # Detalles del producto
-│   ├── novedades/
-│   │   └── page.js                         # Novedades y populares
-│   ├── politica-envios/
-│   │   └── page.js                         # Política de envíos
-│   ├── preguntas-frecuentes/
-│   │   └── page.js                         # FAQ con acordeón
-│   ├── terminos/
-│   │   └── page.js                         # Términos y condiciones
-│   ├── globals.css                         # Estilos globales (CSS puro)
-│   ├── layout.js                           # Layout principal
-│   ├── not-found.js                        # Página 404
-│   └── page.js                             # Página de inicio
-│
-├── components/                             # Componentes React
-│   ├── carrito/
-│   │   ├── AddProductsModal.jsx            # Selección múltiple
-│   │   ├── CartItem.jsx                    # Item del carrito
-│   │   └── CartTotals.jsx                  # Totales y checkout
-│   ├── layout/
-│   │   ├── Footer.jsx                      # Pie de página
-│   │   ├── Header.jsx                      # Cabecera y navegación
-│   │   └── ThemeToggle.jsx                 # Botón de tema
-│   ├── modals/
-│   │   ├── CompartirModal.jsx              # Compartir en redes
-│   │   ├── InfoModal.jsx                   # Información del producto
-│   │   └── SignificadoModal.jsx            # Significado espiritual
-│   └── ui/
-│       ├── CartOverlay.jsx                 # Overlay lateral del carrito
-│       ├── CategoryFilter.jsx              # Filtros de categoría/tipo
-│       ├── GlobalToast.jsx                 # Toast notifications global
-│       ├── HeroCarousel.jsx                # Carrusel del hero
-│       ├── Pagination.jsx                  # Controles de paginación
-│       ├── ProductCard.jsx                 # Tarjeta de producto
-│       ├── ProductGrid.jsx                 # Grid de productos
-│       ├── SearchOverlay.jsx               # Overlay de búsqueda
-│       ├── SkeletonLoader.jsx              # Loader esqueleto
-│       └── WhatsAppButton.jsx              # Botón flotante de WhatsApp
-│
-├── contexts/                               # Contextos globales
-│   ├── CartContext.jsx                     # Estado del carrito
-│   └── ThemeContext.jsx                    # Estado del tema
-│
-├── data/
-│   └── productos.js                        # Datos de productos (estático)
-│
-├── hooks/                                  # Custom Hooks
-│   ├── useCart.js                          # Hook del carrito
-│   ├── useSearch.js                        # Hook de búsqueda
-│   └── useTheme.js                         # Hook del tema
-│
-├── lib/                                    # Librerías y configuraciones
-│   ├── supabase-client.js                  # Cliente Supabase (frontend)
-│   ├── supabase-server.js                  # Cliente Supabase (server)
-│   └── supabase.js                         # Configuración base
-│
-├── public/                                 # Archivos estáticos
+├── public/                                 # Archivos estáticos servidos en la raíz
 │   └── resources/
-│       ├── carrucel/                       # Imágenes del carrusel
+│       ├── favicon.ico                     # Favicon del sitio
+│       ├── carrucel/                       # Imágenes del carrusel (fallback)
+│       │   ├── slide1.jpg
+│       │   ├── slide2.jpg
+│       │   ├── slide3.jpg
+│       │   └── slide4.jpg
+│       ├── imagenes/                       # Imágenes generales del sitio
 │       ├── gavyMontezCreaciones_aro_darkLogo.png
 │       ├── gavyMontezCreaciones_darkLogo.png
 │       └── gavyMontezCreaciones_lightLogo.png
 │
-├── utils/                                  # Utilidades
-│   ├── constants.js                        # Constantes globales
-│   ├── helpers.js                          # Funciones de ayuda
-│   └── validators.js                       # Validadores de datos
+├── src/                                    # Código fuente completo
+│   │
+│   ├── app/                                # App Router (páginas y layouts)
+│   │   ├── busqueda/
+│   │   │   └── page.js                     # Búsqueda de productos
+│   │   ├── carrito/
+│   │   │   └── page.js                     # Carrito de compras
+│   │   ├── catalogo/
+│   │   │   ├── layout.js                   # Metadata OpenGraph/Twitter
+│   │   │   ├── opengraph-image.js          # Imagen OG dinámica
+│   │   │   └── page.js                     # Catálogo con filtros
+│   │   ├── contacto/
+│   │   │   ├── layout.js                   # Metadata OpenGraph/Twitter
+│   │   │   ├── opengraph-image.js          # Imagen OG dinámica
+│   │   │   └── page.js                     # Contacto y redes sociales
+│   │   ├── detalles/
+│   │   │   └── [slug]/                     # Ruta dinámica por slug
+│   │   │       ├── layout.js               # Metadata dinámica por producto
+│   │   │       ├── opengraph-image.js      # Imagen OG del producto
+│   │   │       └── page.js                 # Detalles del producto
+│   │   ├── novedades/
+│   │   │   ├── layout.js                   # Metadata OpenGraph/Twitter
+│   │   │   ├── opengraph-image.js          # Imagen OG dinámica
+│   │   │   └── page.js                     # Novedades y populares
+│   │   ├── politica-envios/
+│   │   │   └── page.js                     # Política de envíos
+│   │   ├── preguntas-frecuentes/
+│   │   │   └── page.js                     # FAQ con acordeón
+│   │   ├── terminos/
+│   │   │   └── page.js                     # Términos y condiciones
+│   │   ├── layout.js                       # Layout principal + metadata raíz
+│   │   ├── not-found.js                    # Página 404
+│   │   ├── opengraph-image.js              # Imagen OG de la home
+│   │   ├── page.js                         # Página de inicio
+│   │   └── sitemap.js                      # Sitemap dinámico
+│   │
+│   ├── components/                         # Componentes React
+│   │   ├── carrito/
+│   │   │   ├── AddProductsModal.jsx        # Selección múltiple
+│   │   │   ├── CartItem.jsx                # Item del carrito
+│   │   │   └── CartTotals.jsx              # Totales y checkout
+│   │   ├── layout/
+│   │   │   ├── Footer.jsx                  # Pie de página
+│   │   │   ├── Header.jsx                  # Cabecera y navegación
+│   │   │   └── ThemeToggle.jsx             # Botón de tema
+│   │   ├── modals/
+│   │   │   ├── CompartirModal.jsx          # Compartir en redes
+│   │   │   ├── InfoModal.jsx               # Información del producto
+│   │   │   └── SignificadoModal.jsx        # Significado espiritual
+│   │   └── ui/
+│   │       ├── CartOverlay.jsx             # Overlay lateral del carrito
+│   │       ├── CategoryFilter.jsx          # Filtros de categoría/tipo
+│   │       ├── GlobalToast.jsx             # Toast notifications global
+│   │       ├── HeroCarousel.jsx            # Carrusel del hero
+│   │       ├── Pagination.jsx              # Controles de paginación
+│   │       ├── ProductCard.jsx             # Tarjeta de producto
+│   │       ├── ProductGrid.jsx             # Grid de productos
+│   │       ├── SearchOverlay.jsx           # Overlay de búsqueda
+│   │       ├── SkeletonLoader.jsx          # Loader esqueleto
+│   │       └── WhatsAppButton.jsx          # Botón flotante de WhatsApp
+│   │
+│   ├── contexts/                           # Contextos globales
+│   │   ├── CartContext.jsx                 # Estado del carrito
+│   │   └── ThemeContext.jsx                # Estado del tema
+│   │
+│   ├── data/
+│   │   └── productos.js                    # Datos de productos (estático)
+│   │
+│   ├── hooks/                              # Custom Hooks
+│   │   ├── useCart.js                      # Hook del carrito
+│   │   ├── useSearch.js                    # Hook de búsqueda
+│   │   └── useTheme.js                     # Hook del tema
+│   │
+│   ├── lib/                                # Librerías y configuraciones
+│   │   ├── supabase-client.js              # Cliente Supabase (frontend)
+│   │   ├── supabase-server.js              # Cliente Supabase (server)
+│   │   └── supabase.js                     # Configuración base
+│   │
+│   ├── resources/                          # Recursos locales (importables)
+│   │   ├── carrucel/                       # Imágenes del carrusel
+│   │   │   ├── slide1.jpg
+│   │   │   ├── slide2.jpg
+│   │   │   ├── slide3.jpg
+│   │   │   └── slide4.jpg
+│   │   ├── fonts/                          # Fuentes para OG images
+│   │   │   ├── Inter_24pt-Regular.ttf
+│   │   │   ├── Inter_24pt-Bold.ttf
+│   │   │   ├── PlayfairDisplay-Regular.ttf
+│   │   │   └── PlayfairDisplay-Bold.ttf
+│   │   └── imagenes/                       # Imágenes generales del sitio
+│   │
+│   ├── styles/                             # Estilos
+│   │   └── globals.css                     # Estilos globales (CSS puro)
+│   │
+│   └── utils/                              # Utilidades
+│       ├── constants.js                    # Constantes globales
+│       ├── helpers.js                      # Funciones de ayuda
+│       ├── og-fonts.js                     # Carga de fuentes para OG
+│       └── validators.js                   # Validadores de datos
 │
 ├── .env.local                              # Variables de entorno
-├── jsconfig.json                           # Configuración de rutas (@/*)
+├── jsconfig.json                           # Configuración de rutas (@/* → ./src/*)
 ├── next.config.js                          # Configuración de Next.js
 ├── package.json                            # Dependencias y scripts
 └── README.md                               # Este archivo
@@ -179,10 +214,53 @@ gavymontez-creaciones-project/
 
 ---
 
+## 🔀 Alias de rutas
+
+El proyecto usa el alias `@/*` configurado en `jsconfig.json` que apunta a `./src/*`. Esto permite imports limpios:
+
+```js
+// En lugar de:
+import ProductCard from '../../../components/ui/ProductCard';
+
+// Usamos:
+import ProductCard from '@/components/ui/ProductCard';
+```
+
+Configuración en jsconfig.json:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/": ["./src/"]
+    }
+  }
+}
+```
+
+---
+
+## 🖼️ Open Graph dinámico
+
+El proyecto genera vistas previas personalizadas para cada ruta usando `next/og`:
+
+| Ruta | Archivo | Imagen generada |
+|------|---------|-----------------|
+| `/` | `src/app/opengraph-image.js` | Home con slide 1 del carrusel |
+| `/catalogo` | `src/app/catalogo/opengraph-image.js` | Catálogo con texto estilizado |
+| `/contacto` | `src/app/contacto/opengraph-image.js` | Contacto con canales |
+| `/novedades` | `src/app/novedades/opengraph-image.js` | Novedades con texto |
+| `/detalles/[slug]` | `src/app/detalles/[slug]/opengraph-image.js` | Imagen del producto |
+
+**Metadata por ruta:** cada carpeta tiene un `layout.js` (server component) que exporta `metadata` con `openGraph.images` y `twitter.images` apuntando a su `opengraph-image`. Esto garantiza que WhatsApp, Telegram y redes sociales lean correctamente las vistas previas (los bots no ejecutan JavaScript).
+
+---
 
 ## 📦 Dependencias
 
-### Producción
+**Producción**
+
 ```json
 {
   "@supabase/supabase-js": "^2.108.1",
@@ -192,7 +270,8 @@ gavymontez-creaciones-project/
 }
 ```
 
-### Desarrollo
+**Desarrollo**
+
 ```json
 {
   "eslint": "^9",
@@ -223,35 +302,35 @@ gavymontez-creaciones-project/
 
 **Ernesto Alejandro**
 
-- 🐙 [GitHub](https://github.com/ernest0ale)
-- 📸 [Instagram](https://instagram.com/ernest0ale)
-- ✈️ [Telegram](https://t.me/ernest0ale)
-- 📧 [Email](mailto:ernest0ale428@gmail.com)
+- 🐙 [GitHub](#)
+- 📸 [Instagram](#)
+- ✈️ [Telegram](#)
+- 📧 [Email](#)
 
 ---
 
 ## 🏪 Proyecto
 
-**GavyMontez Creaciones** - Arte con intención y alma
+**GavyMontez Creaciones - Arte con intención y alma**
 
-- 📸 [Instagram](https://instagram.com/gavymontez_creaciones)
-- 📱 [WhatsApp](https://wa.me/5358481876)
+- 📸 [Instagram](#)
+- 📱 [WhatsApp](#)
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto es de uso privado para GavyMontez Creaciones. Todos los derechos reservados.
+Este proyecto es de uso privado para **GavyMontez Creaciones**. Todos los derechos reservados.
 
 ---
 
 ## 🙏 Agradecimientos
 
-- **Next.js** - Por su excelente framework
-- **React** - Por la revolucionaria forma de construir UIs
-- **Font Awesome** - Por su increíble biblioteca de iconos
-- **Google Fonts** - Por las hermosas fuentes tipográficas
+- [Next.js](https://nextjs.org/) - Por su excelente framework
+- [React](https://reactjs.org/) - Por la revolucionaria forma de construir UIs
+- [Font Awesome](https://fontawesome.com/) - Por su increíble biblioteca de iconos
+- [Google Fonts](https://fonts.google.com/) - Por las hermosas fuentes tipográficas
 
 ---
 
-**Hecho con ❤️ desde La Habana, Cuba**
+Hecho con ❤️ desde La Habana, Cuba
